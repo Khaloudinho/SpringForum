@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="global-head">
+  <meta charset="UTF-8"/>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet"
+        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css}"/>
+</head>
+<body>
+
+<div th:fragment="global-navbar" class="">
+  <div>Ici une navbar ???</div>
+</div>
+
+<h1 class="title">Test inside Layout</h1>
+
+<div th:fragment="site-footer" class="navbar-fixed-bottom text-center">
+  &copy; Our Forum, Belarus 2016
+</div>
+
+<script th:src="@{/js/blog-scripts.js}"></script>
+</body>
+</html>
