@@ -26,10 +26,8 @@
     </div>
 
     <div class="navbar-end">
+      <a class="navbar-item" th:href="@{/register}" th:text="#{user.register}"></a>
       <div class="navbar-item">
-        <form action="/register" method="get">
-          <button class="button is-link" th:text="#{user.register}"></button>
-        </form>
         <form action="/logout" method="post">
           <button class="button is-primary" th:text="#{logout.btn}"></button>
         </form>
