@@ -5,28 +5,31 @@ import fr.miage.sid.forum.repository.UserRepository;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class UserController {
 
   private final UserRepository userRepository;
+
   @Autowired
-  public UserController(UserRepository userRepository){
+  public UserController(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
-  @RequestMapping("/register")
-  public String registerUser(User user) {
-    return "registerUser";
+  @GetMapping("/register")
+  public String register(User user, Model model) {
+    model.addAttribute("user", user);
+    return "auth/register";
   }
 
   @PostMapping("/register")
-  public String registerUser(@Valid User user, BindingResult bindingResult){
+  public String register(@Valid User user, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
-      return "registerUser";
+      return "auth/register";
     } else {
       userRepository.save(user);
       return "redirect:/";
