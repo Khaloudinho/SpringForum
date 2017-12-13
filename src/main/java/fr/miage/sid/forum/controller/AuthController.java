@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class UserController {
+public class AuthController {
 
   private final UserRepository userRepository;
 
   @Autowired
-  public UserController(UserRepository userRepository) {
+  public AuthController(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
   @GetMapping("/register")
-  public String register(User user, Model model) {
+  public String getRegisterPage(User user, Model model) {
     model.addAttribute("user", user);
     return "auth/register";
   }
