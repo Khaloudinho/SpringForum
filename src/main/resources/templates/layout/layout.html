@@ -1,23 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="global-head">
-  <meta charset="UTF-8"/>
-  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <title>Spring Forum</title>
   <link rel="stylesheet"
-        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css}"/>
+        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
+<nav class="navbar is-transparent">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://bulma.io">
+      <img th:src="@{img/spring-logo.svg}">
+    </a>
+    <div class="navbar-burger burger" data-target="navbarEx">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
 
-<div th:fragment="global-navbar" class="">
-  <div>Ici une navbar ???</div>
-</div>
+  <div id="navbarEx" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="/" th:text="#{home}"></a>
+    </div>
 
-<h1 class="title">Test inside Layout</h1>
-
-<div th:fragment="site-footer" class="navbar-fixed-bottom text-center">
-  &copy; Our Forum, Belarus 2016
-</div>
-
-<script th:src="@{/js/blog-scripts.js}"></script>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <form action="/logout" method="post">
+          <button class="button is-primary" th:text="#{logout.btn}"></button>
+        </form>
+      </div>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link"
+           th:text="#{lang.change}"></a>
+        <div class="navbar-dropdown is-boxed">
+          <a class="navbar-item lang-changer"
+             th:text="#{lang.fr}"
+             data-lang="fr"></a>
+          <a class="navbar-item lang-changer"
+             th:text="#{lang.eng}"
+             data-lang="en"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<section layout:fragment="content"></section>
+<script th:src="@{js/main.js}"></script>
 </body>
 </html>
