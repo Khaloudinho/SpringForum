@@ -1,3 +1,13 @@
 .navbar-item img {
   max-height: 3rem;
 }
+.navbar-item form + form {
+  margin-left: 10px;
+}
+form label{
+  margin-top: 10px;
+}
+
+form button{
+  margin-top: 20px;
+}

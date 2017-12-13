@@ -1,0 +1,54 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<body>
+<section class="section" layout:fragment="content">
+
+  <div class="container">
+
+    <h1 class="title" th:text="#{user.register}"></h1>
+
+    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+      <div class="field">
+
+        <label class="label" th:text="#{user.email}"></label>
+        <div class="control">
+          <input class="input" type="text" th:field="*{email}" />
+          <p class="help is-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</p>
+        </div>
+
+        <label class="label" th:text="#{user.username}"></label>
+        <div class="control">
+          <input class="input" type="text" th:field="*{username}" />
+          <p class="help is-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</p>
+        </div>
+
+        <label class="label" th:text="#{user.password}"></label>
+        <div class="control">
+          <input class="input" type="password" th:field="*{password}" />
+          <p class="help is-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</p>
+        </div>
+
+        <label class="label" th:text="#{user.firstname}"></label>
+        <div class="control">
+          <input class="input" type="text" th:field="*{firstname}" />
+          <p class="help is-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">firstname error</p>
+        </div>
+
+        <label class="label" th:text="#{user.lastname}"></label>
+        <div class="control">
+          <input class="input" type="text" th:field="*{lastname}" />
+          <p class="help is-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">lastname error</p>
+        </div>
+
+        <div class="control">
+          <button class="button is-link" th:text="#{submit}"></button>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+
+</section>
+</body>
+</html>
