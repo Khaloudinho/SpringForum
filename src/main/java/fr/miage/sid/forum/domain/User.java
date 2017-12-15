@@ -1,10 +1,13 @@
 package fr.miage.sid.forum.domain;
 
 
+import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -23,14 +26,17 @@ public class User {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+  @Column(unique = true)
   @NotEmpty
   @Email
   private String email;
 
   @Size(min = 3, max = 10)
+  @NotEmpty
   private String username;
 
   @Size(min = 6, max = 100)
+  @NotEmpty
   private String password;
 
   @NotEmpty
@@ -38,4 +44,9 @@ public class User {
 
   @NotEmpty
   private String lastname;
+
+  @ManyToMany
+  private Set<Role> roles;
+
+  private boolean enabled = true;
 }

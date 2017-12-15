@@ -31,6 +31,7 @@ public class AuthController {
     if (bindingResult.hasErrors()) {
       return "auth/register";
     } else {
+      // TODO Create service
       userRepository.save(user);
       return "redirect:/";
     }
