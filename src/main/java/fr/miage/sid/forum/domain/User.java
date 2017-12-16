@@ -19,11 +19,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 @NoArgsConstructor
 @Entity
 // We specify table name because we can't have an User table in psql
-@Table(name = "Person")
+@Table(name = "Users")
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(unique = true)
@@ -31,7 +31,7 @@ public class User {
   @Email
   private String email;
 
-  @Size(min = 3, max = 10)
+  @Size(min = 3, max = 20)
   @NotEmpty
   private String username;
 
@@ -39,10 +39,8 @@ public class User {
   @NotEmpty
   private String password;
 
-  @NotEmpty
   private String firstname;
 
-  @NotEmpty
   private String lastname;
 
   @ManyToMany

@@ -1,7 +1,7 @@
 package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.repository.UserRepository;
+import fr.miage.sid.forum.services.UserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AuthController {
 
-  private final UserRepository userRepository;
+  private final UserService userService;
 
   @Autowired
-  public AuthController(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  public AuthController(UserService userService) {
+    this.userService = userService;
   }
 
   @GetMapping("/register")
@@ -31,8 +31,7 @@ public class AuthController {
     if (bindingResult.hasErrors()) {
       return "auth/register";
     } else {
-      // TODO Create service
-      userRepository.save(user);
+      userService.save(user);
       return "redirect:/";
     }
   }
