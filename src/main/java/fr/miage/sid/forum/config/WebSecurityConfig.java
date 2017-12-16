@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -18,6 +19,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   private DataSource dataSource; // Don't worry about the Intellij warning ..
+
+  @Autowired
+  private AccessDeniedHandler accessDeniedHandler;
 
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
@@ -41,8 +45,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests().anyRequest().permitAll()
+    http.csrf().disable()
+        .authorizeRequests()
+          .antMatchers("/").permitAll()
+          .antMatchers("/admin/**").hasAnyRole("ADMIN")//all admins patterns
+          .antMatchers("/user/**").hasAnyRole("USER")//all users patterns
+          .anyRequest().authenticated()
         .and()
-        .formLogin();
+          .formLogin()
+          .loginPage("/login")//TODO login page
+          .permitAll()
+        .and()
+          .logout()
+          .permitAll()
+        .and()
+        .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
   }
 }
