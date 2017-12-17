@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.services;
+package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.User;
 

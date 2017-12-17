@@ -1,7 +1,7 @@
 package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.services.UserService;
+import fr.miage.sid.forum.service.UserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

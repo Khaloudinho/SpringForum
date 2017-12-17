@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.services;
+package fr.miage.sid.forum.service;
 
 import com.google.common.collect.Sets;
 import fr.miage.sid.forum.domain.Role;
