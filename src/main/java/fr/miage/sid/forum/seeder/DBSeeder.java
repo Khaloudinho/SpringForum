@@ -34,7 +34,7 @@ public class DBSeeder {
   @Transactional
   public void seed(ContextRefreshedEvent ev) {
     logger.info("Seeding database with roles and a dummy user");
-    Role userRole = createRoleIfNotExists("ROLE_USER");
+    Role userRole = createRoleIfNotExists("USER");
 
     User dummy = new User();
     dummy.setFirstname("John");

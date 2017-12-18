@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public void save(User user) {
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    // TODO Need to make sure user role is defined at startup
     Role userRole = roleRepo.findByRole("USER");
     Set<Role> roles = Sets.newHashSet(userRole);
     user.setRoles(roles);
