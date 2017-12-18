@@ -21,6 +21,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private AccessDeniedHandler accessDeniedHandler;
 
+  @Autowired
+  BCryptPasswordEncoder bCryptPasswordEncoder;
+
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
@@ -31,14 +34,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // TODO We still need to check the thing with role prefixes
     auth.jdbcAuthentication()
         .dataSource(dataSource)
-        .authoritiesByUsernameQuery(
-            "SELECT\n"
-                + "  username,\n"
-                + "  role\n"
-                + "FROM person\n"
-                + "  INNER JOIN person_roles prole ON person.id = prole.user_id\n"
-                + "  INNER JOIN role r ON prole.roles_id = r.id where username=?")
-        .passwordEncoder(passwordEncoder());
+        .usersByUsernameQuery("select email, password, enabled from users where email=?")
+        .authoritiesByUsernameQuery("SELECT\n"
+            + "  u.email,\n"
+            + "  r.role\n"
+            + "FROM users u \n"
+            + "INNER JOIN users_roles ur ON u.id = ur.user_id\n"
+            + "INNER JOIN role r ON ur.roles_id = r.id where u.email=?")
+        .passwordEncoder(bCryptPasswordEncoder);
   }
 
 
@@ -50,14 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //          .antMatchers("/admin/**").hasAnyRole("ADMIN") //all admins patterns
 //          .antMatchers("/user/**").hasAnyRole("USER") //all users patterns
 //          .anyRequest().authenticated()
-        .and()
-        .formLogin()
-        .loginPage("/login") //TODO login page
-        .permitAll()
-        .and()
-        .logout()
-        .permitAll()
-        .and()
-        .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+        .and().formLogin().loginPage("/login").usernameParameter("email").permitAll()
+        .and().logout().logoutSuccessUrl("/").permitAll()
+        .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
   }
 }

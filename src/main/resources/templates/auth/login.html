@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Spring Forum</title>
+  <link rel="stylesheet"
+        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<div class="hero is-primary is-bold is-fullheight">
+  <div class="hero-body">
+    <div class="column is-4 is-offset-4">
+      <form id="loginForm" th:action="@{/login}" method="post">
+
+        <article class="card">
+          <div class="card-content">
+            <div class="notification is-danger"
+                 th:if="${param.error}"
+                 th:text="#{login.error}">
+            </div>
+
+            <div class="field">
+              <label class="label" th:text="#{user.email}"></label>
+              <div class="control">
+                <input class="input" name="email"/>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" th:text="#{user.password}"></label>
+              <div class="control">
+                <input class="input" type="password" name="password"/>
+              </div>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <a id="loginBtn" class="card-footer-item" th:text="#{user.login}"></a>
+          </footer>
+        </article>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const loginBtn = document.getElementById('loginBtn')
+    const loginForm = document.getElementById('loginForm')
+    loginBtn.addEventListener('click', () => {
+      loginForm.submit()
+    })
+  })()
+</script>
+</body>
+</html>
