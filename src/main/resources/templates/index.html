@@ -10,7 +10,7 @@
 
   </div>
 
-  <div th:text="${#au}"></div>
+  <div th:text="${#authentication}"></div>
   <div th:text="${#authentication.getPrincipal()}"></div>
   <div sec:authorize="hasAuthority('user')">
     Je suis user
