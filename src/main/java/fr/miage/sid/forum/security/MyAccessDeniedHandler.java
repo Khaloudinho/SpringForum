@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.config;
+package fr.miage.sid.forum.security;
 
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.config;
+package fr.miage.sid.forum.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
