@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -20,6 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 // We specify table name because we can't have an User table in psql
 @Table(name = "Users")
+@NamedEntityGraph(name = "User.detail", attributeNodes = @NamedAttributeNode("roles"))
 public class User {
 
   @Id

@@ -1,8 +1,23 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/layout}">
 <body>
 <section class="section" layout:fragment="content">
   <h1 class="title">Forum</h1>
+
+  <div th:text="${#authentication.getDetails()}">
+
+  </div>
+
+  <div th:text="${#au}"></div>
+  <div th:text="${#authentication.getPrincipal()}"></div>
+  <div sec:authorize="hasAuthority('user')">
+    Je suis user
+  </div>
+  <div sec:authorize="hasAuthority('ROLE_USER')">
+    Je suis role_user
+  </div>
 </section>
 </body>
 </html>

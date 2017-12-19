@@ -4,8 +4,6 @@ import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.service.UserService;
 import java.security.Principal;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class AuthController {
 
-  private Logger logger = LoggerFactory.getLogger(AuthController.class);
   private final UserService userService;
 
   @Autowired

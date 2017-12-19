@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Spring Forum</title>
   <link rel="stylesheet"
         th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css}">
@@ -27,14 +31,10 @@
 
     <div class="navbar-end">
       <a class="navbar-item" th:href="@{/register}" th:text="#{user.register}"></a>
-      <div class="navbar-item">
-        <form action="/logout" method="post">
-          <button class="button is-primary" th:text="#{logout.btn}"></button>
-        </form>
-      </div>
-      <div class="navbar-item has-dropdown is-hoverable">
+
+      <div class="navbar-item has-dropdown is-hoverable" sec:authorize="isAuthenticated()">
         <a class="navbar-link"
-           th:text="#{lang.change}"></a>
+           th:text="${#authentication.getName()}"></a>
         <div class="navbar-dropdown is-boxed">
           <a class="navbar-item lang-changer"
              th:text="#{lang.fr}"
@@ -42,12 +42,31 @@
           <a class="navbar-item lang-changer"
              th:text="#{lang.eng}"
              data-lang="en"></a>
+          <form sec:authorize="isAuthenticated()" id="logoutForm" th:action="@{/logout}"
+                method="post">
+            <a id="logoutBtn" class="navbar-item" th:text="#{logout.btn}"></a>
+          </form>
         </div>
+      </div>
+
+      <div class="navbar-item has-dropdown is-hoverable" sec:authorize="isAnonymous()">
+
       </div>
     </div>
   </div>
 </nav>
 <section layout:fragment="content"></section>
 <script th:src="@{js/main.js}"></script>
+<script>
+  (() => {
+    const logoutBtn = document.getElementById('logoutBtn')
+    const logoutForm = document.getElementById('logoutForm')
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        logoutForm.submit()
+      })
+    }
+  })()
+</script>
 </body>
 </html>

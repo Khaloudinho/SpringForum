@@ -1,6 +1,5 @@
 package fr.miage.sid.forum.config;
 
-import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -16,13 +16,14 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
-  private DataSource dataSource; // Don't worry about the Intellij warning ..
+  private UserDetailsService userDetailsService;
 
   @Autowired
   private AccessDeniedHandler accessDeniedHandler;
 
   @Autowired
   BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
@@ -31,16 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    // TODO We still need to check the thing with role prefixes
-    auth.jdbcAuthentication()
-        .dataSource(dataSource)
-        .usersByUsernameQuery("select email, password, enabled from users where email=?")
-        .authoritiesByUsernameQuery("SELECT\n"
-            + "  u.email,\n"
-            + "  r.role\n"
-            + "FROM users u \n"
-            + "INNER JOIN users_roles ur ON u.id = ur.user_id\n"
-            + "INNER JOIN role r ON ur.roles_id = r.id where u.email=?")
+    auth
+        .userDetailsService(userDetailsService)
         .passwordEncoder(bCryptPasswordEncoder);
   }
 
