@@ -21,10 +21,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private AccessDeniedHandler accessDeniedHandler;
 
-  @Autowired
-  BCryptPasswordEncoder bCryptPasswordEncoder;
-
-
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
@@ -34,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth
         .userDetailsService(userDetailsService)
-        .passwordEncoder(bCryptPasswordEncoder);
+        .passwordEncoder(passwordEncoder());
   }
 
 

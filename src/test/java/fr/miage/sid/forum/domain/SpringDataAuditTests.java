@@ -1,8 +1,7 @@
-package fr.miage.sid.forum;
+package fr.miage.sid.forum.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.repository.UserRepository;
 import java.util.Date;
 import org.junit.Before;
