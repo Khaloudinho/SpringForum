@@ -15,11 +15,16 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
   private UserDetailsService userDetailsService;
 
-  @Autowired
   private AccessDeniedHandler accessDeniedHandler;
+
+  @Autowired
+  public WebSecurityConfig(UserDetailsService userDetailsService,
+      AccessDeniedHandler accessDeniedHandler) {
+    this.userDetailsService = userDetailsService;
+    this.accessDeniedHandler = accessDeniedHandler;
+  }
 
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
