@@ -14,11 +14,13 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Data
+@Data()
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity
