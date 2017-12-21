@@ -14,13 +14,13 @@
   <div class="hero-body">
     <div class="column is-4 is-offset-4">
       <form id="loginForm" th:action="@{/login}" method="post">
-
         <article class="card">
           <div class="card-content">
             <div class="notification is-danger"
                  th:if="${param.error}"
                  th:text="#{login.error}">
             </div>
+
 
             <div class="field">
               <label class="label" th:text="#{user.email}"></label>
@@ -41,10 +41,22 @@
           </footer>
         </article>
       </form>
+
+      <label class="label has-text-white has-text-centered">ou</label>
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <a th:href="@{/login/google}" class="button is-google">
+                  <span class="icon">
+                    <i class="fab fa-google"></i>
+                  </span>
+            <span>Connexion avec Google</span>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
+<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 <script>
   (() => {
     const loginBtn = document.getElementById('loginBtn')
