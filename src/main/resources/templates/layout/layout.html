@@ -30,7 +30,11 @@
     </div>
 
     <div class="navbar-end">
-      <a class="navbar-item" th:href="@{/register}" th:text="#{user.register}"></a>
+      <a class="navbar-item" sec:authorize="isAnonymous()"
+         th:href="@{/register}" th:text="#{user.register}"></a>
+
+      <a class="navbar-item" sec:authorize="isAnonymous()"
+         th:href="@{/login}" th:text="#{user.login}"></a>
 
       <div class="navbar-item has-dropdown is-hoverable" sec:authorize="isAuthenticated()">
         <a class="navbar-link"

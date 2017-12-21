@@ -12,11 +12,11 @@
 
   <div th:text="${#authentication}"></div>
   <div th:text="${#authentication.getPrincipal()}"></div>
-  <div sec:authorize="hasAuthority('user')">
+  <div sec:authorize="hasRole('USER')">
     Je suis user
   </div>
   <div sec:authorize="hasAuthority('ROLE_USER')">
-    Je suis role_user
+    Je suis authority role_user
   </div>
 </section>
 </body>

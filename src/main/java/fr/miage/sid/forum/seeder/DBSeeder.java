@@ -34,15 +34,11 @@ public class DBSeeder {
   @Transactional
   public void seed(ContextRefreshedEvent ev) {
     logger.info("Seeding database with roles and a dummy user");
-    Role userRole = createRoleIfNotExists("USER");
+    Role userRole = createRoleIfNotExists("ROLE_USER");
 
-    User dummy = new User();
-    dummy.setFirstname("John");
-    dummy.setLastname("Doe");
-    dummy.setUsername("johndoe");
-    dummy.setEmail("john@doe.com");
-    dummy.setPassword(passwordEncoder.encode("test"));
-    dummy.setRoles(Sets.newHashSet(userRole));
+    User dummy = new User().setFirstname("John").setLastname("Doe").setUsername("johndoe")
+        .setEmail("john@doe.com").setPassword(passwordEncoder.encode("test"))
+        .setRoles(Sets.newHashSet(userRole));
     userRepo.save(dummy);
   }
 
@@ -51,8 +47,7 @@ public class DBSeeder {
     Role role = roleRepo.findByRole(name);
 
     if (role == null) {
-      role = new Role();
-      role.setRole(name);
+      role = new Role().setRole(name);
       roleRepo.save(role);
     }
 

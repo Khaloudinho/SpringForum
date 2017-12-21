@@ -47,6 +47,8 @@ public class SpringSecurityTests {
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/"))
         .andExpect(authenticated().withUsername("test"));
+
+
   }
 
   @Test
