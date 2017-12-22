@@ -1,23 +1,10 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="~{layout/layout}">
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
 <body>
 <section class="section" layout:fragment="content">
   <h1 class="title">Forum</h1>
 
-  <div th:text="${#authentication.getPrincipal()}">
-
-  </div>
-
-  <!--<div th:text="${#authentication}"></div>-->
-  <!--<div th:text="${#authentication.getCredentials()}"></div>-->
-  <!--<div sec:authorize="hasRole('USER')">-->
-    <!--Je suis user-->
-  <!--</div>-->
-  <!--<div sec:authorize="hasAuthority('ROLE_USER')">-->
-    <!--Je suis authority role_user-->
-  <!--</div>-->
 </section>
 </body>
 </html>

@@ -2,9 +2,9 @@ package fr.miage.sid.forum.security;
 
 public interface MyPrincipal {
 
-  String getFirstname();
+  Long getId();
 
-  String getLastname();
+  String getName();
 
   String getEmail();
 }
