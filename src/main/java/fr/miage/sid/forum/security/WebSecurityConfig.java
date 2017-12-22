@@ -1,9 +1,12 @@
 package fr.miage.sid.forum.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.miage.sid.forum.domain.User;
+import fr.miage.sid.forum.domain.UserOrigin;
+import fr.miage.sid.forum.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,17 +20,20 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @Configuration
 @EnableWebSecurity
 @EnableOAuth2Sso
+@Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+  private UserRepository userRepository;
 
   private UserDetailsService userDetailsService;
 
   private AccessDeniedHandler accessDeniedHandler;
 
   @Autowired
-  public WebSecurityConfig(UserDetailsService userDetailsService,
+  public WebSecurityConfig(UserRepository userRepository,
+      UserDetailsService userDetailsService,
       AccessDeniedHandler accessDeniedHandler) {
+    this.userRepository = userRepository;
     this.userDetailsService = userDetailsService;
     this.accessDeniedHandler = accessDeniedHandler;
   }
@@ -37,11 +43,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-//  @Bean
-//  public PrincipalExtractor principalExtractor() {
-//    logger.warn("Trying to extract Principal");
-//    return map -> null;
-//  }
+  /**
+   * This Bean is used to extract OAuth2 connection information
+   * and then save them to DB. By using this extractor we make sure that
+   * we can always map an User (coming from OAuth or from classic registration) to
+   * a know MyPrincipal interface. This allows us to use the @AuthenticationPrincipal
+   * annotation in our controllers to always retrieve a Principal with a known implementation
+   * (and also decoupling from Spring Security).
+   */
+  @Bean
+  public PrincipalExtractor principalExtractor() {
+    return map -> {
+      log.info("Mapping google user and saving it to DB");
+      String oauthId = (String) map.get("sub");
+      User user = userRepository.findByOauthId(oauthId);
+      if (user == null) {
+        user = new User().setEmail((String) map.get("email"))
+            .setOauthId(oauthId).setUsername((String) map.get("name"))
+            .setFirstname((String) map.get("name"))
+            .setLastname((String) map.get("name"))
+            .setPicture((String) map.get("picture"))
+            .setOrigin(UserOrigin.GOOGLE);
+      } else {
+        // We will update picture every time to make sure our data is fresh
+        user.setPicture((String) map.get("picture"));
+      }
+
+      userRepository.save(user);
+      return user;
+    };
+  }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -49,7 +80,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .userDetailsService(userDetailsService)
         .passwordEncoder(passwordEncoder());
   }
-
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {

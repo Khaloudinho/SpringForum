@@ -3,6 +3,7 @@ package fr.miage.sid.forum.service;
 import com.google.common.collect.Sets;
 import fr.miage.sid.forum.domain.Role;
 import fr.miage.sid.forum.domain.User;
+import fr.miage.sid.forum.domain.UserOrigin;
 import fr.miage.sid.forum.repository.RoleRepository;
 import fr.miage.sid.forum.repository.UserRepository;
 import java.util.Set;
@@ -33,8 +34,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User save(User user) {
+    user.setOrigin(UserOrigin.DB);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    Role userRole = roleRepo.findByRole("USER");
+    Role userRole = roleRepo.findByRole("ROLE_USER");
     Set<Role> roles = Sets.newHashSet(userRole);
     user.setRoles(roles);
     return userRepo.save(user);

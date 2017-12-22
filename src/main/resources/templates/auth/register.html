@@ -7,7 +7,7 @@
 
     <h1 class="title" th:text="#{user.register}"></h1>
 
-    <form th:action="@{/register}" th:object="${user}" method="post">
+    <form th:action="@{/register}" th:object="${userForm}" method="post">
       <div class="field">
         <label class="label" th:text="#{user.email}"></label>
         <div class="control">
