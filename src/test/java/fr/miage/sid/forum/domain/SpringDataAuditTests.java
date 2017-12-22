@@ -46,4 +46,5 @@ public class SpringDataAuditTests {
     assertThat(updatedUser.getUpdatedAt()).isAfter(updated);
   }
 
+
 }

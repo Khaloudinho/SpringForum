@@ -1,6 +1,7 @@
 package fr.miage.sid.forum.domain;
 
 
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,4 +53,14 @@ public class User extends Auditable {
   private Set<Role> roles;
 
   private boolean enabled = true;
+  
+  
+  
+  @Override
+  public boolean equals(Object o){
+      User tmp =(User)o;
+      return this.getId().equals(tmp.getId());  
+  }
+
+
 }
