@@ -27,7 +27,6 @@ public class TopicController {
 
   @GetMapping("project/{projectId}/newtopic")
   public ModelAndView getTopicForm(Topic topic, @PathVariable("projectId") String projectId){
-    System.out.println(projectId);
     ModelAndView modelAndView = new ModelAndView("topic/new");
     modelAndView.addObject(topic);
     modelAndView.addObject("projectId", projectId);
@@ -42,7 +41,7 @@ public class TopicController {
       modelAndView.addObject("projectId", projectId);
     } else {
       topic.setProject(projectRepository.getOne(Long.valueOf(projectId, 10)));
-      topicRepository.save(topic);//TODO gérer created by
+      topicRepository.save(topic);
       modelAndView.setViewName("redirect:/");
     }
     return modelAndView;
