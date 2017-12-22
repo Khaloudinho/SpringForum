@@ -1,5 +1,7 @@
 package fr.miage.sid.forum.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @EnableOAuth2Sso
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+  private Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+
   private UserDetailsService userDetailsService;
 
   private AccessDeniedHandler accessDeniedHandler;
@@ -32,6 +36,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
+//  @Bean
+//  public PrincipalExtractor principalExtractor() {
+//    logger.warn("Trying to extract Principal");
+//    return map -> null;
+//  }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {

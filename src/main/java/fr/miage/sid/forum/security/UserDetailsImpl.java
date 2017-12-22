@@ -4,7 +4,8 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-public class UserDetailsImpl extends User {
+
+public class UserDetailsImpl extends User implements MyPrincipal {
 
   private String firstname;
   private String lastname;
@@ -18,18 +19,18 @@ public class UserDetailsImpl extends User {
     this.email = user.getEmail();
   }
 
-
+  @Override
   public String getFirstname() {
     return firstname;
   }
 
+  @Override
   public String getLastname() {
     return lastname;
   }
 
+  @Override
   public String getEmail() {
     return email;
   }
-
-
 }

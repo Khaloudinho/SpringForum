@@ -1,8 +1,7 @@
 package fr.miage.sid.forum.controller;
 
-import java.security.Principal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import fr.miage.sid.forum.domain.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -10,12 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
   @GetMapping("/")
-  public String home(Principal principal) {
+  public String home(@AuthenticationPrincipal User principal) {
+////    System.out.println(authentication.getDetails());
+//    if (principal != null && principal instanceof OAuth2Authentication) {
+//      System.out.println("hello");
+//      OAuth2Authentication auth2Authentication = (OAuth2Authentication) principal;
+//      Authentication authentication  = auth2Authentication.getUserAuthentication();
+//      System.out.println(authentication.getDetails());
+////      Map<String, String> map = new LinkedHashMap<>();
+////      map.put("email", details.get("email"));
+////      System.out.println(map);
+//    }
+
     System.out.println(principal);
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String currentPrincipalName = authentication.getName();
-    System.out.println(currentPrincipalName);
-    System.out.println(authentication);
     return "index";
   }
 

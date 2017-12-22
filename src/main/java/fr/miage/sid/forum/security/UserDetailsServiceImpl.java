@@ -33,6 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     if (user == null) {
       throw new UsernameNotFoundException(email);
     }
+
     return new UserDetailsImpl(user, getAuthorities(user.getRoles()));
   }
 
