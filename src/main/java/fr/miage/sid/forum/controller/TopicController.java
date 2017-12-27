@@ -3,9 +3,7 @@ package fr.miage.sid.forum.controller;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.repository.ProjectRepository;
 import fr.miage.sid.forum.repository.TopicRepository;
-import fr.miage.sid.forum.service.MailService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import fr.miage.sid.forum.service.TopicService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,14 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class TopicController {
 
-  private final TopicRepository topicRepository;
-  private final ProjectRepository projectRepository;
+  private final TopicService topicService;
 
   @Autowired
-  public TopicController(TopicRepository topicRepository,
-      ProjectRepository projectRepository) {
-    this.topicRepository = topicRepository;
-    this.projectRepository = projectRepository;
+  public TopicController(TopicService topicService) {
+    this.topicService = topicService;
   }
 
   @GetMapping("project/{projectId}/newtopic")
@@ -43,8 +38,7 @@ public class TopicController {
       modelAndView.setViewName("topic/new");
       modelAndView.addObject("projectId", projectId);
     } else {
-      topic.setProject(projectRepository.getOne(Long.valueOf(projectId, 10)));
-      topicRepository.save(topic);
+      topicService.save(topic, projectId);
       modelAndView.setViewName("redirect:/");
     }
     return modelAndView;

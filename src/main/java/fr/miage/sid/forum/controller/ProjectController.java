@@ -2,6 +2,7 @@ package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.repository.ProjectRepository;
+import fr.miage.sid.forum.service.ProjectService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,11 +14,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ProjectController {
 
-  private final ProjectRepository projectRepository;
+  private final ProjectService projectService;
 
   @Autowired
-  public ProjectController(ProjectRepository projectRepository) {
-    this.projectRepository = projectRepository;
+  public ProjectController(ProjectService projectService) {
+    this.projectService = projectService;
   }
 
   @GetMapping("project/new")
@@ -33,7 +34,7 @@ public class ProjectController {
     if(result.hasErrors()){
       modelAndView.setViewName("project/new");
     } else {
-      projectRepository.save(project);
+      projectService.save(project);
       modelAndView.setViewName("redirect:/");
     }
     return modelAndView;
