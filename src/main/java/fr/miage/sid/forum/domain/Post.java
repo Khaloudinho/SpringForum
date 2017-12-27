@@ -8,9 +8,11 @@ import javax.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity

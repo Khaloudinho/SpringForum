@@ -101,14 +101,33 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.16.16</version>
+      <version>1.16.18</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.icegreen</groupId>
+        <artifactId>greenmail</artifactId>
+        <version>1.5.0</version>
+        <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>23.5-jre</version>
     </dependency>
+    <dependency>
+      <groupId>org.modelmapper</groupId>
+      <artifactId>modelmapper</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.jvnet.mock-javamail/mock-javamail -->
+    <dependency>
+        <groupId>org.jvnet.mock-javamail</groupId>
+        <artifactId>mock-javamail</artifactId>
+        <version>1.9</version>
+        <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>

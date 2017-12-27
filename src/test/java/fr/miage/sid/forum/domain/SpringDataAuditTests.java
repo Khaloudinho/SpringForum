@@ -22,10 +22,8 @@ public class SpringDataAuditTests {
 
   @Before
   public void create() {
-    User newUser = new User();
-    newUser.setUsername("test");
-    newUser.setPassword("test");
-    newUser.setEmail("test@test.com");
+    User newUser = new User().setUsername("test").setPassword("test")
+        .setEmail("test@test.com");
     user = userRepo.save(newUser);
   }
 

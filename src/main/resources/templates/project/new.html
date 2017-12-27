@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<body>
+<section class="section" layout:fragment="content">
+  <div class="container">
+
+    <h1 class="title" th:text="#{project.new}"></h1>
+
+    <form th:action="@{/project/new}" th:object="${project}" method="post">
+      <div class="field">
+        <label class="label" th:text="#{project.name}"></label>
+        <div class="control">
+          <input class="input" th:field="*{name}"/>
+          <p class="help is-danger"
+             th:if="${#fields.hasErrors('name')}"
+             th:errors="*{name}">name error</p>
+        </div>
+      </div>
+
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <button class="button is-info" th:text="#{submit}"></button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</section>
+</body>
+</html>
