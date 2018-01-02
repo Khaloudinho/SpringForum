@@ -25,6 +25,7 @@ public class Post extends Auditable {
   @NotEmpty
   private String content;
 
+
   @ManyToOne
   private Topic topic;
 
