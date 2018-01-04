@@ -1,11 +1,14 @@
 package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.exception.PermissionTopicException;
 import fr.miage.sid.forum.repository.ProjectRepository;
 import fr.miage.sid.forum.repository.TopicRepository;
+import fr.miage.sid.forum.security.MyPrincipal;
 import fr.miage.sid.forum.service.TopicService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +35,29 @@ public class TopicController {
   }
 
   @PostMapping("project/{projectId}/newtopic")
-  public ModelAndView createTopic(@Valid Topic topic, BindingResult result, @PathVariable("projectId") String projectId){
+  public ModelAndView createTopic(
+      @Valid Topic topic,
+      BindingResult result,
+      @PathVariable("projectId") String projectId,
+      @AuthenticationPrincipal MyPrincipal principal){
     ModelAndView modelAndView = new ModelAndView();
     if(result.hasErrors()){
       modelAndView.setViewName("topic/new");
       modelAndView.addObject("projectId", projectId);
     } else {
-      topicService.save(topic, projectId);
-      modelAndView.setViewName("redirect:/");
+      try {
+        Topic createdTopic = topicService.save(topic, Long.valueOf(projectId), principal.getId());
+        modelAndView.setViewName("redirect:/");
+        if(createdTopic == null){
+          modelAndView.setViewName("error/404");
+          modelAndView.addObject("message", "This project does not exist, making a new topic is impossible");
+        }
+      } catch (PermissionTopicException e){
+        modelAndView.setViewName("error/403");
+        modelAndView.addObject("message", "You do not have the permission to make a topic on this project");
+        return modelAndView;
+      }
+
     }
     return modelAndView;
   }

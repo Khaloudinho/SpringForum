@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
@@ -33,14 +34,14 @@ public class Project extends Auditable {
     @ManyToOne
     private User creator;
 
-    @OneToMany
+    @ManyToMany
     private Set<User> readerUser = new HashSet<>();
-    @OneToMany
+    @ManyToMany
     private Set<User> writerUser= new HashSet<>();
     
     
-    @OneToMany(mappedBy = "project")
-    private Set<Topic> topics= new HashSet<>();
+//    @OneToMany(mappedBy = "project")
+//    private Set<Topic> topics= new HashSet<>();
 
     /**
      * addDroit - set permission for a user to the project
@@ -83,13 +84,13 @@ public class Project extends Auditable {
     }
     /**
      * addTopic, set a topic to the project
-     * @param t Topic, topic set
+     * @param topic Topic, topic set
      * @throws PermissionTopicException if the user can't insert the topic 
      */
-    public void addTopic(Topic t) throws PermissionTopicException{
-        if(this.canExecute(t.getCreator(), EDroit.WRITE)){
-            t.setProject(this);
-            this.topics.add(t);
+    public void addTopic(Topic topic) throws PermissionTopicException{
+        if(this.canExecute(topic.getCreator(), EDroit.WRITE)){
+            topic.setProject(this);
+//            this.topics.add(topic);
         }else{
             throw new PermissionTopicException("User can't create topic");
         }

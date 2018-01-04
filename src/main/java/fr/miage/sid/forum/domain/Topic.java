@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -12,9 +13,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -42,14 +45,14 @@ public class Topic extends Auditable {
     @ManyToOne
     private Project project;
 
-    @OneToMany
+    @ManyToMany
     private Set<User> readerUser = new HashSet<>();
-    @OneToMany
+    @ManyToMany
     private Set<User> writerUser = new HashSet<>();
     
   
-    @OneToMany(mappedBy = "topic")
-    private Set<Post> posts = new HashSet<>();
+//    @OneToMany(mappedBy = "topic")
+//    private Set<Post> posts = new HashSet<>();
 
     /**
      * addDroit - set permission for a user to the topic
@@ -145,13 +148,13 @@ public class Topic extends Auditable {
     
     /**
      * addPost, set a post to the topic
-     * @param p Post, post set
+     * @param post Post, post set
      * @throws PermissionPostException if the user can't insert the post 
      */
-    public void addPost(Post p) throws PermissionPostException{
-        if(this.canExecute(p.getUser(), EDroit.WRITE)){
-            p.setTopic(this);
-            this.posts.add(p);
+    public void addPost(Post post) throws PermissionPostException{
+        if(this.canExecute(post.getUser(), EDroit.WRITE)){
+//            this.posts.add(post);
+            post.setTopic(this);
         }else{
             throw new PermissionPostException("User can't write post");
         }

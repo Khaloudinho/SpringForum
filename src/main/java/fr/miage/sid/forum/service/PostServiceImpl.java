@@ -1,6 +1,8 @@
 package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.Post;
+import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.exception.PermissionPostException;
 import fr.miage.sid.forum.repository.PostRepository;
 import fr.miage.sid.forum.repository.TopicRepository;
 import fr.miage.sid.forum.repository.UserRepository;
@@ -29,9 +31,16 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public Post save(Post post, Long topicId, Long userId) {
-    post.setUser(userRepository.getOne(userId));
-    post.setTopic(topicRepository.getOne(topicId));
-    return postRepository.save(post);
+  public Post save(Post post, Long topicId, Long userId) throws PermissionPostException{
+
+    if(topicRepository.exists(topicId)){
+      Topic topic = topicRepository.getOne(topicId);
+      post.setUser(userRepository.getOne(userId));
+      topic.addPost(post);
+//      topicRepository.save(topic);
+      return postRepository.save(post);
+    }
+
+    return null;
   }
 }

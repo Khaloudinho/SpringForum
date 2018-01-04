@@ -41,4 +41,9 @@ public class UserServiceImpl implements UserService {
     user.setRoles(roles);
     return userRepo.save(user);
   }
+
+  @Override
+  public User getOne(Long id) {
+    return userRepo.getOne(id);
+  }
 }
