@@ -33,6 +33,7 @@ public class ProjectController {
   @GetMapping("project")
   public ModelAndView getAll(){
     ModelAndView modelAndView = new ModelAndView("project/home");
+    modelAndView.addObject("projects", projectService.getAll());
     return modelAndView;
   }
 

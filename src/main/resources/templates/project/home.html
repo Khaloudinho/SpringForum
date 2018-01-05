@@ -6,6 +6,21 @@
   <div class="container">
     <h1 class="title" th:text="#{project.all}"></h1>
     <a class="button is-link" th:text="#{project.new}" th:href="@{/project/new}"></a>
+    <table class="table">
+      <tbody>
+      <tr th:each="project : ${projects}">
+        <td><a th:href="@{'/project/' + ${project.id}}" th:text="${project.name}"></a></td>
+        <td><a href="#" th:text="${project.creator.username}"></a></td>
+      </tr>
+      </tbody>
+      <thead>
+      <tr>
+        <th th:text="#{project.name}"></th>
+        <th th:text="#{creator}"></th>
+      </tr>
+      </thead>
+    </table>
+  </div>
   </div>
 </section>
 </body>
