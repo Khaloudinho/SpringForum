@@ -63,7 +63,7 @@ public class PostController {
     } else {
       try {
         Post created = postService.save(post, Long.valueOf(topicId), principal.getId());
-        modelAndView.setViewName("redirect:/");
+        modelAndView.setViewName("redirect:/topic/" + topicId);
         if (created == null){
           modelAndView.setViewName("error/basicTemplate");
           modelAndView.setStatus(HttpStatus.NOT_FOUND);

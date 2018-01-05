@@ -5,7 +5,9 @@ import fr.miage.sid.forum.exception.PermissionTopicException;
 import fr.miage.sid.forum.repository.ProjectRepository;
 import fr.miage.sid.forum.repository.TopicRepository;
 import fr.miage.sid.forum.security.MyPrincipal;
+import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +23,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class TopicController {
 
   private final TopicService topicService;
+  private final PostService postService;
 
   @Autowired
-  public TopicController(TopicService topicService) {
+  public TopicController(TopicService topicService,
+      PostService postService) {
     this.topicService = topicService;
+    this.postService = postService;
   }
 
   @GetMapping("project/{projectId}/newtopic")
@@ -75,5 +80,22 @@ public class TopicController {
     return modelAndView;
   }
 
+  @GetMapping("/topic/{topicId}")
+  public ModelAndView getOne(@PathVariable("topicId") String topicId){
+    ModelAndView modelAndView = new ModelAndView();
 
+    try{
+      Topic topic = topicService.getOne(Long.valueOf(topicId));
+      modelAndView.setViewName("topic/topicPage");
+      modelAndView.addObject("topic", topic);
+      modelAndView.addObject("posts", postService.getAllByTopic(topic));
+    } catch (NumberFormatException | EntityNotFoundException e){
+      modelAndView.setViewName("error/basicTemplate");
+      modelAndView.setStatus(HttpStatus.NOT_FOUND);
+      modelAndView.addObject("errorCode", "404 Not Found");
+      modelAndView.addObject("message", "This topic does not exist");
+    }
+
+    return modelAndView;
+  }
 }

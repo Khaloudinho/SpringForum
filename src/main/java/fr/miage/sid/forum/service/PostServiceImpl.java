@@ -6,6 +6,7 @@ import fr.miage.sid.forum.exception.PermissionPostException;
 import fr.miage.sid.forum.repository.PostRepository;
 import fr.miage.sid.forum.repository.TopicRepository;
 import fr.miage.sid.forum.repository.UserRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +43,10 @@ public class PostServiceImpl implements PostService {
     }
 
     return null;
+  }
+
+  @Override
+  public List<Post> getAllByTopic(Topic topic) {
+    return postRepository.getAllByTopic(topic);
   }
 }
