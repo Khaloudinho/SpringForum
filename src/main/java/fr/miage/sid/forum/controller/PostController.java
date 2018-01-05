@@ -9,6 +9,7 @@ import fr.miage.sid.forum.service.TopicService;
 import fr.miage.sid.forum.service.UserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -47,6 +48,15 @@ public class PostController {
       @PathVariable("topicId") String topicId,
       @AuthenticationPrincipal MyPrincipal principal){
     ModelAndView modelAndView = new ModelAndView();
+
+    if(principal == null){// user is somehow anonymous
+      modelAndView.setViewName("error/basicTemplate");
+      modelAndView.setStatus(HttpStatus.UNAUTHORIZED);
+      modelAndView.addObject("errorCode", "401 Unauthorized");
+      modelAndView.addObject("message", "You did not provide any HTTP authentication");
+      return modelAndView;
+    }
+
     if(result.hasErrors()){
       modelAndView.setViewName("topic/newPost");
       modelAndView.addObject("topicId", topicId);
@@ -55,11 +65,15 @@ public class PostController {
         Post created = postService.save(post, Long.valueOf(topicId), principal.getId());
         modelAndView.setViewName("redirect:/");
         if (created == null){
-          modelAndView.setViewName("error/404");
+          modelAndView.setViewName("error/basicTemplate");
+          modelAndView.setStatus(HttpStatus.NOT_FOUND);
+          modelAndView.addObject("errorCode", "404 Not Found");
           modelAndView.addObject("message", "This topic does not exist, making a new post is impossible");
         }
       } catch (PermissionPostException e) {
-        modelAndView.setViewName("error/403");
+        modelAndView.setViewName("error/basicTemplate");
+        modelAndView.setStatus(HttpStatus.FORBIDDEN);
+        modelAndView.addObject("errorCode", "403 Forbidden");
         modelAndView.addObject("message", "You do not have the permission to make a post here");
         return modelAndView;
       }

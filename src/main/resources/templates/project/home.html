@@ -4,13 +4,8 @@
 <body>
 <section class="section" layout:fragment="content">
   <div class="container">
-
-    <h1 class="title">403 - ¯\_(ツ)_/¯</h1>
-
-    <div th:inline="text" th:text="${message}">
-
-    </div>
-
+    <h1 class="title" th:text="#{project.all}"></h1>
+    <a class="button is-link" th:text="#{project.new}" th:href="@{/project/new}"></a>
   </div>
 </section>
 </body>
