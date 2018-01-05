@@ -59,6 +59,8 @@ public class DBSeeder {
 
     Topic topicA1 = new Topic().setTitle("Premier sujet").setCreator(dummy).setProject(projectA);
     topicA1.addDroit(dummy, EDroit.ALL);
+    Topic topicB1 = new Topic().setTitle("Vous n'allez jamais croire ce qu'il s'est passé ! :xxx").setCreator(dummy).setProject(projectB);
+    topicB1.addDroit(dummy, EDroit.ALL);
     topicRepository.save(topicA1);
   }
 

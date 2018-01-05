@@ -4,6 +4,8 @@ import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.repository.ProjectRepository;
 import fr.miage.sid.forum.security.MyPrincipal;
 import fr.miage.sid.forum.service.ProjectService;
+import fr.miage.sid.forum.service.TopicService;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,10 +21,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProjectController {
 
   private final ProjectService projectService;
+  private final TopicService topicService;
 
   @Autowired
-  public ProjectController(ProjectService projectService) {
+  public ProjectController(ProjectService projectService,
+      TopicService topicService) {
     this.projectService = projectService;
+    this.topicService = topicService;
   }
 
   @GetMapping("project")
@@ -57,5 +63,25 @@ public class ProjectController {
     }
     return modelAndView;
   }
+
+  @GetMapping("project/{projectId}")
+  public ModelAndView getOne(@PathVariable("projectId") String projectId){
+    ModelAndView modelAndView = new ModelAndView();
+
+    try{
+      Project project = projectService.getOne(Long.valueOf(projectId));
+      modelAndView.setViewName("project/projectPage");
+      modelAndView.addObject("project", project);
+      modelAndView.addObject("topics", topicService.getAllByProject(project));
+    } catch (NumberFormatException | EntityNotFoundException e){
+      modelAndView.setViewName("error/basicTemplate");
+      modelAndView.setStatus(HttpStatus.NOT_FOUND);
+      modelAndView.addObject("errorCode", "404 Not Found");
+      modelAndView.addObject("message", "This project does not exist");
+    }
+
+    return modelAndView;
+  }
+
 
 }

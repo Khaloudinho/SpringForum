@@ -6,6 +6,7 @@ import fr.miage.sid.forum.exception.PermissionTopicException;
 import fr.miage.sid.forum.repository.ProjectRepository;
 import fr.miage.sid.forum.repository.TopicRepository;
 import fr.miage.sid.forum.repository.UserRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,10 @@ public class TopicServiceImpl implements TopicService {
   @Override
   public Topic getOne(Long id) {
     return topicRepository.getOne(id);
+  }
+
+  @Override
+  public List<Topic> getAllByProject(Project project) {
+    return topicRepository.getAllByProject(project);
   }
 }

@@ -24,4 +24,9 @@ public class ProjectServiceImpl implements ProjectService{
     project.setCreator(userRepository.getOne(userId));
     return projectRepository.save(project);
   }
+
+  @Override
+  public Project getOne(Long projectId) {
+    return projectRepository.getOne(projectId);
+  }
 }
