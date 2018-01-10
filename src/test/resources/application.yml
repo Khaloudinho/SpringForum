@@ -6,5 +6,11 @@ spring:
     password: sa
   session:
     store-type: none
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+
+
 
 

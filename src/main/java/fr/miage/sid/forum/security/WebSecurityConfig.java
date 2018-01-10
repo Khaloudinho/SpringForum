@@ -60,8 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       if (user == null) {
         user = new User().setEmail((String) map.get("email"))
             .setOauthId(oauthId).setUsername((String) map.get("name"))
-            .setFirstname((String) map.get("name"))
-            .setLastname((String) map.get("name"))
+            .setFirstname((String) map.get("given_name"))
+            .setLastname((String) map.get("family_name"))
             .setPicture((String) map.get("picture"))
             .setOrigin(UserOrigin.GOOGLE);
       } else {
