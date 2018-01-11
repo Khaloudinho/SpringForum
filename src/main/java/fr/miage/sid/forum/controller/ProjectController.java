@@ -83,6 +83,23 @@ public class ProjectController {
 
     return modelAndView;
   }
+  @GetMapping("project/{projectId}/editaccess")
+  public ModelAndView editAccess(@PathVariable("projectId") String projectId){
+    ModelAndView modelAndView = new ModelAndView();
+
+    try{
+      Project project = projectService.getOne(Long.valueOf(projectId));
+      modelAndView.setViewName("project/editAccessPage");
+      modelAndView.addObject("project", project);
+    } catch (NumberFormatException | EntityNotFoundException e){
+      modelAndView.setViewName("error/basicTemplate");
+      modelAndView.setStatus(HttpStatus.NOT_FOUND);
+      modelAndView.addObject("errorCode", "404 Not Found");
+      modelAndView.addObject("message", "This project does not exist");
+    }
+
+    return modelAndView;
+  }
 
 
 }

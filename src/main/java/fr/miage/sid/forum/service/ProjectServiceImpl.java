@@ -1,5 +1,6 @@
 package fr.miage.sid.forum.service;
 
+import fr.miage.sid.forum.domain.EDroit;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.repository.ProjectRepository;
 import fr.miage.sid.forum.repository.UserRepository;
@@ -23,6 +24,7 @@ public class ProjectServiceImpl implements ProjectService{
   @Override
   public Project save(Project project, Long userId) {
     project.setCreator(userRepository.getOne(userId));
+    project.addDroit(userRepository.getOne(userId),EDroit.ALL);
     return projectRepository.save(project);
   }
 

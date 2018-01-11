@@ -41,6 +41,7 @@ public class Topic extends Auditable {
     @ManyToOne
     private User creator;
 
+    private boolean anonymeAccess;
     
     @ManyToOne
     private Project project;
@@ -118,14 +119,17 @@ public class Topic extends Auditable {
     
     /**
      * canExecute - verify if user can execute an action
-     * @param u User, user who has verify
+     * @param u User, user who has verify or null to test anonyme user
      * @param d EDroit, the permisssion verify
      * @return true if user can use the permission to the projet, false if it can't
      */
     public boolean canExecute(User u, EDroit d) {
+        if(u == null&& anonymeAccess&& d == EDroit.READ){
+            return true;
+        }
         switch (d) {
             case READ:
-                if (readerUser.contains(u)) {
+                if (readerUser.contains(u)||this.anonymeAccess) {
                     return true;
                 }
                 ;

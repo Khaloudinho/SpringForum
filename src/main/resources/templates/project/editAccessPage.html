@@ -6,23 +6,14 @@
   <div class="container">
     <h1 class="title" th:text="#{project}"></h1>
     <h2 class="subtitle" th:text="${project.name}"></h2>
-    <a class="button is-link" th:text="#{topic.new}" th:href="@{'/project/'+${project.id}+'/newtopic'}"></a>
 <a class="button is-link" th:text="#{project.return}" th:href="@{/project/}"></a>
 <a class="button is-link" th:text="#{project.edit_access}" th:href="@{'/project/'+${project.id}+'/editaccess'}"></a>
 
     <table class="table">
       <tbody>
-        <tr th:each="topic : ${topics}">
-          <td><a th:href="@{'/topic/' + ${topic.id}}" th:text="${topic.title}"></a></td>
-          <td><a href="#" th:text="${topic.creator.username}"></a></td>
-        </tr>
+
       </tbody>
-      <thead>
-        <tr>
-          <th th:text="#{topic.title}"></th>
-          <th th:text="#{creator}"></th>
-        </tr>
-      </thead>
+
     </table>
   </div>
 </section>

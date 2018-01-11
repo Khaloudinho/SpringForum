@@ -46,9 +46,9 @@ public class MailService {
     public void sendNotificationEmail(User u,User actionner){
          MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom("sample@dolszewski.com");
+            messageHelper.setFrom("do-not-reply@spring-mail.com");
             messageHelper.setTo(u.getEmail());
-            messageHelper.setSubject("Sample mail subject");
+            messageHelper.setSubject("Topic notification");
             String content = build(u.getFirstname(),actionner.getUsername());
            messageHelper.setText(content, true);
         };

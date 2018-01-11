@@ -1,7 +1,9 @@
 package fr.miage.sid.forum.service;
 
+import fr.miage.sid.forum.domain.EDroit;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.exception.PermissionTopicException;
 import fr.miage.sid.forum.repository.ProjectRepository;
 import fr.miage.sid.forum.repository.TopicRepository;
@@ -35,8 +37,10 @@ public class TopicServiceImpl implements TopicService {
   @Override
   public Topic save(Topic topic, Long projectId, Long userId) throws PermissionTopicException {
     if(projectRepository.exists(projectId)){
+      User tmp = userRepository.findOne(userId);
       Project project = projectRepository.getOne(projectId);
       topic.setCreator(userRepository.getOne(userId));
+      topic.addDroit(tmp, EDroit.ALL);
       project.addTopic(topic);
       return topicRepository.save(topic);
     }

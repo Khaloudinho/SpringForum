@@ -6,6 +6,7 @@
   <div class="container">
 
     <h1 class="title" th:text="#{topic.new}"></h1>
+<a class="button is-link" th:text="#{topic.return}" th:href="@{'/project/'+${projectId} }"></a>
 
     <form th:action="@{'/project/' + ${projectId} + '/newtopic'}" th:object="${topic}" method="post">
       <div class="field">
