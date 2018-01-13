@@ -1,7 +1,7 @@
 package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.Project;
-import fr.miage.sid.forum.repository.ProjectRepository;
+import fr.miage.sid.forum.security.CurrentUser;
 import fr.miage.sid.forum.security.MyPrincipal;
 import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.TopicService;
@@ -9,7 +9,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,32 +31,26 @@ public class ProjectController {
   }
 
   @GetMapping("project")
-  public ModelAndView getAll(){
+  public ModelAndView getAll() {
     ModelAndView modelAndView = new ModelAndView("project/home");
     modelAndView.addObject("projects", projectService.getAll());
     return modelAndView;
   }
 
   @GetMapping("project/new")
-  public ModelAndView getTopicForm(Project project){
+  public ModelAndView getTopicForm(Project project) {
     ModelAndView modelAndView = new ModelAndView("project/new");
     modelAndView.addObject(project);
     return modelAndView;
   }
 
   @PostMapping("project/new")
-  public ModelAndView createTopic(@Valid Project project, BindingResult result, @AuthenticationPrincipal MyPrincipal principal){
+  @PreAuthorize("isAuthenticated()")
+  public ModelAndView createTopic(@Valid Project project, BindingResult result,
+      @CurrentUser MyPrincipal principal) {
+
     ModelAndView modelAndView = new ModelAndView();
-
-    if(principal == null){// user is somehow anonymous
-      modelAndView.setViewName("error/basicTemplate");
-      modelAndView.setStatus(HttpStatus.UNAUTHORIZED);
-      modelAndView.addObject("errorCode", "401 Unauthorized");
-      modelAndView.addObject("message", "You did not provide any HTTP authentication");
-      return modelAndView;
-    }
-
-    if(result.hasErrors()){
+    if (result.hasErrors()) {
       modelAndView.setViewName("project/new");
     } else {
       projectService.save(project, principal.getId());
@@ -66,15 +60,15 @@ public class ProjectController {
   }
 
   @GetMapping("project/{projectId}")
-  public ModelAndView getOne(@PathVariable("projectId") String projectId){
+  public ModelAndView getOne(@PathVariable("projectId") String projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    try{
+    try {
       Project project = projectService.getOne(Long.valueOf(projectId));
       modelAndView.setViewName("project/projectPage");
       modelAndView.addObject("project", project);
       modelAndView.addObject("topics", topicService.getAllByProject(project));
-    } catch (NumberFormatException | EntityNotFoundException e){
+    } catch (NumberFormatException | EntityNotFoundException e) {
       modelAndView.setViewName("error/basicTemplate");
       modelAndView.setStatus(HttpStatus.NOT_FOUND);
       modelAndView.addObject("errorCode", "404 Not Found");
@@ -83,15 +77,16 @@ public class ProjectController {
 
     return modelAndView;
   }
+
   @GetMapping("project/{projectId}/editaccess")
-  public ModelAndView editAccess(@PathVariable("projectId") String projectId){
+  public ModelAndView editAccess(@PathVariable("projectId") String projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    try{
+    try {
       Project project = projectService.getOne(Long.valueOf(projectId));
       modelAndView.setViewName("project/editAccessPage");
       modelAndView.addObject("project", project);
-    } catch (NumberFormatException | EntityNotFoundException e){
+    } catch (NumberFormatException | EntityNotFoundException e) {
       modelAndView.setViewName("error/basicTemplate");
       modelAndView.setStatus(HttpStatus.NOT_FOUND);
       modelAndView.addObject("errorCode", "404 Not Found");

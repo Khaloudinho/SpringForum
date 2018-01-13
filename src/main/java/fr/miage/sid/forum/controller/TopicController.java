@@ -2,8 +2,7 @@ package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.exception.PermissionTopicException;
-import fr.miage.sid.forum.repository.ProjectRepository;
-import fr.miage.sid.forum.repository.TopicRepository;
+import fr.miage.sid.forum.security.CurrentUser;
 import fr.miage.sid.forum.security.MyPrincipal;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
@@ -11,7 +10,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,7 @@ public class TopicController {
   }
 
   @GetMapping("project/{projectId}/newtopic")
-  public ModelAndView getTopicForm(Topic topic, @PathVariable("projectId") String projectId){
+  public ModelAndView getTopicForm(Topic topic, @PathVariable("projectId") String projectId) {
     ModelAndView modelAndView = new ModelAndView("topic/new");
     modelAndView.addObject(topic);
     modelAndView.addObject("projectId", projectId);
@@ -41,39 +40,34 @@ public class TopicController {
   }
 
   @PostMapping("project/{projectId}/newtopic")
+  @PreAuthorize("isAuthenticated()")
   public ModelAndView createTopic(
       @Valid Topic topic,
       BindingResult result,
       @PathVariable("projectId") String projectId,
-      @AuthenticationPrincipal MyPrincipal principal){
+      @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView();
 
-    if(principal == null){// user is somehow anonymous
-      modelAndView.setViewName("error/basicTemplate");
-      modelAndView.setStatus(HttpStatus.UNAUTHORIZED);
-      modelAndView.addObject("errorCode", "401 Unauthorized");
-      modelAndView.addObject("message", "You did not provide any HTTP authentication");
-      return modelAndView;
-    }
-
-    if(result.hasErrors()){
+    if (result.hasErrors()) {
       modelAndView.setViewName("topic/new");
       modelAndView.addObject("projectId", projectId);
     } else {
       try {
         Topic createdTopic = topicService.save(topic, Long.valueOf(projectId), principal.getId());
         modelAndView.setViewName("redirect:/");
-        if(createdTopic == null){
+        if (createdTopic == null) {
           modelAndView.setViewName("error/basicTemplate");
           modelAndView.setStatus(HttpStatus.NOT_FOUND);
           modelAndView.addObject("errorCode", "404 Not Found");
-          modelAndView.addObject("message", "This project does not exist, making a new topic is impossible");
+          modelAndView.addObject("message",
+              "This project does not exist, making a new topic is impossible");
         }
-      } catch (PermissionTopicException e){
+      } catch (PermissionTopicException e) {
         modelAndView.setViewName("error/basicTemplate");
         modelAndView.setStatus(HttpStatus.FORBIDDEN);
         modelAndView.addObject("errorCode", "403 Forbidden");
-        modelAndView.addObject("message", "You do not have the permission to make a topic on this project");
+        modelAndView
+            .addObject("message", "You do not have the permission to make a topic on this project");
         return modelAndView;
       }
     }
@@ -81,15 +75,15 @@ public class TopicController {
   }
 
   @GetMapping("/topic/{topicId}")
-  public ModelAndView getOne(@PathVariable("topicId") String topicId){
+  public ModelAndView getOne(@PathVariable("topicId") String topicId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    try{
+    try {
       Topic topic = topicService.getOne(Long.valueOf(topicId));
       modelAndView.setViewName("topic/topicPage");
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("posts", postService.getAllByTopic(topic));
-    } catch (NumberFormatException | EntityNotFoundException e){
+    } catch (NumberFormatException | EntityNotFoundException e) {
       modelAndView.setViewName("error/basicTemplate");
       modelAndView.setStatus(HttpStatus.NOT_FOUND);
       modelAndView.addObject("errorCode", "404 Not Found");

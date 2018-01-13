@@ -1,8 +1,8 @@
 package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.Post;
-import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.exception.PermissionPostException;
+import fr.miage.sid.forum.security.CurrentUser;
 import fr.miage.sid.forum.security.MyPrincipal;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
@@ -10,7 +10,7 @@ import fr.miage.sid.forum.service.UserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +27,14 @@ public class PostController {
 
   @Autowired
   public PostController(PostService postService,
-      TopicService topicService, UserService userService){
+      TopicService topicService, UserService userService) {
     this.postService = postService;
     this.topicService = topicService;
     this.userService = userService;
   }
 
   @GetMapping("/topic/{topicId}/newpost")
-  public ModelAndView getPostForm(Post post, @PathVariable("topicId") String topicId){
+  public ModelAndView getPostForm(Post post, @PathVariable("topicId") String topicId) {
     ModelAndView modelAndView = new ModelAndView("topic/newPost");
     modelAndView.addObject(post);
     modelAndView.addObject("topicId", topicId);
@@ -42,33 +42,27 @@ public class PostController {
   }
 
   @PostMapping("/topic/{topicId}/newpost")
+  @PreAuthorize("isAuthenticated()")
   public ModelAndView createPost(
       @Valid Post post,
       BindingResult result,
       @PathVariable("topicId") String topicId,
-      @AuthenticationPrincipal MyPrincipal principal){
+      @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView();
 
-    if(principal == null){// user is somehow anonymous
-      modelAndView.setViewName("error/basicTemplate");
-      modelAndView.setStatus(HttpStatus.UNAUTHORIZED);
-      modelAndView.addObject("errorCode", "401 Unauthorized");
-      modelAndView.addObject("message", "You did not provide any HTTP authentication");
-      return modelAndView;
-    }
-
-    if(result.hasErrors()){
+    if (result.hasErrors()) {
       modelAndView.setViewName("topic/newPost");
       modelAndView.addObject("topicId", topicId);
     } else {
       try {
         Post created = postService.save(post, Long.valueOf(topicId), principal.getId());
         modelAndView.setViewName("redirect:/topic/" + topicId);
-        if (created == null){
+        if (created == null) {
           modelAndView.setViewName("error/basicTemplate");
           modelAndView.setStatus(HttpStatus.NOT_FOUND);
           modelAndView.addObject("errorCode", "404 Not Found");
-          modelAndView.addObject("message", "This topic does not exist, making a new post is impossible");
+          modelAndView
+              .addObject("message", "This topic does not exist, making a new post is impossible");
         }
       } catch (PermissionPostException e) {
         modelAndView.setViewName("error/basicTemplate");

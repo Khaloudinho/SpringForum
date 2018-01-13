@@ -47,7 +47,8 @@ public class DBSeeder {
     log.info("Seeding database with roles and a dummy user");
     Role userRole = createRoleIfNotExists("ROLE_USER");
 
-    User dummy = new User().setFirstname("John").setLastname("Doe").setUsername("johndoe")
+    User dummy = new User();
+    dummy.setFirstname("John").setLastname("Doe").setUsername("johndoe")
         .setEmail("john@doe.com").setPassword(passwordEncoder.encode("test"))
         .setRoles(Sets.newHashSet(userRole)).setOrigin(UserOrigin.DB);
     userRepo.save(dummy);
@@ -59,7 +60,8 @@ public class DBSeeder {
 
     Topic topicA1 = new Topic().setTitle("Premier sujet").setCreator(dummy).setProject(projectA);
     topicA1.addDroit(dummy, EDroit.ALL);
-    Topic topicB1 = new Topic().setTitle("Vous n'allez jamais croire ce qu'il s'est passé ! :xxx").setCreator(dummy).setProject(projectB);
+    Topic topicB1 = new Topic().setTitle("Vous n'allez jamais croire ce qu'il s'est passé ! :xxx")
+        .setCreator(dummy).setProject(projectB);
     topicB1.addDroit(dummy, EDroit.ALL);
     topicRepository.save(topicA1);
   }

@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.Principal
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,6 +20,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableOAuth2Sso
 @Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -47,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
    * This Bean is used to extract OAuth2 connection information
    * and then save them to DB. By using this extractor we make sure that
    * we can always map an User (coming from OAuth or from classic registration) to
-   * a know MyPrincipal interface. This allows us to use the @AuthenticationPrincipal
+   * a know MyPrincipal interface. This allows us to use the @CurrentUser
    * annotation in our controllers to always retrieve a Principal with a known implementation
    * (and also decoupling from Spring Security).
    */
@@ -58,7 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       String oauthId = (String) map.get("sub");
       User user = userRepository.findByOauthId(oauthId);
       if (user == null) {
-        user = new User().setEmail((String) map.get("email"))
+        user = new User();
+        user.setEmail((String) map.get("email"))
             .setOauthId(oauthId).setUsername((String) map.get("name"))
             .setFirstname((String) map.get("given_name"))
             .setLastname((String) map.get("family_name"))
