@@ -14,13 +14,10 @@ spring:
     username: miage.sid.2018@gmail.com
     password: jesuissid
     port: 587
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      starttls.required: true
 
 security:
   oauth2:

@@ -4,7 +4,7 @@ package fr.miage.sid.forum.domain;
  *
  * @author alex
  */
-public enum EDroit {
+public enum Permission {
     READ,
     WRITE,
     ALL;

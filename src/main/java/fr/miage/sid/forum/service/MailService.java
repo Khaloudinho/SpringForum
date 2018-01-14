@@ -22,10 +22,14 @@ import org.thymeleaf.context.Context;
 @Service
 public class MailService {
 
-  @Autowired
   private JavaMailSender sender;
-  @Autowired
   private TemplateEngine templateEngine;
+
+  @Autowired
+  public MailService(JavaMailSender sender, TemplateEngine templateEngine) {
+    this.sender = sender;
+    this.templateEngine = templateEngine;
+  }
 
   public void sendEmail() throws Exception {
     MimeMessage message = sender.createMimeMessage();

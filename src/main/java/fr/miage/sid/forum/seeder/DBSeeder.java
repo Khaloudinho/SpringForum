@@ -1,7 +1,7 @@
 package fr.miage.sid.forum.seeder;
 
 import com.google.common.collect.Sets;
-import fr.miage.sid.forum.domain.EDroit;
+import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.Role;
 import fr.miage.sid.forum.domain.Topic;
@@ -59,10 +59,10 @@ public class DBSeeder {
     projectRepository.save(projectB);
 
     Topic topicA1 = new Topic().setTitle("Premier sujet").setCreator(dummy).setProject(projectA);
-    topicA1.addDroit(dummy, EDroit.ALL);
+    topicA1.givePermission(dummy, Permission.ALL);
     Topic topicB1 = new Topic().setTitle("Vous n'allez jamais croire ce qu'il s'est passé ! :xxx")
         .setCreator(dummy).setProject(projectB);
-    topicB1.addDroit(dummy, EDroit.ALL);
+    topicB1.givePermission(dummy, Permission.ALL);
     topicRepository.save(topicA1);
   }
 

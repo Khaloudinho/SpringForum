@@ -1,6 +1,6 @@
 package fr.miage.sid.forum.service;
 
-import fr.miage.sid.forum.domain.EDroit;
+import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.User;
@@ -40,7 +40,7 @@ public class TopicServiceImpl implements TopicService {
       User tmp = userRepository.findOne(userId);
       Project project = projectRepository.getOne(projectId);
       topic.setCreator(userRepository.getOne(userId));
-      topic.addDroit(tmp, EDroit.ALL);
+      topic.givePermission(tmp, Permission.ALL);
       project.addTopic(topic);
       return topicRepository.save(topic);
     }

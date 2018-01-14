@@ -29,6 +29,7 @@ public class AuthController {
   public ModelAndView getLoginForm(Principal principal) {
     ModelAndView modelAndView = new ModelAndView("auth/login");
     if (principal != null) {
+      // Redirect if user already logged in
       modelAndView.setViewName("redirect:/");
     }
     return modelAndView;
@@ -41,12 +42,13 @@ public class AuthController {
     return modelAndView;
   }
 
+
+  // TODO Login user programmatically after register
   @PostMapping("/register")
   public ModelAndView register(@Valid UserForm userForm, BindingResult result) {
     ModelAndView modelAndView = new ModelAndView();
     ModelMapper mapper = new ModelMapper();
     User user = mapper.map(userForm, User.class);
-    log.info(user.toString());
     if (result.hasErrors()) {
       modelAndView.setViewName("auth/register");
     } else {

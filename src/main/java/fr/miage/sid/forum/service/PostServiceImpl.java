@@ -32,9 +32,9 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public Post save(Post post, Long topicId, Long userId) throws PermissionPostException{
+  public Post save(Post post, Long topicId, Long userId) throws PermissionPostException {
 
-    if(topicRepository.exists(topicId)){
+    if (topicRepository.exists(topicId)) {
       Topic topic = topicRepository.getOne(topicId);
       post.setUser(userRepository.getOne(userId));
       topic.addPost(post);
