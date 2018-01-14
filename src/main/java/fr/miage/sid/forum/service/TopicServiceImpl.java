@@ -39,9 +39,8 @@ public class TopicServiceImpl implements TopicService {
     if(projectRepository.exists(projectId)){
       User tmp = userRepository.findOne(userId);
       Project project = projectRepository.getOne(projectId);
-      topic.setCreator(userRepository.getOne(userId));
       topic.givePermission(tmp, Permission.ALL);
-      project.addTopic(topic);
+//      project.addTopic(topic);
       return topicRepository.save(topic);
     }
     return null;

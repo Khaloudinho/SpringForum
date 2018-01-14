@@ -9,6 +9,37 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+  mail:
+      host: smtp.gmail.com
+      username: miage.sid.2018@gmail.com
+      password: jesuissid
+      port: 587
+      properties.mail.smtp:
+        auth: true
+        starttls.enable: true
+        starttls.required: true
+  profiles:
+    active: test
+
+
+
+security:
+  oauth2:
+    client:
+      client-id: 129928913750-gbr8vns4217rdgrg77jb09hoqd5qtas6.apps.googleusercontent.com
+      client-secret: 4rMi3WTkJTBbYSUU8sUIUAqd
+      access-token-uri: https://accounts.google.com/o/oauth2/token
+      user-authorization-uri: https://accounts.google.com/o/oauth2/auth
+      client-authentication-scheme: form
+      scope:
+          - openid
+          - email
+          - profile
+    resource:
+      user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+      prefer-token-info: false
+    sso:
+      login-path: /login/google
 
 
 

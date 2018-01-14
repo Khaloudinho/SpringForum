@@ -12,11 +12,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -29,15 +30,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private UserDetailsService userDetailsService;
 
-  private AccessDeniedHandler accessDeniedHandler;
-
   @Autowired
   public WebSecurityConfig(UserRepository userRepository,
-      UserDetailsService userDetailsService,
-      AccessDeniedHandler accessDeniedHandler) {
+      UserDetailsService userDetailsService) {
     this.userRepository = userRepository;
     this.userDetailsService = userDetailsService;
-    this.accessDeniedHandler = accessDeniedHandler;
   }
 
   @Bean
@@ -77,23 +74,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     };
   }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+  @Autowired
+  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     auth
         .userDetailsService(userDetailsService)
         .passwordEncoder(passwordEncoder());
   }
 
   @Override
+  public void configure(WebSecurity web) throws Exception {
+    web
+        .ignoring()
+        .antMatchers("/**/*.css", "/**/*.png", "/**/*.gif", "/**/*.jpg");
+  }
+
+  @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable()
-        .authorizeRequests()
+    http
+        .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/")
+        .and().logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID", "SESSION")
+        .and().exceptionHandling()
+        // Needed to redirect to login when not authenticated
+        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+        .and().authorizeRequests()
         .antMatchers("/").permitAll()
-//          .antMatchers("/admin/**").hasAnyRole("ADMIN") //all admins patterns
-//          .antMatchers("/user/**").hasAnyRole("USER") //all users patterns
-//          .anyRequest().authenticated()
-        .and().formLogin().loginPage("/login").usernameParameter("email").permitAll()
-        .and().logout().logoutSuccessUrl("/").permitAll()
-        .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+        .and().rememberMe();
   }
 }

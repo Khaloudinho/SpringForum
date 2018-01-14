@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @Entity
 // We specify table name because we can't have an User table in psql
@@ -51,16 +51,6 @@ public class User extends Auditable implements MyPrincipal, Serializable {
   private Set<Role> roles;
 
   private boolean enabled = true;
-  
-  
-  
-  @Override
-  public boolean equals(Object o){
-      User tmp =(User)o;
-      return this.getId().equals(tmp.getId());  
-  }
-
-
 
   @Override
   public String getName() {

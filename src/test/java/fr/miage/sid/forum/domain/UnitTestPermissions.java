@@ -10,12 +10,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class SpringTestSetDroit {
+public class UnitTestPermissions {
 
   private User writeUser, readUser, allUser;
   private HasPermissions project;
@@ -26,7 +24,7 @@ public class SpringTestSetDroit {
     readUser = new User().setId(2L);
     allUser = new User().setId(3L);
 
-    project = new Project().setName("M2-SID").setCreator(writeUser);
+    project = new Project().setName("M2-SID");
   }
 
   @Test

@@ -13,15 +13,16 @@ import fr.miage.sid.forum.repository.TopicRepository;
 import fr.miage.sid.forum.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Profile("dev")
 @Slf4j
-public class DBSeeder {
+public class DevDBSeeder implements CommandLineRunner {
 
   private RoleRepository roleRepo;
   private UserRepository userRepo;
@@ -30,7 +31,7 @@ public class DBSeeder {
   private BCryptPasswordEncoder passwordEncoder;
 
   @Autowired
-  public DBSeeder(RoleRepository roleRepo, UserRepository userRepo,
+  public DevDBSeeder(RoleRepository roleRepo, UserRepository userRepo,
       ProjectRepository projectRepository,
       TopicRepository topicRepository,
       BCryptPasswordEncoder passwordEncoder) {
@@ -41,40 +42,29 @@ public class DBSeeder {
     this.passwordEncoder = passwordEncoder;
   }
 
-  @EventListener
+  @Override
   @Transactional
-  public void seed(ContextRefreshedEvent ev) {
-    log.info("Seeding database with roles and a dummy user");
-    Role userRole = createRoleIfNotExists("ROLE_USER");
+  public void run(String... strings) throws Exception {
+    log.info("Seeding dev database");
+
+    Role userRole = roleRepo.save(new Role().setRole("ROLE_USER"));
 
     User dummy = new User();
-    dummy.setFirstname("John").setLastname("Doe").setUsername("johndoe")
-        .setEmail("john@doe.com").setPassword(passwordEncoder.encode("test"))
+    dummy.setFirstname("System").setLastname("System").setUsername("system")
+        .setEmail("system@spring.com").setPassword(passwordEncoder.encode("system"))
         .setRoles(Sets.newHashSet(userRole)).setOrigin(UserOrigin.DB);
-    userRepo.save(dummy);
+    dummy = userRepo.save(dummy);
 
-    Project projectA = new Project().setName("Projet A").setCreator(dummy);
-    Project projectB = new Project().setName("Projet B").setCreator(dummy);
+    Project projectA = new Project().setName("Projet A");
+    Project projectB = new Project().setName("Projet B");
     projectRepository.save(projectA);
     projectRepository.save(projectB);
 
-    Topic topicA1 = new Topic().setTitle("Premier sujet").setCreator(dummy).setProject(projectA);
-    topicA1.givePermission(dummy, Permission.ALL);
+    Topic topicA1 = new Topic().setTitle("Premier sujet").setProject(projectA);
     Topic topicB1 = new Topic().setTitle("Vous n'allez jamais croire ce qu'il s'est passé ! :xxx")
-        .setCreator(dummy).setProject(projectB);
+        .setProject(projectB);
+    topicA1.givePermission(dummy, Permission.ALL);
     topicB1.givePermission(dummy, Permission.ALL);
     topicRepository.save(topicA1);
-  }
-
-
-  private Role createRoleIfNotExists(String name) {
-    Role role = roleRepo.findByRole(name);
-
-    if (role == null) {
-      role = new Role().setRole(name);
-      roleRepo.save(role);
-    }
-
-    return role;
   }
 }

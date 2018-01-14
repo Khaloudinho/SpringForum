@@ -10,7 +10,7 @@
       <tbody>
       <tr th:each="project : ${projects}">
         <td><a th:href="@{'/project/' + ${project.id}}" th:text="${project.name}"></a></td>
-        <td><a href="#" th:text="${project.creator.username}"></a></td>
+        <td><a href="#" th:text="${project.createdBy.username}"></a></td>
       </tr>
       </tbody>
       <thead>

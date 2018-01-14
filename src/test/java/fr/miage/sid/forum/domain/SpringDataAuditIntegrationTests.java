@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SpringDataAuditTests {
+public class SpringDataAuditIntegrationTests {
 
   @Autowired
   private UserRepository userRepo;
@@ -22,27 +22,25 @@ public class SpringDataAuditTests {
 
   @Before
   public void create() {
-    User newUser = new User().setUsername("test").setPassword("test")
-        .setEmail("test@test.com");
-    user = userRepo.save(newUser);
+    user = userRepo.findByUsername("user");
   }
 
   @Test
   public void testUpdatedAt() {
     Date updated = user.getUpdatedAt();
 
-    User updateUser = new User();
-    updateUser.setId(user.getId());
-    updateUser.setUsername("changed");
-    updateUser.setEmail(user.getEmail());
-    updateUser.setPassword(user.getPassword());
+    User updateUser = new User().setId(user.getId()).setUsername("changed")
+        .setEmail(user.getEmail())
+        .setPassword(user.getPassword());
 
     userRepo.save(updateUser);
 
     User updatedUser = userRepo.findOne(user.getId());
+    System.out.println(updatedUser.getEmail());
+    System.out.println(updatedUser.getId());
+    System.out.println(updatedUser.getUpdatedAt());
     assertThat(updatedUser.getUsername()).isEqualToIgnoringCase("changed");
     assertThat(updatedUser.getUpdatedAt()).isAfter(updated);
   }
-
 
 }

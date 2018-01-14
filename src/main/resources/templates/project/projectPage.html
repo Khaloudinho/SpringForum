@@ -14,7 +14,7 @@
       <tbody>
         <tr th:each="topic : ${topics}">
           <td><a th:href="@{'/topic/' + ${topic.id}}" th:text="${topic.title}"></a></td>
-          <td><a href="#" th:text="${topic.creator.username}"></a></td>
+          <td><a href="#" th:text="${topic.createdBy.username}"></a></td>
         </tr>
       </tbody>
       <thead>

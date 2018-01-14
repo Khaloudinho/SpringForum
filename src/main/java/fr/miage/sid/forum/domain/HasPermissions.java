@@ -40,19 +40,23 @@ abstract class HasPermissions extends Auditable {
     }
   }
 
-  public boolean canWrite(User user) {
-    return writers.contains(user);
-  }
 
-  public boolean canRead(User user) {
-    return (user == null && anonymousCanAccess) || readers.contains(user);
+  /**
+   * An user can write an entity with Permissions if :
+   * he is in writers or writers is empty
+   */
+  public boolean canWrite(User user) {
+    return writers.isEmpty() || writers.contains(user);
   }
 
   /**
-   * An user can read a topic if :
-   * he is anonymous and anonymousCanAccess is true or he is in readers
-   * An user can create a topic if he is connected and has WRITE or ALL permissions
+   * An user can read an entity with Permissions if :
+   * he is anonymous and anonymousCanAccess is true or he is in readers or readers is empty
    */
+  public boolean canRead(User user) {
+    return (user == null && anonymousCanAccess) || readers.isEmpty() || readers.contains(user);
+  }
+
   public boolean hasPermission(User user, Permission permission) {
     boolean canRead = canRead(user);
     boolean canWrite = canWrite(user);

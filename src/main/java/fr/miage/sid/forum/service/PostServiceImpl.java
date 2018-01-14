@@ -36,9 +36,8 @@ public class PostServiceImpl implements PostService {
 
     if (topicRepository.exists(topicId)) {
       Topic topic = topicRepository.getOne(topicId);
-      post.setUser(userRepository.getOne(userId));
       topic.addPost(post);
-//      topicRepository.save(topic);
+      topicRepository.save(topic);
       return postRepository.save(post);
     }
 

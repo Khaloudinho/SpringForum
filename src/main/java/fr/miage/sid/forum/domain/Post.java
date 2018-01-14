@@ -27,7 +27,4 @@ public class Post extends Auditable {
 
   @ManyToOne
   private Topic topic;
-
-  @ManyToOne
-  private User user;
 }

@@ -27,18 +27,16 @@ public class Topic extends HasPermissions {
   private String title;
 
   @ManyToOne
-  private User creator;
-
-  @ManyToOne
   private Project project;
 
-//    @OneToMany(mappedBy = "topic")
-//    private Set<Post> posts = new HashSet<>();
 
-  // TODO We need a way to check if everyobdy is allowed to post, etc (checking empty on writers) ?
+  /**
+   * You can add a Post if writers is empty (everybody can post) or if you are in writers
+   *
+   * @throws PermissionPostException Not allowed to post
+   */
   public void addPost(Post post) throws PermissionPostException {
-    if (this.hasPermission(post.getUser(), Permission.WRITE)) {
-//      this.posts.add(post);
+    if (this.hasPermission(post.getCreatedBy(), Permission.WRITE) || this.getWriters().isEmpty()) {
       post.setTopic(this);
     } else {
       throw new PermissionPostException("User has insufficient permissions to create this post");

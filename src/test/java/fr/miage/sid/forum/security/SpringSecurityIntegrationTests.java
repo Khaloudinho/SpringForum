@@ -7,52 +7,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.service.UserService;
-import org.junit.Before;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class SpringSecurityTests {
+@Slf4j
+public class SpringSecurityIntegrationTests {
 
   @Autowired
   private MockMvc mockMvc;
 
-  @Autowired
-  private UserService userService;
-
-  @Before
-  public void create() {
-    User user = new User().setUsername("test")
-        .setPassword("test")
-        .setEmail("test@test.com");
-    userService.save(user);
-  }
-
   @Test
-  @WithMockUser
   public void testLoginSuccess() throws Exception {
-    RequestBuilder builder = formLogin().userParameter("email").user("test@test.com")
-        .password("test");
+    RequestBuilder builder = formLogin().userParameter("email").user("user@test.com")
+        .password("password");
     mockMvc.perform(builder).andDo(print())
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/"))
-        .andExpect(authenticated().withUsername("test"));
+        .andExpect(authenticated().withUsername("user"));
   }
 
   @Test
-  public void testLoginFailed() throws Exception {
-    RequestBuilder builder = formLogin().userParameter("email").user("test@test.com")
+  public void testInvalidPassword() throws Exception {
+    RequestBuilder builder = formLogin().userParameter("email").user("user@test.com")
         .password("invalid");
     mockMvc.perform(builder).andDo(print())
         .andExpect(status().is3xxRedirection())

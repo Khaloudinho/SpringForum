@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,24 +21,17 @@ public class Project extends HasPermissions {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @NotEmpty
   private String name;
 
-  @ManyToOne
-  private User creator;
-
-//    @OneToMany(mappedBy = "project")
-//    private Set<Topic> topics= new HashSet<>();
-
-
   /**
-   * addTopic, set a topic to the project
+   * You can add a Topic if writers is empty (everybody can post) or if you are in writers
    *
-   * @param topic Topic, topic set
-   * @throws PermissionTopicException if the user can't insert the topic
+   * @throws PermissionTopicException Not allowed to create topic
    */
   public void addTopic(Topic topic) throws PermissionTopicException {
-    if (this.hasPermission(topic.getCreator(), Permission.WRITE)) {
+    if (this.hasPermission(topic.getCreatedBy(), Permission.WRITE)) {
       topic.setProject(this);
 //            this.topics.add(topic);
     } else {
