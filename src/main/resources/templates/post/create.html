@@ -7,14 +7,15 @@
 
     <h1 class="title" th:text="#{post.new}"></h1>
 
-    <form th:action="@{'/topic/' + ${topicId} + '/newpost'}" th:object="${post}" method="post">
+    <form th:action="@{/topic/{id}/post(id=${topicId})}" th:object="${post}" method="post">
       <div class="field">
         <label class="label" th:text="#{post.content}"></label>
         <div class="control">
-          <textarea class="textarea" th:field="*{content}" th:placeholder="#{post.content.placeholder}"></textarea>
+          <textarea class="textarea" th:field="*{content}"
+                    th:placeholder="#{post.content.placeholder}"></textarea>
           <p class="help is-danger"
              th:if="${#fields.hasErrors('content')}"
-             th:errors="*{content}">content error</p>
+             th:errors="*{content}"></p>
         </div>
       </div>
 
@@ -23,9 +24,7 @@
           <button class="button is-info" th:text="#{submit}"></button>
         </div>
       </div>
-
     </form>
-
   </div>
 </section>
 </body>

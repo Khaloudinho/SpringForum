@@ -1,5 +1,7 @@
 package fr.miage.sid.forum.controller;
 
+import static fr.miage.sid.forum.controller.ViewUtils.setErrorView;
+
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.exception.PermissionPostException;
 import fr.miage.sid.forum.security.CurrentUser;
@@ -33,15 +35,15 @@ public class PostController {
     this.userService = userService;
   }
 
-  @GetMapping("/topic/{topicId}/newpost")
+  @GetMapping("/topic/{topicId}/post/create")
   public ModelAndView getPostForm(Post post, @PathVariable("topicId") String topicId) {
-    ModelAndView modelAndView = new ModelAndView("topic/newPost");
+    ModelAndView modelAndView = new ModelAndView("post/create");
     modelAndView.addObject(post);
     modelAndView.addObject("topicId", topicId);
     return modelAndView;
   }
 
-  @PostMapping("/topic/{topicId}/newpost")
+  @PostMapping("/topic/{topicId}/post")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView createPost(
       @Valid Post post,
@@ -51,27 +53,23 @@ public class PostController {
     ModelAndView modelAndView = new ModelAndView();
 
     if (result.hasErrors()) {
-      modelAndView.setViewName("topic/newPost");
-      modelAndView.addObject("topicId", topicId);
-    } else {
-      try {
-        Post created = postService.save(post, Long.valueOf(topicId), principal.getId());
-        modelAndView.setViewName("redirect:/topic/" + topicId);
-        if (created == null) {
-          modelAndView.setViewName("error/basicTemplate");
-          modelAndView.setStatus(HttpStatus.NOT_FOUND);
-          modelAndView.addObject("errorCode", "404 Not Found");
-          modelAndView
-              .addObject("message", "This topic does not exist, making a new post is impossible");
-        }
-      } catch (PermissionPostException e) {
-        modelAndView.setViewName("error/basicTemplate");
-        modelAndView.setStatus(HttpStatus.FORBIDDEN);
-        modelAndView.addObject("errorCode", "403 Forbidden");
-        modelAndView.addObject("message", "You do not have the permission to make a post here");
-        return modelAndView;
-      }
+      modelAndView.setViewName("post/create");
+      return modelAndView;
     }
+
+    try {
+      Post savedPost = postService.save(post, Long.valueOf(topicId), principal.getId());
+      modelAndView.setViewName("redirect:/topic/" + topicId);
+      if (savedPost == null) {
+        setErrorView(modelAndView, HttpStatus.NOT_FOUND,
+            "This topic does not exist, making a new post is impossible");
+      }
+    } catch (PermissionPostException e) {
+      setErrorView(modelAndView, HttpStatus.FORBIDDEN,
+          "You do not have the permission to make a post here");
+      return modelAndView;
+    }
+
     return modelAndView;
   }
 }
