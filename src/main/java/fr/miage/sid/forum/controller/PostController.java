@@ -36,6 +36,7 @@ public class PostController {
   }
 
   @GetMapping("/topic/{topicId}/post/create")
+  @PreAuthorize("isAuthenticated()")
   public ModelAndView getPostForm(Post post, @PathVariable("topicId") String topicId) {
     ModelAndView modelAndView = new ModelAndView("post/create");
     modelAndView.addObject(post);
