@@ -63,8 +63,8 @@ public class DevDBSeeder implements CommandLineRunner {
     Topic topicA1 = new Topic().setTitle("Premier sujet").setProject(projectA);
     Topic topicB1 = new Topic().setTitle("Vous n'allez jamais croire ce qu'il s'est passé ! :xxx")
         .setProject(projectB);
-    topicA1.givePermission(dummy, Permission.ALL);
-    topicB1.givePermission(dummy, Permission.ALL);
+    topicA1.givePermission(dummy.getId(), Permission.ALL);
+    topicB1.givePermission(dummy.getId(), Permission.ALL);
     topicRepository.save(topicA1);
   }
 }

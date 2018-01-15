@@ -2,64 +2,65 @@ package fr.miage.sid.forum.domain;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.ManyToMany;
+import javax.persistence.ElementCollection;
 import javax.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 @MappedSuperclass
 @EqualsAndHashCode(callSuper = true)
-abstract class HasPermissions extends Auditable {
+public abstract class HasPermissions extends Auditable {
 
   private boolean anonymousCanAccess = true;
 
-  @ManyToMany
-  private Set<User> readers = new HashSet<>();
+  @ElementCollection
+  private Set<Long> readers = new HashSet<>();
 
-  @ManyToMany
-  private Set<User> writers = new HashSet<>();
+  @ElementCollection
+  private Set<Long> writers = new HashSet<>();
 
-  public void givePermission(User user, Permission permission) {
+  public void givePermission(Long userId, Permission permission) {
     if (permission == Permission.READ || permission == Permission.ALL) {
-      readers.add(user);
+      readers.add(userId);
     }
 
     if (permission == Permission.WRITE || permission == Permission.ALL) {
-      writers.add(user);
+      writers.add(userId);
     }
   }
 
-  public void removePermission(User user, Permission permission) {
+  public void removePermission(Long userId, Permission permission) {
     if (permission == Permission.READ || permission == Permission.ALL) {
-      readers.remove(user);
+      readers.remove(userId);
     }
 
     if (permission == Permission.WRITE || permission == Permission.ALL) {
-      writers.remove(user);
+      writers.remove(userId);
     }
   }
-
 
   /**
    * An user can write an entity with Permissions if :
    * he is in writers or writers is empty
    */
-  public boolean canWrite(User user) {
-    return writers.isEmpty() || writers.contains(user);
+  public boolean canWrite(Long userId) {
+    return writers.isEmpty() || writers.contains(userId);
   }
 
   /**
    * An user can read an entity with Permissions if :
    * he is anonymous and anonymousCanAccess is true or he is in readers or readers is empty
    */
-  public boolean canRead(User user) {
-    return (user == null && anonymousCanAccess) || readers.isEmpty() || readers.contains(user);
+  public boolean canRead(Long userId) {
+    return (userId == null && anonymousCanAccess) || readers.isEmpty() || readers.contains(userId);
   }
 
-  public boolean hasPermission(User user, Permission permission) {
-    boolean canRead = canRead(user);
-    boolean canWrite = canWrite(user);
+  public boolean hasPermission(Long userId, Permission permission) {
+    boolean canRead = canRead(userId);
+    boolean canWrite = canWrite(userId);
 
     if (permission == Permission.READ) {
       return canRead;

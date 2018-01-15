@@ -29,64 +29,34 @@ public class UnitTestPermissions {
 
   @Test
   public void readerCanRead() {
-    project.givePermission(readUser, Permission.READ);
-    assertThat(project.canRead(readUser)).isTrue();
+    project.givePermission(readUser.getId(), Permission.READ);
+    assertThat(project.canRead(readUser.getId())).isTrue();
   }
 
   @Test
   public void writerCanWrite() {
-    project.givePermission(writeUser, Permission.WRITE);
-    assertThat(project.canWrite(writeUser)).isTrue();
+    project.givePermission(writeUser.getId(), Permission.WRITE);
+    assertThat(project.canWrite(writeUser.getId())).isTrue();
   }
 
   @Test
   public void allUserCanWriteAndRead() {
-    project.givePermission(allUser, Permission.ALL);
-    assertThat(project.canRead(allUser)).isTrue();
-    assertThat(project.canWrite(allUser)).isTrue();
+    project.givePermission(allUser.getId(), Permission.ALL);
+    assertThat(project.canRead(allUser.getId())).isTrue();
+    assertThat(project.canWrite(allUser.getId())).isTrue();
   }
 
   @Test
   public void userCanNoLongerUsePermissionPrivilegesAfterRevoking() {
-    project.givePermission(readUser, Permission.READ);
-    project.removePermission(readUser, Permission.READ);
-    assertThat(project.canRead(readUser)).isFalse();
+    project.givePermission(writeUser.getId(), Permission.READ);
+    project.givePermission(readUser.getId(), Permission.READ);
+    project.removePermission(readUser.getId(), Permission.READ);
+    assertThat(project.canRead(readUser.getId())).isFalse();
   }
 
   @Test
   public void revokingInexistantPermissionWorks() {
-    project.removePermission(readUser, Permission.READ);
+    project.removePermission(readUser.getId(), Permission.READ);
     assertThat(project.getReaders().size()).isEqualTo(0);
   }
-
-//
-//  @Test(expected = PermissionTopicException.class)
-//  public void testCreateTopicWithNoPermission() throws Exception {
-//    project.givePermission(writeUser, Permission.READ);
-//    topic.setCreator(writeUser);
-//    project.addTopic(topic);
-//  }
-//
-//  @Test(expected = PermissionPostException.class)
-//  public void testCreatePostWithNoPermission() throws Exception {
-//    topic.givePermission(writeUser, Permission.READ);
-//    Post tmp = new Post();
-//    tmp.setUser(writeUser);
-//    topic.addPost(tmp);
-//  }
-//
-//  @Test(expected = Test.None.class)
-//  public void testCreateTopicWithPermission() throws Exception {
-//    project.givePermission(writeUser, Permission.WRITE);
-//    topic.setCreator(writeUser);
-//    project.addTopic(topic);
-//  }
-//
-//  @Test(expected = Test.None.class)
-//  public void testCreatePostWithPermission() throws Exception {
-//    topic.givePermission(writeUser, Permission.WRITE);
-//    Post tmp = new Post();
-//    tmp.setUser(writeUser);
-//    topic.addPost(tmp);
-//  }
 }

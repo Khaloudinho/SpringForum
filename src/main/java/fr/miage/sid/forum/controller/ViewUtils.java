@@ -5,12 +5,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class ViewUtils {
 
-  public static void setErrorView(ModelAndView modelAndView, HttpStatus httpStatus,
+  public static ModelAndView setErrorView(ModelAndView modelAndView, HttpStatus httpStatus,
       String message) {
     modelAndView.setViewName("error/basicTemplate");
     modelAndView.setStatus(httpStatus);
     modelAndView.addObject("errorCode", httpStatus);
     modelAndView.addObject("message", message);
+    return modelAndView;
   }
 
 }

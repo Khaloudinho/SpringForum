@@ -2,10 +2,8 @@ package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;
-import fr.miage.sid.forum.exception.PermissionPostException;
 import fr.miage.sid.forum.repository.PostRepository;
 import fr.miage.sid.forum.repository.TopicRepository;
-import fr.miage.sid.forum.repository.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,29 +13,19 @@ public class PostServiceImpl implements PostService {
 
   private final PostRepository postRepository;
   private final TopicRepository topicRepository;
-  private final UserRepository userRepository;
 
   @Autowired
   public PostServiceImpl(PostRepository postRepository,
-      TopicRepository topicRepository, UserRepository userRepository) {
+      TopicRepository topicRepository) {
     this.postRepository = postRepository;
     this.topicRepository = topicRepository;
-    this.userRepository = userRepository;
-  }
-
-
-  @Override
-  public Post save(Post post) {
-    return postRepository.save(post);
   }
 
   @Override
-  public Post save(Post post, Long topicId, Long userId) throws PermissionPostException {
-
+  public Post save(Post post, Long topicId, Long userId) {
     if (topicRepository.exists(topicId)) {
       Topic topic = topicRepository.getOne(topicId);
-      topic.addPost(post);
-      topicRepository.save(topic);
+      post.setTopic(topic);
       return postRepository.save(post);
     }
 

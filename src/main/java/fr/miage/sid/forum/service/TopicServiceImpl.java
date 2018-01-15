@@ -36,10 +36,10 @@ public class TopicServiceImpl implements TopicService {
 
   @Override
   public Topic save(Topic topic, Long projectId, Long userId) throws PermissionTopicException {
-    if(projectRepository.exists(projectId)){
+    if (projectRepository.exists(projectId)) {
       User tmp = userRepository.findOne(userId);
       Project project = projectRepository.getOne(projectId);
-      topic.givePermission(tmp, Permission.ALL);
+      topic.givePermission(tmp.getId(), Permission.ALL);
 //      project.addTopic(topic);
       return topicRepository.save(topic);
     }
@@ -54,5 +54,10 @@ public class TopicServiceImpl implements TopicService {
   @Override
   public List<Topic> getAllByProject(Project project) {
     return topicRepository.getAllByProject(project);
+  }
+
+  @Override
+  public boolean exists(Long id) {
+    return topicRepository.exists(id);
   }
 }

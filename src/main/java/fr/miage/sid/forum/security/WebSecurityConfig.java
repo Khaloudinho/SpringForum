@@ -42,6 +42,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
+//  @Bean
+//  public PermissionEvaluator permissionEvaluator() {
+//    return new MyPermissionEvaluator();
+//  }
+
   /**
    * This Bean is used to extract OAuth2 connection information
    * and then save them to DB. By using this extractor we make sure that

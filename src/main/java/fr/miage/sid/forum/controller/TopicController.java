@@ -75,11 +75,11 @@ public class TopicController {
   }
 
   @GetMapping("/topic/{topicId}")
-  public ModelAndView getOne(@PathVariable("topicId") String topicId) {
+  public ModelAndView getOne(@PathVariable("topicId") Long topicId) {
     ModelAndView modelAndView = new ModelAndView();
 
     try {
-      Topic topic = topicService.getOne(Long.valueOf(topicId));
+      Topic topic = topicService.getOne(topicId);
       modelAndView.setViewName("topic/topicPage");
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("posts", postService.getAllByTopic(topic));

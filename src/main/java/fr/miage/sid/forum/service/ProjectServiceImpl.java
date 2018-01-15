@@ -23,7 +23,7 @@ public class ProjectServiceImpl implements ProjectService{
 
   @Override
   public Project save(Project project, Long userId) {
-    project.givePermission(userRepository.getOne(userId), Permission.ALL);
+    project.givePermission(userRepository.getOne(userId).getId(), Permission.ALL);
     return projectRepository.save(project);
   }
 
