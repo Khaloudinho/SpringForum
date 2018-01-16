@@ -3,13 +3,13 @@ package fr.miage.sid.forum.config.seeder;
 import com.google.common.collect.Sets;
 import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Project;
+import fr.miage.sid.forum.domain.ProjectRepository;
 import fr.miage.sid.forum.domain.Role;
+import fr.miage.sid.forum.domain.RoleRepository;
 import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.domain.TopicRepository;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.UserOrigin;
-import fr.miage.sid.forum.domain.ProjectRepository;
-import fr.miage.sid.forum.domain.RoleRepository;
-import fr.miage.sid.forum.domain.TopicRepository;
 import fr.miage.sid.forum.domain.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +48,16 @@ public class DevDBSeeder implements CommandLineRunner {
     log.info("Seeding dev database");
 
     Role userRole = roleRepo.save(new Role().setRole("ROLE_USER"));
+    Role adminRole = roleRepo.save(new Role().setRole("ROLE_ADMIN"));
 
     User dummy = new User();
-    dummy.setFirstname("System").setLastname("System").setUsername("system")
-        .setEmail("system@spring.com").setPassword(passwordEncoder.encode("system"))
-        .setRoles(Sets.newHashSet(userRole)).setOrigin(UserOrigin.DB);
+    dummy.setFirstname("Admin").setLastname("Admin").setUsername("admin")
+        .setEmail("admin@fourm.com").setPassword(passwordEncoder.encode("system"))
+        .setRoles(Sets.newHashSet(userRole, adminRole)).setOrigin(UserOrigin.DB);
     dummy = userRepo.save(dummy);
 
-    Project projectA = new Project().setName("Projet A");
-    Project projectB = new Project().setName("Projet B");
+    Project projectA = new Project().setName("Spring Data");
+    Project projectB = new Project().setName("Spring Boot");
     projectRepository.save(projectA);
     projectRepository.save(projectB);
 
