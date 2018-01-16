@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.security;
+package fr.miage.sid.forum.config.security;
 
 public interface MyPrincipal {
 

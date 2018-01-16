@@ -7,11 +7,11 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;
-import fr.miage.sid.forum.repository.PostRepository;
-import fr.miage.sid.forum.repository.TopicRepository;
+import fr.miage.sid.forum.domain.PostRepository;
+import fr.miage.sid.forum.domain.TopicRepository;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.PostServiceImpl;
-import fr.miage.sid.forum.service.TopicNotFoundException;
+import fr.miage.sid.forum.exception.TopicNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;

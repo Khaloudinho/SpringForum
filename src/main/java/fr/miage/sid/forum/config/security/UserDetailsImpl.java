@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.security;
+package fr.miage.sid.forum.config.security;
 
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;

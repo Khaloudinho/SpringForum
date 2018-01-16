@@ -1,8 +1,8 @@
 package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.Project;
-import fr.miage.sid.forum.security.CurrentUser;
-import fr.miage.sid.forum.security.MyPrincipal;
+import fr.miage.sid.forum.config.security.CurrentUser;
+import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.TopicService;
 import javax.persistence.EntityNotFoundException;

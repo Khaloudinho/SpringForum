@@ -1,9 +1,8 @@
 package fr.miage.sid.forum.controller;
 
+import fr.miage.sid.forum.config.security.CurrentUser;
+import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Topic;
-import fr.miage.sid.forum.exception.PermissionTopicException;
-import fr.miage.sid.forum.security.CurrentUser;
-import fr.miage.sid.forum.security.MyPrincipal;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
 import javax.persistence.EntityNotFoundException;
@@ -62,7 +61,8 @@ public class TopicController {
           modelAndView.addObject("message",
               "This project does not exist, making a new topic is impossible");
         }
-      } catch (PermissionTopicException e) {
+      } catch (Exception e) {
+//      } catch (PermissionTopicException e) {
         modelAndView.setViewName("error/basicTemplate");
         modelAndView.setStatus(HttpStatus.FORBIDDEN);
         modelAndView.addObject("errorCode", "403 Forbidden");

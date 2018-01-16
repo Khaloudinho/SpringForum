@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.seeder;
+package fr.miage.sid.forum.config.seeder;
 
 import com.google.common.collect.Sets;
 import fr.miage.sid.forum.domain.Permission;
@@ -7,10 +7,10 @@ import fr.miage.sid.forum.domain.Role;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.UserOrigin;
-import fr.miage.sid.forum.repository.ProjectRepository;
-import fr.miage.sid.forum.repository.RoleRepository;
-import fr.miage.sid.forum.repository.TopicRepository;
-import fr.miage.sid.forum.repository.UserRepository;
+import fr.miage.sid.forum.domain.ProjectRepository;
+import fr.miage.sid.forum.domain.RoleRepository;
+import fr.miage.sid.forum.domain.TopicRepository;
+import fr.miage.sid.forum.domain.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

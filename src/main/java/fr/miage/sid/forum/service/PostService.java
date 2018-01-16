@@ -2,6 +2,7 @@ package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.exception.TopicNotFoundException;
 import java.util.List;
 
 public interface PostService {

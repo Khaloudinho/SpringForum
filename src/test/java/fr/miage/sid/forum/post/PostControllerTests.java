@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import fr.miage.sid.forum.controller.PostController;
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.service.PostService;
-import fr.miage.sid.forum.service.TopicNotFoundException;
+import fr.miage.sid.forum.exception.TopicNotFoundException;
 import fr.miage.sid.forum.service.TopicService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

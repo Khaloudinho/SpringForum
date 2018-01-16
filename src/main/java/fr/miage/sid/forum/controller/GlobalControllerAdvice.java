@@ -1,6 +1,6 @@
 package fr.miage.sid.forum.controller;
 
-import fr.miage.sid.forum.service.TopicNotFoundException;
+import fr.miage.sid.forum.exception.TopicNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

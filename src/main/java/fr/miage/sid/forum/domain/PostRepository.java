@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.repository;
+package fr.miage.sid.forum.domain;
 
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;

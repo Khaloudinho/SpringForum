@@ -1,7 +1,7 @@
 package fr.miage.sid.forum.config;
 
 import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.security.MyPrincipal;
+import fr.miage.sid.forum.config.security.MyPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

@@ -2,7 +2,7 @@ package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.service.UserService;
-import fr.miage.sid.forum.validation.UserForm;
+import fr.miage.sid.forum.domain.validation.UserForm;
 import java.security.Principal;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

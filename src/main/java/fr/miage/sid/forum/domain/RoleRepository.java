@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.repository;
+package fr.miage.sid.forum.domain;
 
 import fr.miage.sid.forum.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

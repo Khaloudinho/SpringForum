@@ -1,8 +1,8 @@
-package fr.miage.sid.forum.security;
+package fr.miage.sid.forum.config.security;
 
 import fr.miage.sid.forum.domain.Role;
 import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.repository.UserRepository;
+import fr.miage.sid.forum.domain.UserRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

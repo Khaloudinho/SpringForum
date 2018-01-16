@@ -1,7 +1,7 @@
 package fr.miage.sid.forum.domain;
 
 
-import fr.miage.sid.forum.security.MyPrincipal;
+import fr.miage.sid.forum.config.security.MyPrincipal;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Entity;

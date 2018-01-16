@@ -1,4 +1,4 @@
-package fr.miage.sid.forum.security;
+package fr.miage.sid.forum.config.security;
 
 import fr.miage.sid.forum.domain.HasPermissions;
 import fr.miage.sid.forum.domain.Permission;

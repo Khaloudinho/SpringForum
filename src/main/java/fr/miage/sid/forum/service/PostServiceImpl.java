@@ -2,8 +2,9 @@ package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;
-import fr.miage.sid.forum.repository.PostRepository;
-import fr.miage.sid.forum.repository.TopicRepository;
+import fr.miage.sid.forum.domain.PostRepository;
+import fr.miage.sid.forum.domain.TopicRepository;
+import fr.miage.sid.forum.exception.TopicNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

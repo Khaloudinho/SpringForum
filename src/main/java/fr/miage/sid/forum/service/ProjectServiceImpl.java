@@ -2,8 +2,8 @@ package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Project;
-import fr.miage.sid.forum.repository.ProjectRepository;
-import fr.miage.sid.forum.repository.UserRepository;
+import fr.miage.sid.forum.domain.ProjectRepository;
+import fr.miage.sid.forum.domain.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

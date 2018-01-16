@@ -1,8 +1,8 @@
-package fr.miage.sid.forum.security;
+package fr.miage.sid.forum.config.security;
 
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.UserOrigin;
-import fr.miage.sid.forum.repository.UserRepository;
+import fr.miage.sid.forum.domain.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;

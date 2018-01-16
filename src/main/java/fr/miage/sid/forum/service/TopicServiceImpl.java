@@ -2,12 +2,11 @@ package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Project;
+import fr.miage.sid.forum.domain.ProjectRepository;
 import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.domain.TopicRepository;
 import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.exception.PermissionTopicException;
-import fr.miage.sid.forum.repository.ProjectRepository;
-import fr.miage.sid.forum.repository.TopicRepository;
-import fr.miage.sid.forum.repository.UserRepository;
+import fr.miage.sid.forum.domain.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class TopicServiceImpl implements TopicService {
   }
 
   @Override
-  public Topic save(Topic topic, Long projectId, Long userId) throws PermissionTopicException {
+  public Topic save(Topic topic, Long projectId, Long userId) {
     if (projectRepository.exists(projectId)) {
       User tmp = userRepository.findOne(userId);
       Project project = projectRepository.getOne(projectId);

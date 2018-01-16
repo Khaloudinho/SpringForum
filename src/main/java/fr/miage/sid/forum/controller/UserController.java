@@ -1,7 +1,7 @@
 package fr.miage.sid.forum.controller;
 
-import fr.miage.sid.forum.security.CurrentUser;
-import fr.miage.sid.forum.security.MyPrincipal;
+import fr.miage.sid.forum.config.security.CurrentUser;
+import fr.miage.sid.forum.config.security.MyPrincipal;
 import java.security.Principal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
