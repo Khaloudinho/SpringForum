@@ -32,6 +32,7 @@ public class MyPermissionEvaluator implements PermissionEvaluator {
   @Override
   public boolean hasPermission(Authentication authentication, Serializable targetId,
       String targetType, Object permission) {
+    log.info("Checking permissions");
 
     if (!targetType.equals("topic") && !targetType.equals("project")
         || !(permission instanceof Permission)) {
