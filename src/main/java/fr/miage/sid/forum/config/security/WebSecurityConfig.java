@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   public void configure(WebSecurity web) throws Exception {
     web
         .ignoring()
-        .antMatchers("/**/*.css", "/**/*.png", "/**/*.gif", "/**/*.jpg");
+        .antMatchers("/**/*.css", "/**/*.png", "/**/*.gif", "/**/*.jpg", "/**/*.js");
   }
 
   @Override

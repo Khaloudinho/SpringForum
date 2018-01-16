@@ -61,19 +61,6 @@
 </nav>
 <section layout:fragment="content"></section>
 <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
-<script th:src="@{js/main.js}"></script>
-<script>
-  (() = > {
-    const logoutBtn = document.getElementById('logoutBtn')
-    const logoutForm = document.getElementById('logoutForm')
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () = > {
-        logoutForm.submit()
-    })
-    }
-  }
-  )
-  ()
-</script>
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
