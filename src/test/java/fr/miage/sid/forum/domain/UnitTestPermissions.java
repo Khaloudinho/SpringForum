@@ -29,34 +29,34 @@ public class UnitTestPermissions {
 
   @Test
   public void readerCanRead() {
-    project.givePermission(readUser.getId(), Permission.READ);
+    project.givePermissionTo(readUser.getId(), Permission.READ);
     assertThat(project.canRead(readUser.getId())).isTrue();
   }
 
   @Test
   public void writerCanWrite() {
-    project.givePermission(writeUser.getId(), Permission.WRITE);
+    project.givePermissionTo(writeUser.getId(), Permission.WRITE);
     assertThat(project.canWrite(writeUser.getId())).isTrue();
   }
 
   @Test
   public void allUserCanWriteAndRead() {
-    project.givePermission(allUser.getId(), Permission.ALL);
+    project.givePermissionTo(allUser.getId(), Permission.ALL);
     assertThat(project.canRead(allUser.getId())).isTrue();
     assertThat(project.canWrite(allUser.getId())).isTrue();
   }
 
   @Test
   public void userCanNoLongerUsePermissionPrivilegesAfterRevoking() {
-    project.givePermission(writeUser.getId(), Permission.READ);
-    project.givePermission(readUser.getId(), Permission.READ);
-    project.removePermission(readUser.getId(), Permission.READ);
+    project.givePermissionTo(writeUser.getId(), Permission.READ);
+    project.givePermissionTo(readUser.getId(), Permission.READ);
+    project.removePermissionOf(readUser.getId(), Permission.READ);
     assertThat(project.canRead(readUser.getId())).isFalse();
   }
 
   @Test
   public void revokingInexistantPermissionWorks() {
-    project.removePermission(readUser.getId(), Permission.READ);
+    project.removePermissionOf(readUser.getId(), Permission.READ);
     assertThat(project.getReaders().size()).isEqualTo(0);
   }
 }

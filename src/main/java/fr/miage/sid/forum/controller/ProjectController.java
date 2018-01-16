@@ -1,7 +1,5 @@
 package fr.miage.sid.forum.controller;
 
-import fr.miage.sid.forum.config.security.CurrentUser;
-import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.TopicService;
@@ -38,6 +36,7 @@ public class ProjectController {
   }
 
   @GetMapping("/project/create")
+  @PreAuthorize("isAuthenticated()")
   public ModelAndView getTopicForm(Project project) {
     ModelAndView modelAndView = new ModelAndView("project/create");
     modelAndView.addObject(project);
@@ -46,33 +45,33 @@ public class ProjectController {
 
   @PostMapping("/project")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView createProject(@Valid Project project, BindingResult result,
-      @CurrentUser MyPrincipal principal) {
-
+  public ModelAndView createProject(@Valid Project project, BindingResult result) {
     ModelAndView modelAndView = new ModelAndView();
+
     if (result.hasErrors()) {
       modelAndView.setViewName("project/create");
+      return modelAndView;
     }
 
-    projectService.save(project, principal.getId());
+    projectService.save(project);
     modelAndView.setViewName("redirect:/");
 
     return modelAndView;
   }
 
   @GetMapping("project/{projectId}")
-  public ModelAndView getOne(@PathVariable("projectId") Long projectId) {
+  public ModelAndView showProject(@PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    try {
-      Project project = projectService.getOne(projectId);
-      modelAndView.setViewName("project/show");
-      modelAndView.addObject("project", project);
-      modelAndView.addObject("topics", topicService.getAllByProject(project));
-    } catch (EntityNotFoundException e) {
+    Project project = projectService.getOne(projectId);
+
+    if (project == null) {
       ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This project doesn't exist");
     }
 
+    modelAndView.setViewName("project/show");
+    modelAndView.addObject("project", project);
+    modelAndView.addObject("topics", topicService.getAllByProject(project));
     return modelAndView;
   }
 

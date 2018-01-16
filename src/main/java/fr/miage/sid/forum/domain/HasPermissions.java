@@ -22,7 +22,7 @@ public abstract class HasPermissions extends Auditable {
   @ElementCollection
   private Set<Long> writers = new HashSet<>();
 
-  public void givePermission(Long userId, Permission permission) {
+  public void givePermissionTo(Long userId, Permission permission) {
     if (permission == Permission.READ || permission == Permission.ALL) {
       readers.add(userId);
     }
@@ -32,13 +32,25 @@ public abstract class HasPermissions extends Auditable {
     }
   }
 
-  public void removePermission(Long userId, Permission permission) {
+  public void givePermissionToAll(Set<Long> userIds, Permission permission) {
+    for (Long user : userIds) {
+      givePermissionTo(user, permission);
+    }
+  }
+
+  public void removePermissionOf(Long userId, Permission permission) {
     if (permission == Permission.READ || permission == Permission.ALL) {
       readers.remove(userId);
     }
 
     if (permission == Permission.WRITE || permission == Permission.ALL) {
       writers.remove(userId);
+    }
+  }
+
+  public void removePermissionOfAll(Set<Long> userIds, Permission permission) {
+    for (Long user : userIds) {
+      removePermissionOf(user, permission);
     }
   }
 
