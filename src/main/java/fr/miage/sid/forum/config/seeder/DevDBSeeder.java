@@ -1,7 +1,6 @@
 package fr.miage.sid.forum.config.seeder;
 
 import com.google.common.collect.Sets;
-import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.ProjectRepository;
 import fr.miage.sid.forum.domain.Role;
@@ -54,18 +53,16 @@ public class DevDBSeeder implements CommandLineRunner {
     dummy.setFirstname("Admin").setLastname("Admin").setUsername("admin")
         .setEmail("admin@fourm.com").setPassword(passwordEncoder.encode("system"))
         .setRoles(Sets.newHashSet(userRole, adminRole)).setOrigin(UserOrigin.DB);
-    dummy = userRepo.save(dummy);
+    userRepo.save(dummy);
 
     Project projectA = new Project().setName("Spring Data");
     Project projectB = new Project().setName("Spring Boot");
     projectRepository.save(projectA);
     projectRepository.save(projectB);
 
-    Topic topicA1 = new Topic().setTitle("Premier sujet").setProject(projectA);
-    Topic topicB1 = new Topic().setTitle("Vous n'allez jamais croire ce qu'il s'est passé ! :xxx")
-        .setProject(projectB);
-    topicA1.givePermission(dummy.getId(), Permission.ALL);
-    topicB1.givePermission(dummy.getId(), Permission.ALL);
+    Topic topicA1 = new Topic().setTitle("Comment avoir une repository REST?").setProject(projectA);
+    Topic topicB1 = new Topic().setTitle("@SpringBoot c'est cool").setProject(projectB);
     topicRepository.save(topicA1);
+    topicRepository.save(topicB1);
   }
 }

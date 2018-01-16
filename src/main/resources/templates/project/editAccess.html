@@ -6,8 +6,9 @@
   <div class="container">
     <h1 class="title" th:text="#{project}"></h1>
     <h2 class="subtitle" th:text="${project.name}"></h2>
-<a class="button is-link" th:text="#{project.return}" th:href="@{/project/}"></a>
-<a class="button is-link" th:text="#{project.edit_access}" th:href="@{'/project/'+${project.id}+'/editaccess'}"></a>
+    <a class="button is-link" th:text="#{project.return}" th:href="@{/project/}"></a>
+    <a class="button is-link" th:text="#{project.edit_access}"
+       th:href="@{'/project/'+${project.id}+'/editaccess'}"></a>
 
     <table class="table">
       <tbody>

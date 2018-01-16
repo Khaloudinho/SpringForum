@@ -7,7 +7,7 @@ public class ViewUtils {
 
   public static ModelAndView setErrorView(ModelAndView modelAndView, HttpStatus httpStatus,
       String message) {
-    modelAndView.setViewName("error/basicTemplate");
+    modelAndView.setViewName("error/basic");
     modelAndView.setStatus(httpStatus);
     modelAndView.addObject("errorCode", httpStatus);
     modelAndView.addObject("message", message);

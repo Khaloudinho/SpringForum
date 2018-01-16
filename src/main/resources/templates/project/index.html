@@ -4,8 +4,8 @@
 <body>
 <section class="section" layout:fragment="content">
   <div class="container">
-    <h1 class="title" th:text="#{project.all}"></h1>
-    <a class="button is-link" th:text="#{project.new}" th:href="@{/project/new}"></a>
+    <h1 class="title" th:text="#{projects}"></h1>
+    <a class="button is-default is-primary" th:text="#{project.create}" th:href="@{/project/create}"></a>
     <table class="table">
       <tbody>
       <tr th:each="project : ${projects}">

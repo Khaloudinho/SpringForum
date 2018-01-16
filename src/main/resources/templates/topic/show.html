@@ -4,6 +4,12 @@
 <body>
 <section class="section" layout:fragment="content">
   <div class="container">
+    <a th:href="@{/project/{id}(id=${topic.project.id})}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 16" class="forum-back-arrow">
+        <path d="M6 3L0 8l6 5v-3h4V6H6z"></path>
+      </svg>
+    </a>
+
     <h1 class="title" th:text="${topic.title}"></h1>
     <h2 class="subtitle"><span th:text="#{project}"></span> : <span
         th:text="${topic.project.name}"></span></h2>
@@ -11,8 +17,6 @@
     <a class="button is-link" th:text="#{post.new}"
        th:href="@{/topic/{id}/post/create(id=${topic.id})}"></a>
 
-    <a class="button is-link" th:text="#{project.return}"
-       th:href="@{'/project/'+ ${topic.project.id}}"></a>
     <article class="message" th:each="post : ${posts}">
       <div class="message-header">
         <strong class="is-pulled-left" th:text="${post.user.username}"></strong>

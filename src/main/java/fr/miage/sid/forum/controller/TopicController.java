@@ -30,15 +30,16 @@ public class TopicController {
     this.postService = postService;
   }
 
-  @GetMapping("project/{projectId}/newtopic")
-  public ModelAndView getTopicForm(Topic topic, @PathVariable("projectId") String projectId) {
-    ModelAndView modelAndView = new ModelAndView("topic/new");
+  @GetMapping("project/{projectId}/topic/create")
+  @PreAuthorize("isAuthenticated()")
+  public ModelAndView getTopicCreateForm(Topic topic, @PathVariable("projectId") String projectId) {
+    ModelAndView modelAndView = new ModelAndView("topic/create");
     modelAndView.addObject(topic);
     modelAndView.addObject("projectId", projectId);
     return modelAndView;
   }
 
-  @PostMapping("project/{projectId}/newtopic")
+  @PostMapping("project/{projectId}/topic")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView createTopic(
       @Valid Topic topic,
@@ -48,29 +49,17 @@ public class TopicController {
     ModelAndView modelAndView = new ModelAndView();
 
     if (result.hasErrors()) {
-      modelAndView.setViewName("topic/new");
+      modelAndView.setViewName("topic/create");
       modelAndView.addObject("projectId", projectId);
-    } else {
-      try {
-        Topic createdTopic = topicService.save(topic, Long.valueOf(projectId), principal.getId());
-        modelAndView.setViewName("redirect:/");
-        if (createdTopic == null) {
-          modelAndView.setViewName("error/basicTemplate");
-          modelAndView.setStatus(HttpStatus.NOT_FOUND);
-          modelAndView.addObject("errorCode", "404 Not Found");
-          modelAndView.addObject("message",
-              "This project does not exist, making a new topic is impossible");
-        }
-      } catch (Exception e) {
-//      } catch (PermissionTopicException e) {
-        modelAndView.setViewName("error/basicTemplate");
-        modelAndView.setStatus(HttpStatus.FORBIDDEN);
-        modelAndView.addObject("errorCode", "403 Forbidden");
-        modelAndView
-            .addObject("message", "You do not have the permission to make a topic on this project");
-        return modelAndView;
-      }
     }
+
+    Topic createdTopic = topicService.save(topic, Long.valueOf(projectId), principal.getId());
+    modelAndView.setViewName("redirect:/");
+    if (createdTopic == null) {
+      ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND,
+          "This project does not exist, making a new topic is impossible");
+    }
+
     return modelAndView;
   }
 
@@ -83,11 +72,8 @@ public class TopicController {
       modelAndView.setViewName("topic/show");
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("posts", postService.getAllByTopic(topic));
-    } catch (NumberFormatException | EntityNotFoundException e) {
-      modelAndView.setViewName("error/basicTemplate");
-      modelAndView.setStatus(HttpStatus.NOT_FOUND);
-      modelAndView.addObject("errorCode", "404 Not Found");
-      modelAndView.addObject("message", "This topic does not exist");
+    } catch (EntityNotFoundException e) {
+      ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This topic doesn't exist");
     }
 
     return modelAndView;

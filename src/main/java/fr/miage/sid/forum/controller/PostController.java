@@ -28,7 +28,7 @@ public class PostController {
 
   @GetMapping("/topic/{topicId}/post/create")
   @PreAuthorize("isAuthenticated() and hasPermission(#topicId, 'topic' ,T(fr.miage.sid.forum.domain.Permission).WRITE)")
-  public ModelAndView getPostForm(Post post, @PathVariable("topicId") Long topicId) {
+  public ModelAndView getPostCreateForm(Post post, @PathVariable("topicId") Long topicId) {
     ModelAndView modelAndView = new ModelAndView("post/create");
     modelAndView.addObject(post);
     modelAndView.addObject("topicId", topicId);

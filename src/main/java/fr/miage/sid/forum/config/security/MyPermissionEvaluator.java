@@ -32,8 +32,6 @@ public class MyPermissionEvaluator implements PermissionEvaluator {
   @Override
   public boolean hasPermission(Authentication authentication, Serializable targetId,
       String targetType, Object permission) {
-    log.info("Checking permissions");
-
     if (!targetType.equals("topic") && !targetType.equals("project")
         || !(permission instanceof Permission)) {
       return true;
@@ -51,6 +49,9 @@ public class MyPermissionEvaluator implements PermissionEvaluator {
     if (!(authentication instanceof AnonymousAuthenticationToken)) {
       principalId = ((MyPrincipal) authentication.getPrincipal()).getId();
     }
+
+    log.info("Checking permission" + permission + "for type: " + targetType + " for userId: "
+        + principalId);
 
     return entity.hasPermission(principalId, (Permission) permission);
   }

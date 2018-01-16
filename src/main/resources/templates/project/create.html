@@ -5,8 +5,7 @@
 <section class="section" layout:fragment="content">
   <div class="container">
 
-    <h1 class="title" th:text="#{project.new}"></h1>
-<a class="button is-link" th:text="#{project.return}" th:href="@{/project/}"></a>
+    <h1 class="title" th:text="#{project.create}"></h1>
     <form th:action="@{/project/new}" th:object="${project}" method="post">
       <div class="field">
         <label class="label" th:text="#{project.name}"></label>
@@ -20,7 +19,8 @@
 
       <div class="field is-grouped is-grouped-centered">
         <div class="control">
-          <button class="button is-info" th:text="#{submit}"></button>
+          <button type="submit" class="button is-primary is-outlined" th:text="#{submit}"></button>
+          <a class="button" th:text="#{cancel}" th:href="@{/}"></a>
         </div>
       </div>
 

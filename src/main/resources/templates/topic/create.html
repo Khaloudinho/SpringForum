@@ -6,22 +6,23 @@
   <div class="container">
 
     <h1 class="title" th:text="#{topic.new}"></h1>
-<a class="button is-link" th:text="#{topic.return}" th:href="@{'/project/'+${projectId} }"></a>
 
-    <form th:action="@{'/project/' + ${projectId} + '/newtopic'}" th:object="${topic}" method="post">
+    <form th:action="@{'/project/' + ${projectId} + '/newtopic'}" th:object="${topic}"
+          method="post">
       <div class="field">
         <label class="label" th:text="#{topic.title}"></label>
         <div class="control">
           <input class="input" th:field="*{title}"/>
           <p class="help is-danger"
              th:if="${#fields.hasErrors('title')}"
-             th:errors="*{title}">title error</p>
+             th:errors="*{title}"></p>
         </div>
       </div>
 
       <div class="field is-grouped is-grouped-centered">
         <div class="control">
-          <button class="button is-info" th:text="#{submit}"></button>
+          <button type="submit" class="button is-primary is-outlined" th:text="#{submit}"></button>
+          <a class="button" th:href="@{/project/{id}(id=${projectId})}" th:text="#{cancel}"></a>
         </div>
       </div>
 
