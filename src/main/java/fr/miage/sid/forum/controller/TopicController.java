@@ -80,7 +80,7 @@ public class TopicController {
 
     try {
       Topic topic = topicService.getOne(topicId);
-      modelAndView.setViewName("topic/topicPage");
+      modelAndView.setViewName("topic/show");
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("posts", postService.getAllByTopic(topic));
     } catch (NumberFormatException | EntityNotFoundException e) {

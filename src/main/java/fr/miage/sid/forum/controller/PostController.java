@@ -1,15 +1,10 @@
 package fr.miage.sid.forum.controller;
 
-import static fr.miage.sid.forum.controller.ViewUtils.setErrorView;
-
 import fr.miage.sid.forum.domain.Post;
-import fr.miage.sid.forum.security.CurrentUser;
-import fr.miage.sid.forum.security.MyPrincipal;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -45,21 +40,15 @@ public class PostController {
   public ModelAndView createPost(
       @Valid Post post,
       BindingResult result,
-      @PathVariable("topicId") Long topicId,
-      @CurrentUser MyPrincipal principal) {
+      @PathVariable("topicId") Long topicId) {
     ModelAndView modelAndView = new ModelAndView();
-
-    if (!topicService.exists(topicId)) {
-      setErrorView(modelAndView, HttpStatus.NOT_FOUND,
-          "This topic does not exist, making a new post is impossible");
-    }
 
     if (result.hasErrors()) {
       modelAndView.setViewName("post/create");
       return modelAndView;
     }
 
-    postService.save(post, topicId, principal.getId());
+    postService.save(post, topicId);
     modelAndView.setViewName("redirect:/topic/" + topicId);
 
     return modelAndView;

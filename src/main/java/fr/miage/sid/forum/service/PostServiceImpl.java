@@ -22,14 +22,13 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public Post save(Post post, Long topicId, Long userId) {
-    if (topicRepository.exists(topicId)) {
-      Topic topic = topicRepository.getOne(topicId);
-      post.setTopic(topic);
-      return postRepository.save(post);
+  public Post save(Post post, Long topicId) throws TopicNotFoundException {
+    Topic topic = topicRepository.getOne(topicId);
+    if (topic == null) {
+      throw new TopicNotFoundException("Can't find topic with id: " + topicId);
     }
-
-    return null;
+    post.setTopic(topic);
+    return postRepository.save(post);
   }
 
   @Override

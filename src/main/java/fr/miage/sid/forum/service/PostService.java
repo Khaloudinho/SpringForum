@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PostService {
 
-  Post save(Post post, Long topicId, Long userId);
+  Post save(Post post, Long topicId) throws TopicNotFoundException;
 
   List<Post> getAllByTopic(Topic topic);
 }
