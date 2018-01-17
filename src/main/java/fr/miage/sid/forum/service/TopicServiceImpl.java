@@ -1,9 +1,6 @@
 package fr.miage.sid.forum.service;
 
-import fr.miage.sid.forum.domain.Project;
-import fr.miage.sid.forum.domain.ProjectRepository;
-import fr.miage.sid.forum.domain.Topic;
-import fr.miage.sid.forum.domain.TopicRepository;
+import fr.miage.sid.forum.domain.*;
 import fr.miage.sid.forum.exception.ProjectNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,11 @@ public class TopicServiceImpl implements TopicService {
     }
 
     topic.setProject(project);
+
+    topic.givePermissionToAll(project.getReaders(), Permission.READ);
+    topic.givePermissionToAll(project.getWriters(), Permission.WRITE);
+    topic.setAnonymousCanAccess(project.isAnonymousCanAccess());
+
     return topicRepository.save(topic);
   }
 
