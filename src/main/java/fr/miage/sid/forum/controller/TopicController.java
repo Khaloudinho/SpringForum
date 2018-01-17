@@ -3,8 +3,11 @@ package fr.miage.sid.forum.controller;
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.domain.User;
+import fr.miage.sid.forum.domain.UserRepository;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
+import fr.miage.sid.forum.service.UserService;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +25,14 @@ public class TopicController {
 
   private final TopicService topicService;
   private final PostService postService;
+  private final UserService userService;
 
   @Autowired
   public TopicController(TopicService topicService,
-      PostService postService) {
+      PostService postService,UserService userService) {
     this.topicService = topicService;
     this.postService = postService;
+    this.userService = userService;
   }
 
   @GetMapping("project/{projectId}/topic/create")
@@ -52,7 +57,7 @@ public class TopicController {
       modelAndView.setViewName("topic/create");
       modelAndView.addObject("projectId", projectId);
     }
-
+    topic.addFollower(userService.getOne(principal.getId()));
     Topic createdTopic = topicService.save(topic, Long.valueOf(projectId), principal.getId());
     modelAndView.setViewName("redirect:/");
     if (createdTopic == null) {

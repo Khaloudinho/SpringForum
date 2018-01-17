@@ -21,6 +21,8 @@ public abstract class HasPermissions extends Auditable {
 
   @ElementCollection
   private Set<Long> writers = new HashSet<>();
+  
+
 
   public void givePermissionTo(Long userId, Permission permission) {
     if (permission == Permission.READ || permission == Permission.ALL) {
@@ -33,9 +35,9 @@ public abstract class HasPermissions extends Auditable {
   }
 
   public void givePermissionToAll(Set<Long> userIds, Permission permission) {
-    for (Long user : userIds) {
-      givePermissionTo(user, permission);
-    }
+      userIds.forEach((user) -> {
+          givePermissionTo(user, permission);
+      });
   }
 
   public void removePermissionOf(Long userId, Permission permission) {
@@ -81,8 +83,8 @@ public abstract class HasPermissions extends Auditable {
     if (permission == Permission.WRITE) {
       return canWrite;
     }
-
     return permission == Permission.ALL && canRead && canWrite;
   }
+
 
 }

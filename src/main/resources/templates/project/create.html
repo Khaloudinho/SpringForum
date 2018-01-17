@@ -6,7 +6,7 @@
   <div class="container">
 
     <h1 class="title" th:text="#{project.create}"></h1>
-    <form th:action="@{/project/new}" th:object="${project}" method="post">
+    <form th:action="@{/project}" th:object="${project}" method="post">
       <div class="field">
         <label class="label" th:text="#{project.name}"></label>
         <div class="control">

@@ -5,8 +5,10 @@
  */
 package fr.miage.sid.forum.service;
 
+import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.User;
 import java.util.List;
+import java.util.Set;
 import javax.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +39,13 @@ public class MailService {
     sender.send(message);
   }
 
-  public void sendNotificationEmail(User user, User actionner) {
+  public void sendNotificationEmail(User user, User actionner,Topic t) {
     MimeMessagePreparator messagePreparator = mimeMessage -> {
       MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
       messageHelper.setFrom("do-not-reply@spring-mail.com");
       messageHelper.setTo(user.getEmail());
       messageHelper.setSubject("Topic notification");
-      String content = build(user.getFirstname(), actionner.getUsername());
+      String content = build(user.getFirstname(), actionner.getUsername(),t.getTitle());
       messageHelper.setText(content, true);
     };
     try {
@@ -53,12 +55,12 @@ public class MailService {
     }
   }
 
-  public void sendNotificationEmail(List<User> users, User actionner) {
-    users.forEach((user) -> sendNotificationEmail(user, actionner));
+  public void sendNotificationEmail(Set<User> users, User actionner,Topic t) {
+    users.forEach((user) -> sendNotificationEmail(user, actionner,t));
   }
 
 
-  public String build(String firstname, String responserName) {
+  private String build(String firstname, String responserName, String title) {
     Context context = new Context();
     context.setVariable("firstName", firstname);
     if (responserName != null || !responserName.isEmpty()) {
