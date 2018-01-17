@@ -3,6 +3,8 @@ package fr.miage.sid.forum.service;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.ProjectRepository;
 import java.util.List;
+
+import fr.miage.sid.forum.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +33,10 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public List<Project> getAll() {
     return projectRepository.findAll();
+  }
+
+  @Override
+  public int countCreatedByUser(User user) {
+    return projectRepository.countAllByCreatedBy(user);
   }
 }

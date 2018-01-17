@@ -36,6 +36,9 @@
       <a class="navbar-item" sec:authorize="isAnonymous()"
          th:href="@{/login}" th:text="#{user.login}"></a>
 
+      <a class="navbar-item" sec:authorize="hasRole('ROLE_ADMIN')"
+         th:href="@{/users}" th:text="#{users}"></a>
+
       <div class="navbar-item has-dropdown is-hoverable" sec:authorize="isAuthenticated()">
         <a class="navbar-link"
            th:text="${#authentication.getName()}"></a>

@@ -6,6 +6,8 @@ import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.UserOrigin;
 import fr.miage.sid.forum.domain.RoleRepository;
 import fr.miage.sid.forum.domain.UserRepository;
+
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -45,5 +47,10 @@ public class UserServiceImpl implements UserService {
   @Override
   public User getOne(Long id) {
     return userRepo.getOne(id);
+  }
+
+  @Override
+  public List<User> getAll() {
+    return userRepo.findAll();
   }
 }

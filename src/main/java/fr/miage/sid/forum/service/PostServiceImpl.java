@@ -1,9 +1,6 @@
 package fr.miage.sid.forum.service;
 
-import fr.miage.sid.forum.domain.Post;
-import fr.miage.sid.forum.domain.Topic;
-import fr.miage.sid.forum.domain.PostRepository;
-import fr.miage.sid.forum.domain.TopicRepository;
+import fr.miage.sid.forum.domain.*;
 import fr.miage.sid.forum.exception.TopicNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +32,10 @@ public class PostServiceImpl implements PostService {
   @Override
   public List<Post> getAllByTopic(Topic topic) {
     return postRepository.getAllByTopic(topic);
+  }
+
+  @Override
+  public int countCreatedByUser(User user) {
+    return postRepository.countAllByCreatedBy(user);
   }
 }

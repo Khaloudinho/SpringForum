@@ -45,4 +45,9 @@ public class TopicServiceImpl implements TopicService {
   public List<Topic> getAllByProject(Project project) {
     return topicRepository.getAllByProject(project);
   }
+
+  @Override
+  public int countCreatedByUser(User user) {
+    return topicRepository.countAllByCreatedBy(user);
+  }
 }
