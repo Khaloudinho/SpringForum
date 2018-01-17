@@ -62,15 +62,6 @@
   </div>
 </div>
 <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
-<script>
-  (() = > {
-    const loginBtn = document.getElementById('loginBtn')
-    const loginForm = document.getElementById('loginForm')
-    loginBtn.addEventListener('click', () = > {
-    loginForm.submit()
-  })
-  })
-  ()
-</script>
+<script th:src="@{/js/login.js}"></script>
 </body>
 </html>

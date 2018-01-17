@@ -51,7 +51,7 @@ public class DevDBSeeder implements CommandLineRunner {
 
     User dummy = new User();
     dummy.setFirstname("Admin").setLastname("Admin").setUsername("admin")
-        .setEmail("admin@fourm.com").setPassword(passwordEncoder.encode("system"))
+        .setEmail("admin@fourm.com").setPassword(passwordEncoder.encode("admin"))
         .setRoles(Sets.newHashSet(userRole, adminRole)).setOrigin(UserOrigin.DB);
     userRepo.save(dummy);
 
