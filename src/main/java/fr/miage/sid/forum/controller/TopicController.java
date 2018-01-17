@@ -1,7 +1,5 @@
 package fr.miage.sid.forum.controller;
 
-import fr.miage.sid.forum.config.security.CurrentUser;
-import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
@@ -44,8 +42,7 @@ public class TopicController {
   public ModelAndView createTopic(
       @Valid Topic topic,
       BindingResult result,
-      @PathVariable("projectId") String projectId,
-      @CurrentUser MyPrincipal principal) {
+      @PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
     if (result.hasErrors()) {
@@ -53,7 +50,7 @@ public class TopicController {
       modelAndView.addObject("projectId", projectId);
     }
 
-    Topic createdTopic = topicService.save(topic, Long.valueOf(projectId), principal.getId());
+    Topic createdTopic = topicService.save(topic, projectId);
     modelAndView.setViewName("redirect:/");
     if (createdTopic == null) {
       ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND,
@@ -64,7 +61,7 @@ public class TopicController {
   }
 
   @GetMapping("/topic/{topicId}")
-  public ModelAndView getOne(@PathVariable("topicId") Long topicId) {
+  public ModelAndView showTopic(@PathVariable("topicId") Long topicId) {
     ModelAndView modelAndView = new ModelAndView();
 
     try {

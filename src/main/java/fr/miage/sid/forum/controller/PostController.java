@@ -27,7 +27,7 @@ public class PostController {
   }
 
   @GetMapping("/topic/{topicId}/post/create")
-  @PreAuthorize("isAuthenticated() and hasPermission(#topicId, 'topic' ,T(fr.miage.sid.forum.domain.Permission).WRITE)")
+  @PreAuthorize("isAuthenticated() and @permissionService.canWriteTopic(#topicId)")
   public ModelAndView getPostCreateForm(Post post, @PathVariable("topicId") Long topicId) {
     ModelAndView modelAndView = new ModelAndView("post/create");
     modelAndView.addObject(post);
@@ -36,7 +36,7 @@ public class PostController {
   }
 
   @PostMapping("/topic/{topicId}/post")
-  @PreAuthorize("isAuthenticated() and hasPermission(#topicId, 'topic' ,T(fr.miage.sid.forum.domain.Permission).WRITE)")
+  @PreAuthorize("isAuthenticated() and @permissionService.canWriteTopic(#topicId)")
   public ModelAndView createPost(
       @Valid Post post,
       BindingResult result,
