@@ -13,8 +13,8 @@
     <h2 class="subtitle" th:text="${project.name}"></h2>
     <a class="button is-link" th:text="#{topic.new}"
        th:href="@{'/project/'+${project.id}+'/topic/create'}"></a>
-    <a class="button is-link" th:text="#{project.edit_access}"
-       th:href="@{'/project/'+${project.id}+'/editaccess'}"></a>
+    <a class="button is-link" th:text="#{project.edit_project}"
+       th:href="@{'/project/'+${project.id}+'/editproject'}"></a>
 
     <table class="table">
       <tbody>

@@ -4,6 +4,7 @@ import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Role;
+import fr.miage.sid.forum.service.MailService;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
 import javax.validation.Valid;
@@ -23,12 +24,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class PostController {
 
   private final PostService postService;
+  private final TopicService topicService;
+  private final MailService mailService;
   private final UserService userService;
 
   @Autowired
   public PostController(PostService postService,
-                        UserService userService) {
+                        TopicService topicService, MailService mailService, UserService userService) {
     this.postService = postService;
+    this.topicService = topicService;
+    this.mailService = mailService;
     this.userService = userService;
   }
 
@@ -55,8 +60,11 @@ public class PostController {
     }
 
     postService.save(post, topicId);
+    
+    mailService.sendNotificationEmail(topicService.getOne(topicId).getFollowers(), post.getCreatedBy(),topicService.getOne(topicId));
+    
     modelAndView.setViewName("redirect:/topic/" + topicId);
-
+    
     return modelAndView;
   }
 
