@@ -1,5 +1,6 @@
 package fr.miage.sid.forum.controller;
 
+import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Project;
@@ -53,11 +54,13 @@ public class TopicController {
       @Valid Topic topic,
       BindingResult result,
       @CurrentUser MyPrincipal principal,
+      String postContent,
       @PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    if (result.hasErrors()) {
+    if (result.hasErrors() || postContent.equals("")) {
       modelAndView.setViewName("topic/create");
+      modelAndView.addObject("errorPostContent", postContent);
       return modelAndView.addObject("projectId", projectId);
     }
 
@@ -69,7 +72,8 @@ public class TopicController {
           "This project does not exist, making a new topic is impossible");
     }
 
-    topicService.save(topic, projectId);
+    Topic saved = topicService.save(topic, projectId);
+    postService.save(new Post().setContent(postContent), saved.getId());
     modelAndView.setViewName("redirect:/project/" + projectId);
 
     return modelAndView;
