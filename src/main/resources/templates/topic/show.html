@@ -24,7 +24,7 @@
     <article class="message" th:each="post : ${posts}">
       <div class="message-header">
         <strong class="is-pulled-left" th:text="${post.getCreatedBy().getUsername()}"></strong>
-        <a th:if="${currentUser != null && currentUser.equals(post.getCreatedBy())}"
+        <a th:if="${userIsAdmin || (currentUser != null && currentUser.equals(post.getCreatedBy()))}"
            th:text="#{modify}"
            th:href="@{/post/{id_post}(id_post=${post.getId()})}"
            class="button is-link is-inverted"></a>

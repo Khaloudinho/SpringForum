@@ -2,13 +2,9 @@ package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
-import fr.miage.sid.forum.domain.Post;
+import fr.miage.sid.forum.domain.*;
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
-import fr.miage.sid.forum.domain.Project;
-import fr.miage.sid.forum.domain.Topic;
-import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.domain.UserRepository;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
 import fr.miage.sid.forum.service.UserService;
@@ -92,6 +88,11 @@ public class TopicController {
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("posts", postService.getAllByTopic(topic));
       if(principal != null){
+        boolean isAdmin = false;
+        for (Role role : userService.getOne(principal.getId()).getRoles()) {
+          if(role.getRole().equals("ROLE_ADMIN")){isAdmin = true;}
+        }
+        modelAndView.addObject("userIsAdmin", isAdmin);
         modelAndView.addObject("currentUser", userService.getOne(principal.getId()));
       }
     } catch (EntityNotFoundException e) {
