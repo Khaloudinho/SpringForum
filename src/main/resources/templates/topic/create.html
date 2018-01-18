@@ -7,7 +7,8 @@
 
     <h1 class="title" th:text="#{topic.new}"></h1>
 
-    <form th:action="@{/project/{id}/topic(id=${projectId})}" th:object="${topic}"
+    <form th:action="@{/project/{id}/topic(id=${projectId})}"
+          th:object="${topic}"
           method="post">
       <div class="field">
         <label class="label" th:text="#{topic.title}"></label>

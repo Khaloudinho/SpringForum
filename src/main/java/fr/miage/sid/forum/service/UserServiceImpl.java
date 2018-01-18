@@ -1,15 +1,19 @@
 package fr.miage.sid.forum.service;
 
 import com.google.common.collect.Sets;
+import fr.miage.sid.forum.config.security.UserDetailsImpl;
 import fr.miage.sid.forum.domain.Role;
+import fr.miage.sid.forum.domain.RoleRepository;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.UserOrigin;
-import fr.miage.sid.forum.domain.RoleRepository;
 import fr.miage.sid.forum.domain.UserRepository;
-
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +56,18 @@ public class UserServiceImpl implements UserService {
   @Override
   public List<User> getAll() {
     return userRepo.findAll();
+  }
+
+  @Override
+  public UserDetailsImpl getUserDetails(User user) {
+    return new UserDetailsImpl(user, getAuthorities(user.getRoles()));
+  }
+
+  private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
+    List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
+    for (Role role : roles) {
+      authorities.add(new SimpleGrantedAuthority(role.getRole()));
+    }
+    return authorities;
   }
 }

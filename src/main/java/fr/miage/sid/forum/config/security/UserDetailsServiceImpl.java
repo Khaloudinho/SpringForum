@@ -1,16 +1,10 @@
 package fr.miage.sid.forum.config.security;
 
-import fr.miage.sid.forum.domain.Role;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.UserRepository;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import fr.miage.sid.forum.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,10 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
   private UserRepository userRepo;
+  private UserService userService;
 
   @Autowired
-  public UserDetailsServiceImpl(UserRepository userRepo) {
+  public UserDetailsServiceImpl(UserRepository userRepo,
+      UserService userService) {
     this.userRepo = userRepo;
+    this.userService = userService;
   }
 
   @Override
@@ -37,14 +34,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       throw new UsernameNotFoundException(email);
     }
 
-    return new UserDetailsImpl(user, getAuthorities(user.getRoles()));
-  }
-
-  private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
-    List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
-    for (Role role : roles) {
-      authorities.add(new SimpleGrantedAuthority(role.getRole()));
-    }
-    return authorities;
+    return userService.getUserDetails(user);
   }
 }

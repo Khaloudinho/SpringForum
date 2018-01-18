@@ -1,9 +1,8 @@
 package fr.miage.sid.forum.service;
 
+import fr.miage.sid.forum.config.security.UserDetailsImpl;
 import fr.miage.sid.forum.domain.User;
-
 import java.util.List;
-import java.util.Set;
 
 public interface UserService {
 
@@ -14,4 +13,6 @@ public interface UserService {
   User getOne(Long id);
 
   List<User> getAll();
+
+  UserDetailsImpl getUserDetails(User user);
 }
