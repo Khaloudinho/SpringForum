@@ -51,7 +51,7 @@ public class DevDBSeeder implements CommandLineRunner {
 
     User dummy = new User();
     dummy.setFirstname("Admin").setLastname("Admin").setUsername("admin")
-        .setEmail("admin@fourm.com").setPassword(passwordEncoder.encode("system"))
+        .setEmail("admin@forum.com").setPassword(passwordEncoder.encode("admin"))
         .setRoles(Sets.newHashSet(userRole, adminRole)).setOrigin(UserOrigin.DB);
     userRepo.save(dummy);
 
@@ -62,6 +62,7 @@ public class DevDBSeeder implements CommandLineRunner {
 
     Topic topicA1 = new Topic().setTitle("Comment avoir une repository REST?").setProject(projectA);
     Topic topicB1 = new Topic().setTitle("@SpringBoot c'est cool").setProject(projectB);
+//    topicA1.givePermissionTo(dummy.getId(), Permission.ALL);
     topicRepository.save(topicA1);
     topicRepository.save(topicB1);
   }

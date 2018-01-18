@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Spring Forum</title>
   <link rel="stylesheet"
-        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css}">
+        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css}">
   <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -62,15 +62,6 @@
   </div>
 </div>
 <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
-<script>
-  (() = > {
-    const loginBtn = document.getElementById('loginBtn')
-    const loginForm = document.getElementById('loginForm')
-    loginBtn.addEventListener('click', () = > {
-    loginForm.submit()
-  })
-  })
-  ()
-</script>
+<script th:src="@{/js/login.js}"></script>
 </body>
 </html>

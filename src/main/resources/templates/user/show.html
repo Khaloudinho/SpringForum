@@ -1,0 +1,49 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<body>
+<section class="section" layout:fragment="content">
+    <div class="container">
+        <a th:href="@{/}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 16" class="forum-back-arrow">
+                <path d="M6 3L0 8l6 5v-3h4V6H6z"></path>
+            </svg>
+        </a>
+        <h1 class="title" th:text="#{users}"></h1>
+
+        <table class="table">
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td><span th:text="${user.getUsername()}"></span></td>
+                <td><span th:text="${user.getEmail()}"></span></td>
+                <td><span th:text="${user.getFirstname()}"></span></td>
+                <td><span th:text="${user.getLastname()}"></span></td>
+                <td><span th:text="${user.getOrigin().name()}"></span></td>
+                <td>
+                    <p th:each="role : ${user.getRoles()}">
+                        <span th:text="${role.getRole()}"></span>
+                    </p>
+                </td>
+                <td><span th:text="${mapProjectCount.get(user)}"></span></td>
+                <td><span th:text="${mapTopicCount.get(user)}"></span></td>
+                <td><span th:text="${mapPostCount.get(user)}"></span></td>
+            </tr>
+            </tbody>
+            <thead>
+            <tr>
+                <th th:text="#{user.username}"></th>
+                <th th:text="#{user.email}"></th>
+                <th th:text="#{user.firstname}"></th>
+                <th th:text="#{user.lastname}"></th>
+                <th th:text="#{user.origin}"></th>
+                <th th:text="#{role}"></th>
+                <th th:text="#{number.project}"></th>
+                <th th:text="#{number.topic}"></th>
+                <th th:text="#{number.post}"></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</section>
+</body>
+</html>

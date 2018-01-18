@@ -16,10 +16,14 @@
 
     <a class="button is-link" th:text="#{post.new}"
        th:href="@{/topic/{id}/post/create(id=${topic.id})}"></a>
+    <a class="button is-link" th:text="#{post.editopic}"
+       th:href="@{'/topic/'+${topic.id}+'/edittopic'}"></a>
+    <a id="followBtn" class="button is-link" th:text="#{post.follow}" onclick="follow()"></a>
+    <a id="unfollowBtn" class="button is-link" th:text="#{post.unfollow}" onclick="unfollow()" style="display:none;" ></a>
 
     <article class="message" th:each="post : ${posts}">
       <div class="message-header">
-        <strong class="is-pulled-left" th:text="${post.user.username}"></strong>
+        <strong class="is-pulled-left" th:text="${post.createdBy.username}"></strong>
         <span class="is-pulled-right" th:text="${post.createdAt}"></span>
       </div>
       <div th:text="${post.content}" class="message-body"></div>

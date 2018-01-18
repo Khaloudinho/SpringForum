@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Spring Forum</title>
   <link rel="stylesheet"
-        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css}">
+        th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css}">
   <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -36,6 +36,9 @@
       <a class="navbar-item" sec:authorize="isAnonymous()"
          th:href="@{/login}" th:text="#{user.login}"></a>
 
+      <a class="navbar-item" sec:authorize="hasRole('ROLE_ADMIN')"
+         th:href="@{/users}" th:text="#{users}"></a>
+
       <div class="navbar-item has-dropdown is-hoverable" sec:authorize="isAuthenticated()">
         <a class="navbar-link"
            th:text="${#authentication.getName()}"></a>
@@ -62,5 +65,7 @@
 <section layout:fragment="content"></section>
 <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 <script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/follow.js}"></script>
+<script th:src="@{/js/addPermission.js}"></script>
 </body>
 </html>

@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @EqualsAndHashCode(callSuper = true)
 public abstract class HasPermissions extends Auditable {
 
-  private boolean anonymousCanAccess = true;
+  protected boolean anonymousCanAccess = true;
 
   @ElementCollection
   private Set<Long> readers = new HashSet<>();
@@ -69,7 +69,7 @@ public abstract class HasPermissions extends Auditable {
    * he is anonymous and anonymousCanAccess is true or he is in readers or readers is empty
    */
   public boolean canRead(Long userId) {
-    return (userId == null && anonymousCanAccess) || readers.isEmpty() || readers.contains(userId);
+    return (userId == null && isAnonymousCanAccess()) || readers.isEmpty() || readers.contains(userId);
   }
 
   public boolean hasPermission(Long userId, Permission permission) {

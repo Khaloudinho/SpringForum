@@ -1,5 +1,6 @@
 package fr.miage.sid.forum.controller;
 
+import fr.miage.sid.forum.config.security.UserDetailsImpl;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.validation.UserForm;
 import fr.miage.sid.forum.service.UserService;
@@ -8,6 +9,8 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +45,6 @@ public class AuthController {
     return modelAndView;
   }
 
-  // TODO Login user programmatically after register
   @PostMapping("/register")
   public ModelAndView register(@Valid UserForm userForm, BindingResult result) {
     ModelAndView modelAndView = new ModelAndView();
@@ -51,11 +53,19 @@ public class AuthController {
     if (result.hasErrors()) {
       modelAndView.setViewName("auth/register");
     } else {
-      userService.save(user);
+      User saved = userService.save(user);
+      signin(userService.getUserDetails(saved));
       modelAndView.setViewName("redirect:/");
     }
 
     return modelAndView;
+  }
+
+  private void signin(UserDetailsImpl user) {
+    SecurityContextHolder
+        .getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
   }
 
 }

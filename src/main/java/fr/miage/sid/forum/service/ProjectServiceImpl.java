@@ -3,6 +3,8 @@ package fr.miage.sid.forum.service;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.ProjectRepository;
 import java.util.List;
+
+import fr.miage.sid.forum.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public Project save(Project project) {
     // TODO Implement giving Permissions. Permissions on project can only come from admin
-//    project.givePermissionTo(userRepository.getOne(userId).getId(), Permission.ALL);
+//    project.givePermissionTo(userRepository.showTopic(userId).getId(), Permission.ALL);
     return projectRepository.save(project);
   }
 
@@ -31,5 +33,10 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public List<Project> getAll() {
     return projectRepository.findAll();
+  }
+
+  @Override
+  public int countCreatedByUser(User user) {
+    return projectRepository.countAllByCreatedBy(user);
   }
 }
