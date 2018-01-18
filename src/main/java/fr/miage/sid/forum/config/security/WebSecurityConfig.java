@@ -98,7 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/")
         .and().logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID", "SESSION")
-        .and().exceptionHandling()
+        .and().exceptionHandling().accessDeniedPage("/403")
         // Needed to redirect to login when not authenticated
         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
         .and().authorizeRequests()
