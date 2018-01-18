@@ -1,5 +1,6 @@
 package fr.miage.sid.forum.controller;
 
+import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
@@ -42,15 +43,18 @@ public class TopicController {
   public ModelAndView createTopic(
       @Valid Topic topic,
       BindingResult result,
+      String postContent,
       @PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    if (result.hasErrors()) {
+    if (result.hasErrors() || postContent.equals("")) {
       modelAndView.setViewName("topic/create");
+      modelAndView.addObject("errorPostContent", postContent);
       return modelAndView.addObject("projectId", projectId);
     }
 
-    topicService.save(topic, projectId);
+    Topic saved = topicService.save(topic, projectId);
+    postService.save(new Post().setContent(postContent), saved.getId());
     modelAndView.setViewName("redirect:/project/" + projectId);
 
     return modelAndView;

@@ -18,6 +18,16 @@
              th:if="${#fields.hasErrors('title')}"
              th:errors="*{title}"></p>
         </div>
+
+        <label class="label" th:text="#{post.new}"></label>
+        <div class="control">
+          <textarea class="textarea" th:value="${postContent}" th:name="postContent"
+                    th:placeholder="#{post.content.placeholder}"></textarea>
+          <p class="help is-danger"
+             th:if="${errorPostContent == ''}"
+             th:text="#{post.content.error.empty}">
+          </p>
+        </div>
       </div>
 
       <div class="field is-grouped is-grouped-centered">
