@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
   @Autowired
   public UserServiceImpl(UserRepository userRepo,
       RoleRepository roleRepo,
-      BCryptPasswordEncoder passwordEncoder) {
+      @Lazy BCryptPasswordEncoder passwordEncoder) {
     this.userRepo = userRepo;
     this.roleRepo = roleRepo;
     this.passwordEncoder = passwordEncoder;
