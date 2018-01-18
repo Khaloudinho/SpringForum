@@ -29,9 +29,9 @@ public class TopicServiceImpl implements TopicService {
 
     topic.setProject(project);
 
-    topic.givePermissionToAll(project.getReaders(), Permission.READ);
-    topic.givePermissionToAll(project.getWriters(), Permission.WRITE);
-    topic.setAnonymousCanAccess(project.isAnonymousCanAccess());
+//    topic.givePermissionToAll(project.getReaders(), Permission.READ);
+//    topic.givePermissionToAll(project.getWriters(), Permission.WRITE);
+//    topic.setAnonymousCanAccess(project.isAnonymousCanAccess());
 
     return topicRepository.save(topic);
   }

@@ -47,15 +47,11 @@ public class TopicController {
 
     if (result.hasErrors()) {
       modelAndView.setViewName("topic/create");
-      modelAndView.addObject("projectId", projectId);
+      return modelAndView.addObject("projectId", projectId);
     }
 
-    Topic createdTopic = topicService.save(topic, projectId);
-    modelAndView.setViewName("redirect:/");
-    if (createdTopic == null) {
-      ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND,
-          "This project does not exist, making a new topic is impossible");
-    }
+    topicService.save(topic, projectId);
+    modelAndView.setViewName("redirect:/project/" + projectId);
 
     return modelAndView;
   }
