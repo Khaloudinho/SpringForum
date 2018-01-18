@@ -19,7 +19,7 @@
 
     <article class="message" th:each="post : ${posts}">
       <div class="message-header">
-        <strong class="is-pulled-left" th:text="${post.user.username}"></strong>
+        <strong class="is-pulled-left" th:text="${post.getCreatedBy().getUsername()}"></strong>
         <span class="is-pulled-right" th:text="${post.createdAt}"></span>
       </div>
       <div th:text="${post.content}" class="message-body"></div>
