@@ -30,6 +30,11 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
+  public Post save(Post post) {
+    return postRepository.save(post);
+  }
+
+  @Override
   public List<Post> getAllByTopic(Topic topic) {
     return postRepository.getAllByTopic(topic);
   }
@@ -37,5 +42,15 @@ public class PostServiceImpl implements PostService {
   @Override
   public int countCreatedByUser(User user) {
     return postRepository.countAllByCreatedBy(user);
+  }
+
+  @Override
+  public Post getOne(Long id) {
+    return postRepository.getOne(id);
+  }
+
+  @Override
+  public boolean exists(Long id){
+    return postRepository.exists(id);
   }
 }

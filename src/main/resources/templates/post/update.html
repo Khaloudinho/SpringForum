@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<body>
+<section class="section" layout:fragment="content">
+    <div class="container">
+
+        <h1 class="title" th:text="#{post.modify}"></h1>
+
+        <form th:action="@{/post/{id}(id=${currentPost.getId()})}" th:object="${post}" method="post">
+            <div class="field">
+                <label class="label" th:text="#{post.content}"></label>
+                <div class="control">
+                    <textarea class="textarea" th:field="*{content}"
+                    th:text="${currentPost.getContent()}"></textarea>
+                    <p class="help is-danger"
+                       th:if="${#fields.hasErrors('content')}"
+                       th:errors="*{content}"></p>
+                </div>
+            </div>
+
+            <div class="field is-grouped is-grouped-centered">
+                <div class="control">
+                    <button class="button is-info" th:text="#{modify}"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

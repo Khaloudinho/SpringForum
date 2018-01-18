@@ -10,7 +10,13 @@ public interface PostService {
 
   Post save(Post post, Long topicId) throws TopicNotFoundException;
 
+  Post save(Post post);
+
   List<Post> getAllByTopic(Topic topic);
 
   int countCreatedByUser(User user);
+
+  Post getOne(Long id);
+
+  boolean exists(Long id);
 }

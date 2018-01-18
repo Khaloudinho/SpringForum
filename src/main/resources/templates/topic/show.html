@@ -20,9 +20,14 @@
     <article class="message" th:each="post : ${posts}">
       <div class="message-header">
         <strong class="is-pulled-left" th:text="${post.getCreatedBy().getUsername()}"></strong>
-        <span class="is-pulled-right" th:text="${post.createdAt}"></span>
+        <a th:if="${currentUser != null && currentUser.equals(post.getCreatedBy())}"
+           th:text="#{modify}"
+           th:href="@{/post/{id_post}(id_post=${post.getId()})}"
+           class="button is-link is-inverted"></a>
+        <span class="is-pulled-right" th:text="${post.getCreatedAt()}"></span>
       </div>
-      <div th:text="${post.content}" class="message-body"></div>
+      <div th:text="${post.content}" class="message-body">
+      </div>
     </article>
 
   </div>

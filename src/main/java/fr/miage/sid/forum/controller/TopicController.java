@@ -1,11 +1,15 @@
 package fr.miage.sid.forum.controller;
 
+import fr.miage.sid.forum.config.security.CurrentUser;
+import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+
+import fr.miage.sid.forum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,12 +25,14 @@ public class TopicController {
 
   private final TopicService topicService;
   private final PostService postService;
+  private final UserService userService;
 
   @Autowired
   public TopicController(TopicService topicService,
-      PostService postService) {
+                         PostService postService, UserService userService) {
     this.topicService = topicService;
     this.postService = postService;
+    this.userService = userService;
   }
 
   @GetMapping("project/{projectId}/topic/create")
@@ -61,7 +67,8 @@ public class TopicController {
   }
 
   @GetMapping("/topic/{topicId}")
-  public ModelAndView showTopic(@PathVariable("topicId") Long topicId) {
+  public ModelAndView showTopic(@PathVariable("topicId") Long topicId,
+                                @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView();
 
     try {
@@ -69,6 +76,9 @@ public class TopicController {
       modelAndView.setViewName("topic/show");
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("posts", postService.getAllByTopic(topic));
+      if(principal != null){
+        modelAndView.addObject("currentUser", userService.getOne(principal.getId()));
+      }
     } catch (EntityNotFoundException e) {
       ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This topic doesn't exist");
     }
