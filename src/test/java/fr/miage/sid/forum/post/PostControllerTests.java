@@ -73,7 +73,7 @@ public class PostControllerTests {
   @Test
   @WithMockUser
   public void testValidPostCreation() throws Exception {
-    doNothing().when(mailService).sendNotifToAllFollowers(anyLong());
+    doNothing().when(mailService).sendNotifToAllFollowers(any());
     mockMvc.perform(post("/topic/{topicId}/post", 1)
         .param("content", "Nouveau post"))
         .andDo(print())
