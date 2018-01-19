@@ -1,6 +1,8 @@
 package fr.miage.sid.forum.config.seeder;
 
 import com.google.common.collect.Sets;
+import fr.miage.sid.forum.domain.Post;
+import fr.miage.sid.forum.domain.PostRepository;
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.ProjectRepository;
 import fr.miage.sid.forum.domain.Role;
@@ -26,17 +28,19 @@ public class DevDBSeeder implements CommandLineRunner {
   private RoleRepository roleRepo;
   private UserRepository userRepo;
   private ProjectRepository projectRepository;
+  private PostRepository postRepository;
   private TopicRepository topicRepository;
   private BCryptPasswordEncoder passwordEncoder;
 
   @Autowired
   public DevDBSeeder(RoleRepository roleRepo, UserRepository userRepo,
       ProjectRepository projectRepository,
-      TopicRepository topicRepository,
+      PostRepository postRepository, TopicRepository topicRepository,
       BCryptPasswordEncoder passwordEncoder) {
     this.roleRepo = roleRepo;
     this.userRepo = userRepo;
     this.projectRepository = projectRepository;
+    this.postRepository = postRepository;
     this.topicRepository = topicRepository;
     this.passwordEncoder = passwordEncoder;
   }
@@ -71,5 +75,8 @@ public class DevDBSeeder implements CommandLineRunner {
 //    topicA1.givePermissionTo(dummy.getId(), Permission.ALL);
     topicRepository.save(topicA1);
     topicRepository.save(topicB1);
+
+    Post post = new Post().setContent("Premier message").setTopic(topicA1);
+    postRepository.save(post);
   }
 }
