@@ -1,5 +1,8 @@
 package fr.miage.sid.forum.config.security;
 
+import com.google.common.collect.Sets;
+import fr.miage.sid.forum.domain.Role;
+import fr.miage.sid.forum.domain.RoleRepository;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.UserOrigin;
 import fr.miage.sid.forum.domain.UserRepository;
@@ -27,6 +30,8 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private UserRepository userRepository;
+
+  private RoleRepository roleRepository;
 
   private UserDetailsService userDetailsService;
 
@@ -63,11 +68,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       User user = userRepository.findByOauthId(oauthId);
       if (user == null) {
         user = new User();
+        Role userRole = roleRepository.findByRole("ROLE_USER");
         user.setEmail((String) map.get("email"))
             .setOauthId(oauthId).setUsername((String) map.get("name"))
             .setFirstname((String) map.get("given_name"))
             .setLastname((String) map.get("family_name"))
             .setPicture((String) map.get("picture"))
+            .setRoles(Sets.newHashSet(userRole))
             .setOrigin(UserOrigin.GOOGLE);
       } else {
         // We will update picture every time to make sure our data is fresh
