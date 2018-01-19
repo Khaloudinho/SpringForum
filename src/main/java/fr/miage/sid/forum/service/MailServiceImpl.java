@@ -45,17 +45,19 @@ public class MailServiceImpl implements MailService {
     Set<User> followers = topic.getFollowers();
 
     if (followers != null && !followers.isEmpty()) {
-      followers.forEach(follower -> sendNotifEmail(follower, author, topic));
+      followers.forEach(follower -> sendNotifEmail(follower, author, topic, post));
     }
   }
 
-  private void sendNotifEmail(User user, User author, Topic topic) {
+  private void sendNotifEmail(User user, User author, Topic topic,
+      Post post) {
     MimeMessagePreparator messagePreparator = mimeMessage -> {
       MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
       messageHelper.setFrom("do-not-reply@spring-forum.com");
       messageHelper.setTo(user.getEmail());
       messageHelper.setSubject("New message in Topic: " + topic.getTitle());
-      String content = buildMailTemplate(user.getFirstname(), author.getUsername());
+      String content = buildMailTemplate(user.getFirstname(), author.getUsername(),
+          post.getContent());
       messageHelper.setText(content, true);
     };
 
@@ -66,9 +68,10 @@ public class MailServiceImpl implements MailService {
     }
   }
 
-  private String buildMailTemplate(String firstname, String responserName) {
+  private String buildMailTemplate(String firstname, String responserName, String content) {
     Context context = new Context();
     context.setVariable("firstName", firstname);
+    context.setVariable("content", content);
     if (responserName != null && !responserName.isEmpty()) {
       context.setVariable("responserName", responserName);
     }
