@@ -1,5 +1,6 @@
 package fr.miage.sid.forum.domain;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity
-public class Project extends HasPermissions {
+public class Project extends HasPermissions implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

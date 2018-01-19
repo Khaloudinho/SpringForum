@@ -1,5 +1,6 @@
 package fr.miage.sid.forum.domain;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.ElementCollection;
@@ -20,7 +21,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity
-public class Topic extends HasPermissions {
+public class Topic extends HasPermissions implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,15 +32,16 @@ public class Topic extends HasPermissions {
 
   @ManyToOne
   private Project project;
-  
+
   @ElementCollection
-    @OneToMany
+  @OneToMany
   private Set<User> followers = new HashSet<>();
-    
-  public void addFollower(User user){
-      this.followers.add(user);
+
+  public void addFollower(User user) {
+    this.followers.add(user);
   }
-  public void  removeFollower(User user){
-      this.followers.remove(user);
+
+  public void removeFollower(User user) {
+    this.followers.remove(user);
   }
 }

@@ -1,7 +1,6 @@
 package fr.miage.sid.forum.domain;
 
 
-import fr.miage.sid.forum.config.security.MyPrincipal;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -25,7 +24,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 // We specify table name because we can't have an User table in psql
 @Table(name = "Users")
 @EntityListeners(AuditingEntityListener.class)
-public class User extends Auditable implements MyPrincipal, Serializable {
+public class User extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,15 +50,4 @@ public class User extends Auditable implements MyPrincipal, Serializable {
   private Set<Role> roles;
 
   private boolean enabled = true;
-
-  @Override
-  public String getName() {
-    return firstname + " " + lastname;
-  }
-
-  // We need to have a small toString to prevent some problems with Google OAuth
-  @Override
-  public String toString() {
-    return getName();
-  }
 }
