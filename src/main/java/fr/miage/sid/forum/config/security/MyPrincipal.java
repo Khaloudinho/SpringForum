@@ -7,4 +7,6 @@ public interface MyPrincipal {
   String getName();
 
   String getEmail();
+
+  boolean isAdmin();
 }

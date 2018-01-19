@@ -13,7 +13,7 @@ public class UserDetailsImpl extends User implements MyPrincipal {
   public UserDetailsImpl(fr.miage.sid.forum.domain.User user,
       Collection<? extends GrantedAuthority> authorities) {
     super(user.getUsername(), user.getPassword(), authorities);
-    this.name = user.getName();
+    this.name = user.getUsername();
     this.email = user.getEmail();
     this.id = user.getId();
   }
@@ -22,6 +22,12 @@ public class UserDetailsImpl extends User implements MyPrincipal {
   @Override
   public String getEmail() {
     return email;
+  }
+
+  @Override
+  public boolean isAdmin() {
+    return getAuthorities().stream()
+        .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
   }
 
   @Override

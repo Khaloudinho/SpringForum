@@ -6,6 +6,10 @@ import fr.miage.sid.forum.domain.RoleRepository;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.domain.UserOrigin;
 import fr.miage.sid.forum.domain.UserRepository;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
@@ -18,6 +22,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
@@ -37,8 +43,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   public WebSecurityConfig(UserRepository userRepository,
+      RoleRepository roleRepository,
       UserDetailsService userDetailsService) {
     this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
     this.userDetailsService = userDetailsService;
   }
 
@@ -65,7 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return map -> {
       log.info("Mapping google user and saving it to DB");
       String oauthId = (String) map.get("sub");
-      User user = userRepository.findByOauthId(oauthId);
+      User user = userRepository.eagerFindByOauthId(oauthId);
       if (user == null) {
         user = new User();
         Role userRole = roleRepository.findByRole("ROLE_USER");
@@ -81,9 +89,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         user.setPicture((String) map.get("picture"));
       }
 
-      userRepository.save(user);
-      return user;
+      User saved = userRepository.save(user);
+      saved.setPassword(""); // To prevent error with UserDetails super() call
+      return new UserDetailsImpl(saved, getAuthorities(saved.getRoles()));
     };
+  }
+
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    super.configure(auth);
   }
 
   @Autowired
@@ -111,5 +125,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and().authorizeRequests()
         .antMatchers("/").permitAll()
         .and().rememberMe();
+  }
+
+  private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
+    List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
+    for (Role role : roles) {
+      authorities.add(new SimpleGrantedAuthority(role.getRole()));
+    }
+    return authorities;
   }
 }
