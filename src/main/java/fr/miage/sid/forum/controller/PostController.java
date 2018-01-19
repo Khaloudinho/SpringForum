@@ -6,7 +6,6 @@ import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.service.MailService;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
-import fr.miage.sid.forum.service.UserService;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +26,13 @@ public class PostController {
   private final PostService postService;
   private final TopicService topicService;
   private final MailService mailService;
-  private final UserService userService;
 
   @Autowired
   public PostController(PostService postService,
-      TopicService topicService, MailService mailService, UserService userService) {
+      TopicService topicService, MailService mailService) {
     this.postService = postService;
     this.topicService = topicService;
     this.mailService = mailService;
-    this.userService = userService;
   }
 
   @GetMapping("/topic/{topicId}/post/create")
@@ -60,12 +57,8 @@ public class PostController {
       return modelAndView;
     }
 
-    postService.save(post, topicId);
-
-    mailService
-        .sendNotificationEmail(topicService.getOne(topicId).getFollowers(), post.getCreatedBy(),
-            topicService.getOne(topicId));
-
+    Post saved = postService.save(post, topicId);
+    mailService.sendNotifToAllFollowers(saved);
     modelAndView.setViewName("redirect:/topic/" + topicId);
 
     return modelAndView;

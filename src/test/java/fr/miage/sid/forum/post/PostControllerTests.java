@@ -2,6 +2,7 @@ package fr.miage.sid.forum.post;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,8 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import fr.miage.sid.forum.controller.PostController;
 import fr.miage.sid.forum.domain.Post;
-import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.exception.TopicNotFoundException;
+import fr.miage.sid.forum.service.MailService;
+import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +39,9 @@ public class PostControllerTests {
 
   @MockBean
   private TopicService topicService;
+
+  @MockBean
+  private MailService mailService;
 
   @Test
   @WithAnonymousUser
@@ -68,6 +73,7 @@ public class PostControllerTests {
   @Test
   @WithMockUser
   public void testValidPostCreation() throws Exception {
+    doNothing().when(mailService).sendNotifToAllFollowers(anyLong());
     mockMvc.perform(post("/topic/{topicId}/post", 1)
         .param("content", "Nouveau post"))
         .andDo(print())

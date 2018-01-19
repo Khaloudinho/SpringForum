@@ -1,71 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fr.miage.sid.forum.service;
 
-import fr.miage.sid.forum.domain.Topic;
-import fr.miage.sid.forum.domain.User;
-import java.util.List;
-import java.util.Set;
-import javax.mail.internet.MimeMessage;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
+import fr.miage.sid.forum.domain.Post;
 
+public interface MailService {
 
-@Slf4j
-@Service
-public class MailService {
+  void sendNotifToAllFollowers(Post postId);
 
-  @Autowired
-  private JavaMailSender sender;
-  @Autowired
-  private TemplateEngine templateEngine;
-
-  public void sendEmail() throws Exception {
-    MimeMessage message = sender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(message);
-    helper.setTo("gadeau.alexandre@laposte.net");
-    helper.setText("How are you?");
-    helper.setSubject("Hi");
-    sender.send(message);
-  }
-
-  public void sendNotificationEmail(User user, User actionner,Topic t) {
-    MimeMessagePreparator messagePreparator = mimeMessage -> {
-      MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-      messageHelper.setFrom("do-not-reply@spring-mail.com");
-      messageHelper.setTo(user.getEmail());
-      messageHelper.setSubject("Topic notification");
-      String content = build(user.getFirstname(), actionner.getUsername(),t.getTitle());
-      messageHelper.setText(content, true);
-    };
-    try {
-      sender.send(messagePreparator);
-    } catch (MailException e) {
-      log.error(e.getMessage(), e);
-    }
-  }
-
-  public void sendNotificationEmail(Set<User> users, User actionner,Topic t) {
-    users.forEach((user) -> sendNotificationEmail(user, actionner,t));
-  }
-
-
-  private String build(String firstname, String responserName, String title) {
-    Context context = new Context();
-    context.setVariable("firstName", firstname);
-    if (responserName != null || !responserName.isEmpty()) {
-      context.setVariable("responserName", responserName);
-    }
-    return templateEngine.process("topic/mailNotification", context);
-  }
 }
