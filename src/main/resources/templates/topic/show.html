@@ -1,4 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <body>
@@ -14,22 +15,25 @@
     <h2 class="subtitle"><span th:text="#{project}"></span> : <span
         th:text="${topic.project.name}"></span></h2>
 
+
     <a class="button is-link" th:text="#{post.new}"
        th:href="@{/topic/{id}/post/create(id=${topic.id})}"></a>
     <a class="button is-link" th:text="#{post.editopic}"
        th:href="@{'/topic/'+${topic.id}+'/edittopic'}"></a>
     <a id="followBtn" class="button is-link" th:text="#{post.follow}" onclick="follow()"></a>
-    <a id="unfollowBtn" class="button is-link" th:text="#{post.unfollow}" onclick="unfollow()" style="display:none;" ></a>
+    <a id="unfollowBtn" class="button is-link" th:text="#{post.unfollow}" onclick="unfollow()"
+       style="display:none;"></a>
 
     <article class="message" th:each="post : ${posts}">
       <div class="message-header">
         <strong class="is-pulled-left" th:text="${post.getCreatedBy().getUsername()}"></strong>
-        <a th:if="${userIsAdmin || (currentUser != null && currentUser.equals(post.getCreatedBy()))}"
+        <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.post.getCreatedBy().getId())"
            th:text="#{modify}"
            th:href="@{/post/{id_post}(id_post=${post.getId()})}"
            class="button is-link is-inverted"></a>
         <span class="is-pulled-right" th:text="${post.getCreatedAt()}"></span>
       </div>
+
       <div th:text="${post.content}" class="message-body">
       </div>
     </article>

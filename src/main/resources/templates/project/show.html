@@ -11,15 +11,17 @@
     </a>
     <h1 class="title" th:text="#{project}"></h1>
     <h2 class="subtitle" th:text="${project.name}"></h2>
+
     <a class="button is-link" th:text="#{topic.new}"
-       th:href="@{'/project/'+${project.id}+'/topic/create'}"></a>
+       th:href="@{/project/{id}/topic/create(id=${project.id})}"></a>
+
     <a class="button is-link" th:text="#{project.edit_project}"
-       th:href="@{'/project/'+${project.id}+'/editproject'}"></a>
+       th:href="@{/project/{id}/edit(id=${project.id})}"></a>
 
     <table class="table">
       <tbody>
       <tr th:each="topic : ${topics}">
-        <td><a th:href="@{'/topic/' + ${topic.id}}" th:text="${topic.title}"></a></td>
+        <td><a th:href="@{/topic/{id}(id=${topic.id})}" th:text="${topic.title}"></a></td>
         <td><a href="#" th:text="${topic.createdBy.username}"></a></td>
       </tr>
       </tbody>

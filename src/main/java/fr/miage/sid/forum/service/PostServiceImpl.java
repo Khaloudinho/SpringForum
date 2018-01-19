@@ -1,6 +1,10 @@
 package fr.miage.sid.forum.service;
 
-import fr.miage.sid.forum.domain.*;
+import fr.miage.sid.forum.domain.Post;
+import fr.miage.sid.forum.domain.PostRepository;
+import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.domain.TopicRepository;
+import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.exception.TopicNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +54,12 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public boolean exists(Long id){
+  public boolean exists(Long id) {
     return postRepository.exists(id);
+  }
+
+  @Override
+  public boolean isCreator(Long userId, Post post) {
+    return post.getCreatedBy().getId().equals(userId);
   }
 }

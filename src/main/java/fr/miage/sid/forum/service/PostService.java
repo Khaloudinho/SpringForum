@@ -19,4 +19,6 @@ public interface PostService {
   Post getOne(Long id);
 
   boolean exists(Long id);
+
+  boolean isCreator(Long userId, Post post);
 }
