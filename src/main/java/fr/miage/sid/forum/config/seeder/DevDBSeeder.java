@@ -49,11 +49,17 @@ public class DevDBSeeder implements CommandLineRunner {
     Role userRole = roleRepo.save(new Role().setRole("ROLE_USER"));
     Role adminRole = roleRepo.save(new Role().setRole("ROLE_ADMIN"));
 
-    User dummy = new User();
-    dummy.setFirstname("Admin").setLastname("Admin").setUsername("admin")
+    User admin = new User();
+    admin.setFirstname("Admin").setLastname("Admin").setUsername("admin")
         .setEmail("admin@forum.com").setPassword(passwordEncoder.encode("admin"))
         .setRoles(Sets.newHashSet(userRole, adminRole)).setOrigin(UserOrigin.DB);
-    userRepo.save(dummy);
+    userRepo.save(admin);
+
+    User normal = new User();
+    normal.setFirstname("Antoine").setLastname("Poivey").setUsername("poiv3y")
+        .setEmail("a@a.a").setPassword(passwordEncoder.encode("love"))
+        .setRoles(Sets.newHashSet(userRole)).setOrigin(UserOrigin.DB);
+    userRepo.save(normal);
 
     Project projectA = new Project().setName("Spring Data");
     Project projectB = new Project().setName("Spring Boot");
