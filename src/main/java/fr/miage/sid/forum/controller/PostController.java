@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,13 +24,16 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 public class PostController {
 
+  private JmsTemplate jmsTemplate;
   private final PostService postService;
   private final TopicService topicService;
   private final MailService mailService;
 
   @Autowired
-  public PostController(PostService postService,
+  public PostController(JmsTemplate jmsTemplate,
+      PostService postService,
       TopicService topicService, MailService mailService) {
+    this.jmsTemplate = jmsTemplate;
     this.postService = postService;
     this.topicService = topicService;
     this.mailService = mailService;
@@ -58,7 +62,7 @@ public class PostController {
     }
 
     Post saved = postService.save(post, topicId);
-    mailService.sendNotifToAllFollowers(saved);
+    jmsTemplate.convertAndSend("mailQueue", saved);
     modelAndView.setViewName("redirect:/topic/" + topicId);
 
     return modelAndView;

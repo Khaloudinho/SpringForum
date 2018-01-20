@@ -4,5 +4,5 @@ import fr.miage.sid.forum.domain.Post;
 
 public interface MailService {
 
-  void sendNotifToAllFollowers(Post postId);
+  void sendNotifToAllFollowers(Post post);
 }

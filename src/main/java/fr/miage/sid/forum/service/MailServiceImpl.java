@@ -38,7 +38,7 @@ public class MailServiceImpl implements MailService {
   @Override
   @Transactional(readOnly = true)
   public void sendNotifToAllFollowers(Post post) {
-    Topic topic = post.getTopic();
+    Topic topic = topicRepository.eagerWithFollowers(post.getTopic().getId());
     User author = post.getCreatedBy();
     Set<User> followers = topic.getFollowers();
 

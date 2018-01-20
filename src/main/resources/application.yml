@@ -20,6 +20,9 @@ spring:
       starttls.required: true
   profiles:
     active: dev
+  activemq:
+    packages:
+      trust-all: true
 
 security:
   oauth2:
