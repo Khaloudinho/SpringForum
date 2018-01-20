@@ -44,7 +44,7 @@ public class ProjectController {
 
   @GetMapping("/project/create")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView getTopicForm(Project project) {
+  public ModelAndView getProjectForm(Project project) {
     ModelAndView modelAndView = new ModelAndView("project/create");
     modelAndView.addObject(project);
     return modelAndView;
