@@ -1,17 +1,13 @@
 function follow(){
+    var topicId = document.getElementById("idTopic").value ;
     // url (required), options (optional)
-    fetch('http://localhost:8080/topic/3/follow', {
+    fetch('http://localhost:8080/topic/'+topicId+'/follow', {
             method: 'get'
     }).then(function(response) {
-        console.log(response);
-        if(response==="true"){
-            document.getElementById("followBtn").change = "none";
-            document.getElementById("unfollowBtn").style.display = "block";
-        }else{
-           alert("Error");   
-        }
+        document.getElementById("followBtn").change = "none";
+        document.getElementById("unfollowBtn").style.display = "block";
     }).catch(function(err) {
-            // Error :(
+        alert("Error");  
     });
 }
 function unfollow(){

@@ -2,10 +2,13 @@ package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
+import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Post;
+import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.service.MailService;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
+import fr.miage.sid.forum.service.UserService;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -28,15 +33,19 @@ public class PostController {
   private final PostService postService;
   private final TopicService topicService;
   private final MailService mailService;
+  private final UserService userService;
 
   @Autowired
   public PostController(JmsTemplate jmsTemplate,
       PostService postService,
-      TopicService topicService, MailService mailService) {
+      TopicService topicService, 
+      MailService mailService,
+      UserService userService) {
     this.jmsTemplate = jmsTemplate;
     this.postService = postService;
     this.topicService = topicService;
     this.mailService = mailService;
+    this.userService= userService;
   }
 
   @GetMapping("/topic/{topicId}/post/create")
@@ -112,4 +121,6 @@ public class PostController {
 
     return modelAndView;
   }
+  
+
 }

@@ -10,9 +10,7 @@
        th:href="@{'/project/'+${project.id}}"></a>
     <fieldset class="section">
       <legend th:text="#{project.general_info}"></legend>
-      <form th:action="@{'/project/'+${project.id}+'/editproject'}"
-            th:object="${project}"
-            method="post">
+      
 
         <div class="field">
           <label class="label" th:text="#{project.name}">Label</label>
@@ -27,15 +25,10 @@
           <div class="control">
             <input type="checkbox" th:checked="${project.anonymousCanAccess}">
             <label class="checkbox" th:text="#{project.anonymous_access}">
-
             </label>
           </div>
         </div>
 
-        <div class="control">
-          <button class="button is-primary" th:text="#{project.submit}"></button>
-        </div>
-      </form>
     </fieldset>
 
     <fieldset class="section">
@@ -69,7 +62,7 @@
         </div>
         <div class="column">
           <div class="control">
-            <button class="button is-primary" onclick="addPermission()"
+            <button class="button is-primary" onclick="addPermissionProject()"
                     th:text="#{project.submit}"></button>
           </div>
         </div>
@@ -90,7 +83,7 @@
                 <span th:each="user : ${usersReader}">
              
                         <div th:id="@{{id}Reader(id=${user.id})}" class="notification" >
-                            <button class="delete" th:id="${user.id}" onclick="deletePermission(this.id,'READ')"></button>
+                            <button class="delete" th:id="${user.id}" onclick="deletePermissionProject(this.id,'READ')"></button>
                             <span th:text="${user.username}"></span>
                          </div>
                 </span>

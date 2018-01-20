@@ -2,7 +2,9 @@ package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
+import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Post;
+import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.service.PostService;
@@ -16,9 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -129,7 +134,7 @@ public class TopicController {
       });
       System.out.println(tmpReader.size());
       System.out.println(tmpWriter.size());
-      modelAndView.setViewName("topic/edittopic");
+      modelAndView.setViewName("topic/edit");
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("users", userService.getAll());
       modelAndView.addObject("usersReader", tmpReader);
@@ -143,4 +148,46 @@ public class TopicController {
 
     return modelAndView;
   }
+  
+  @GetMapping("topic/permission/{topicId}")
+  public  @ResponseBody void addPermission(@PathVariable("topicId") Long projectId,
+      @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
+    Topic topic = topicService.getOne(projectId);    
+    topic.givePermissionTo(userId, Permission.valueOf(permission));
+    topicService.save(topic,topic.getProject().getId());
+
+  }
+  
+  @DeleteMapping("topic/permission/{topicId}") 
+  public  @ResponseBody void removePermission(@PathVariable("topicId") Long projectId,
+      @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
+      
+
+    Topic topic = topicService.getOne(projectId);    
+    topic.removePermissionOf(userId, Permission.valueOf(permission));
+    
+    topicService.save(topic,topic.getProject().getId());
+  }
+  
+    
+  @GetMapping("/topic/{postId}/follow")
+  @PreAuthorize("isAuthenticated()")
+  public  @ResponseBody void followPost(@PathVariable("topicId") Long topicId,
+      @CurrentUser MyPrincipal principal) {
+     
+    Topic topic = topicService.getOne(topicId); 
+    topic.addFollower(userService.getOne(principal.getId()));
+    topicService.save(topic,topic.getProject().getId());
+  }
+  
+  @GetMapping("/topic/{postId}/unfollow")
+  @PreAuthorize("isAuthenticated()")
+  public  @ResponseBody void unfollowPost(@PathVariable("topicId") Long topicId,
+      @CurrentUser MyPrincipal principal) {
+     
+    Topic topic = topicService.getOne(topicId); 
+    topic.removeFollower(userService.getOne(principal.getId()));
+    topicService.save(topic,topic.getProject().getId());
+  } 
+  
 }

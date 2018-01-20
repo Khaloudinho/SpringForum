@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -100,8 +102,6 @@ public class ProjectController {
       project.getWriters().forEach((writer) -> {
         tmpWriter.add(userService.getOne(writer));
       });
-      System.out.println(tmpReader.size());
-      System.out.println(tmpWriter.size());
       modelAndView.setViewName("project/edit");
       modelAndView.addObject("project", project);
       modelAndView.addObject("users", userService.getAll());
@@ -117,20 +117,29 @@ public class ProjectController {
     return modelAndView;
   }
 
-  @PostMapping("project/{projectId}/edit")
-  public ModelAndView editPostProject(@PathVariable("projectId") Long projectId) {
+  @PutMapping("project/{projectId}/edit")
+  public ModelAndView editPostProject(@RequestBody Project project, 
+          BindingResult result,
+          @PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    Project project = projectService.getOne(projectId);
+      System.out.println(project.getId());
+      System.out.println(project.getName());
+      System.out.println(project.isAnonymousCanAccess());
+      
+    if (result.hasErrors()) {
+      modelAndView.setViewName("project/"+projectId+"/edit");
+      return modelAndView;
+    }
 
-    modelAndView.setViewName("project/edit");
-    modelAndView.addObject("project", project);
-    modelAndView.addObject("users", userService.getAll());
+    projectService.save(project);
+    modelAndView.setViewName("redirect:/");
 
     return modelAndView;
+    
   }
 
-  @GetMapping("permission/{projectId}")
+  @GetMapping("project/permission/{projectId}")
   public  @ResponseBody void addPermission(@PathVariable("projectId") Long projectId,
       @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
     Project project = projectService.getOne(projectId);    
@@ -139,7 +148,7 @@ public class ProjectController {
 
   }
   
-  @DeleteMapping("/permission/{projectId}") 
+  @DeleteMapping("project/permission/{projectId}") 
   public  @ResponseBody void removePermission(@PathVariable("projectId") Long projectId,
       @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
       

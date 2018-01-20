@@ -15,9 +15,12 @@
     <a class="button is-link" th:text="#{topic.new}"
        th:href="@{/project/{id}/topic/create(id=${project.id})}"></a>
 
-    <a class="button is-link" th:text="#{project.edit_project}"
-       th:href="@{/project/{id}/edit(id=${project.id})}"></a>
 
+    <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.project.getCreatedBy().getId())"
+           th:text="#{project.edit_project}"
+           th:href="@{/project/{id}/edit(id=${project.id})}"
+           class="button is-link"></a>
+           
     <table class="table">
       <tbody>
       <tr th:each="topic : ${topics}">
