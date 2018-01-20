@@ -119,23 +119,15 @@ public class ProjectController {
     return modelAndView;
   }
 
-  @PutMapping("project/{projectId}/edit")
-  public ModelAndView editPostProject(@RequestBody Project project, 
-          BindingResult result,
-          @PathVariable("projectId") Long projectId) {
+  @PutMapping("project/{projectId}")
+public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name)  {
     ModelAndView modelAndView = new ModelAndView();
 
-      System.out.println(project.getId());
-      System.out.println(project.getName());
-      System.out.println(project.isAnonymousCanAccess());
-      
-    if (result.hasErrors()) {
-      modelAndView.setViewName("project/"+projectId+"/edit");
-      return modelAndView;
-    }
+    Project project = projectService.getOne(projectId);
+    Project saved = projectService.save(project.setName(name));
 
     modelAndView.setViewName("project/edit");
-    modelAndView.addObject("project", project);
+    modelAndView.addObject("project", saved);
     modelAndView.addObject("users", userService.getAll());
     projectService.save(project);
     modelAndView.setViewName("redirect:/");

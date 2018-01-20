@@ -4,8 +4,6 @@ spring:
     url: jdbc:postgresql://192.168.99.100:32768/spring-forum
     username: postgres
     password: postgres
-  session:
-    store-type: jdbc
   jpa:
     hibernate:
       ddl-auto: create
