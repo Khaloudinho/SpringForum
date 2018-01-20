@@ -31,7 +31,9 @@
             </label>
           </div>
         </div>
-
+          <button class="button is-primary" type="submit "
+                    th:text="#{project.submit}"></button>
+      </form>
     </fieldset>
 
     <fieldset class="section">
@@ -87,7 +89,7 @@
              
                         <div th:id="@{{id}Reader(id=${user.id})}" class="notification">
                             <button class="delete" th:id="${user.id}"
-                                    onclick="deletePermission(this.id,'READ')"></button>
+                                    onclick="deletePermissionProject(this.id,'READ')"></button>
                             <span th:text="${user.username}"></span>
                          </div>
                 </span>
@@ -103,7 +105,7 @@
                  <span th:each="user : ${usersWriter}">  
                         <div th:id="@{{id}Writer(id=${user.id})}" class="notification">
                             <button class="delete" th:id="${user.id}"
-                                    onclick="deletePermission(this.id,'WRITE')"></button>
+                                    onclick="deletePermissionProject(this.id,'WRITE')"></button>
                             <span th:text="${user.username}"></span>
                         </div>
                 </span>

@@ -101,23 +101,6 @@ public class TopicController {
     return modelAndView;
   }
 
-  @GetMapping("/topic/{topicId}/follow")
-  @PreAuthorize("isAuthenticated()")
-  public String addFollow(
-      @PathVariable("topicId") Long topicId,
-      @CurrentUser MyPrincipal principal) {
-
-    try {
-      Topic topic = topicService.getOne(topicId);
-      topic.addFollower(userService.getOne(principal.getId()));
-      topicService.save(topic, topic.getProject().getId());
-      return "true";
-    } catch (Exception e) {
-      return "false";
-    }
-
-  }
-
   @GetMapping("topic/{topicId}/edit")
   public ModelAndView editProject(@PathVariable("topicId") String topicId) {
     ModelAndView modelAndView = new ModelAndView();
@@ -172,23 +155,20 @@ public class TopicController {
   }
   
     
-  @GetMapping("/topic/{postId}/follow")
-  @PreAuthorize("isAuthenticated()")
-  public  @ResponseBody void followPost(@PathVariable("topicId") Long topicId,
-      @CurrentUser MyPrincipal principal) {
-     
+  @GetMapping("/topic/{topicId}/follow")
+  public  @ResponseBody void followPost(@PathVariable("topicId") Long topicId,@RequestParam("user") Long userId) {
+      System.out.println("fr.miage.sid.forum.controller.TopicController.followPost()");
     Topic topic = topicService.getOne(topicId); 
-    topic.addFollower(userService.getOne(principal.getId()));
+    topic.addFollower(userService.getOne(userId));
     topicService.save(topic,topic.getProject().getId());
   }
   
-  @GetMapping("/topic/{postId}/unfollow")
-  @PreAuthorize("isAuthenticated()")
+  @GetMapping("/topic/{topicId}/unfollow")
   public  @ResponseBody void unfollowPost(@PathVariable("topicId") Long topicId,
-      @CurrentUser MyPrincipal principal) {
+      @RequestParam("user") Long userId) {
      
     Topic topic = topicService.getOne(topicId); 
-    topic.removeFollower(userService.getOne(principal.getId()));
+    topic.removeFollower(userService.getOne(userId));
     topicService.save(topic,topic.getProject().getId());
   } 
   

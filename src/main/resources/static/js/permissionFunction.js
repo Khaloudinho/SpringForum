@@ -130,9 +130,9 @@ function createBlockUser(id,text,permission){
 
 function deleteBlockUser(id,permission){
     if(permission==="WRITE"){
-        var element = document.getElementById(id+"Reader");
+        var element = document.getElementById(id+"Writer");
     }else if(permission==="READ"){
-        var element=document.getElementById(id+"Writer");  
+        var element=document.getElementById(id+"Reader");  
     }
     element.parentNode.removeChild(element);
 }

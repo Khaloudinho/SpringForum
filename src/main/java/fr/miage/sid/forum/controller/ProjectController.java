@@ -144,7 +144,7 @@ public class ProjectController {
     
   }
 
-  @GetMapping("permission/{projectId}")
+  @GetMapping("project/permission/{projectId}")
   public @ResponseBody
   void addPermission(@PathVariable("projectId") Long projectId,
       @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
@@ -155,7 +155,7 @@ public class ProjectController {
   
       
 
-  @DeleteMapping("/permission/{projectId}")
+  @DeleteMapping("project//permission/{projectId}")
   public @ResponseBody void removePermission(@PathVariable("projectId") Long projectId,
       @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
 

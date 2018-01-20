@@ -10,7 +10,7 @@
         <path d="M6 3L0 8l6 5v-3h4V6H6z"></path>
       </svg>
     </a>
-    <input type="hidden" th:text="#{topic.id}"></input>
+    <input type="hidden" id="idTopic" th:value="${topic.id}"></input>
     <h1 class="title" th:text="${topic.title}"></h1>
     <h2 class="subtitle"><span th:text="#{project}"></span> : <span
         th:text="${topic.project.name}"></span></h2>
@@ -23,9 +23,12 @@
            th:text="#{project.edit_topic}"
            th:href="@{/topic/{id}/edit(id=${topic.id})}"
            class="button is-link"></a>
-    
-    <a id="followBtn" class="button is-link" th:text="#{post.follow}" onclick="follow()"></a>
-    <a id="unfollowBtn" class="button is-link" th:text="#{post.unfollow}" onclick="unfollow()"
+   
+    <input sec:authorize="isAuthenticated()" id="idUser" type="hidden" th:value="${#authentication.principal.id}"></input>
+    <a sec:authorize="isAuthenticated()"
+           id="followBtn" class="button is-link" th:text="#{post.follow}" onclick="follow()"></a>
+    <a ></a>
+    <a  sec:authorize="isAuthenticated()" id="unfollowBtn" class="button is-link" th:text="#{post.unfollow}" onclick="unfollow()"
        style="display:none;"></a>
 
     <article class="message" th:each="post : ${posts}">
