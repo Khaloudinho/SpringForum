@@ -36,9 +36,6 @@ public class SpringDataAuditIntegrationTests {
     userRepo.save(updateUser);
 
     User updatedUser = userRepo.findOne(user.getId());
-    System.out.println(updatedUser.getEmail());
-    System.out.println(updatedUser.getId());
-    System.out.println(updatedUser.getUpdatedAt());
     assertThat(updatedUser.getUsername()).isEqualToIgnoringCase("changed");
     assertThat(updatedUser.getUpdatedAt()).isAfter(updated);
   }

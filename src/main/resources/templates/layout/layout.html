@@ -52,7 +52,7 @@
           <a class="navbar-item"
              th:if="${#authentication.principal.isFromDB()}"
              th:text="#{user.modify}"
-             th:href="@{/user/{id}/edit(id=(${#authentication.principal.id}))}"></a>
+             th:href="@{/user/{id}/edit(id=${#authentication.principal.id})}"></a>
           <form sec:authorize="isAuthenticated()" id="logoutForm" th:action="@{/logout}"
                 method="post">
             <a id="logoutBtn" class="navbar-item" th:text="#{logout.btn}"></a>

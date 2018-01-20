@@ -8,16 +8,17 @@
     <h2 class="subtitle" th:text="${project.name}"></h2>
     <a class="button is-link" th:text="#{project.return}"
        th:href="@{'/project/'+${project.id}}"></a>
+
     <fieldset class="section">
       <legend th:text="#{project.general_info}"></legend>
-      <form th:action="@{'/project/'+${project.id}+'/editproject'}"
+      <form th:action="@{/project/{id}(id=${project.id})}"
             th:object="${project}"
-            method="post">
+            th:method="PUT">
 
         <div class="field">
           <label class="label" th:text="#{project.name}">Label</label>
           <div class="control">
-            <input class="input" type="text" th:value="${project.name}"/>
+            <input class="input" type="text" th:field="${project.name}"/>
           </div>
           <p class="help">This is a help text</p>
         </div>
@@ -59,9 +60,9 @@
             <div class="select">
               <select id="selectUser">
 
-                        <option  th:each="user : ${users}"
-                                 th:value="${user.id}"
-                                th:text="${user.username}"></option>
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.username}"></option>
 
               </select>
             </div>
@@ -89,8 +90,9 @@
             <ul id="listReaderUsers" class="menu-list">
                 <span th:each="user : ${usersReader}">
              
-                        <div th:id="@{{id}Reader(id=${user.id})}" class="notification" >
-                            <button class="delete" th:id="${user.id}" onclick="deletePermission(this.id,'READ')"></button>
+                        <div th:id="@{{id}Reader(id=${user.id})}" class="notification">
+                            <button class="delete" th:id="${user.id}"
+                                    onclick="deletePermission(this.id,'READ')"></button>
                             <span th:text="${user.username}"></span>
                          </div>
                 </span>
@@ -104,8 +106,9 @@
             </p>
             <ul id="listWriterUsers" class="menu-list">
                  <span th:each="user : ${usersWriter}">  
-                        <div th:id="@{{id}Writer(id=${user.id})}" class="notification" >
-                            <button class="delete" th:id="${user.id}" onclick="deletePermission(this.id,'WRITE')"></button>
+                        <div th:id="@{{id}Writer(id=${user.id})}" class="notification">
+                            <button class="delete" th:id="${user.id}"
+                                    onclick="deletePermission(this.id,'WRITE')"></button>
                             <span th:text="${user.username}"></span>
                         </div>
                 </span>
