@@ -28,7 +28,7 @@
     <a sec:authorize="isAuthenticated()"
            id="followBtn" class="button is-link" th:text="#{post.follow}" onclick="follow()"></a>
     <a ></a>
-    <a  sec:authorize="isAuthenticated()" id="unfollowBtn" class="button is-link" th:text="#{post.unfollow}" onclick="unfollow()"
+    <a sec:authorize="isAuthenticated()" id="unfollowBtn" class="button is-link" th:text="#{post.unfollow}" onclick="unfollow()"
        style="display:none;"></a>
 
     <article class="message" th:each="post : ${posts}">
