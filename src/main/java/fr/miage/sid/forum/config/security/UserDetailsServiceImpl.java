@@ -1,7 +1,6 @@
 package fr.miage.sid.forum.config.security;
 
 import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.domain.UserRepository;
 import fr.miage.sid.forum.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private UserRepository userRepo;
-  private UserService userService;
-
   @Autowired
-  public UserDetailsServiceImpl(UserRepository userRepo,
-      UserService userService) {
-    this.userRepo = userRepo;
-    this.userService = userService;
-  }
+  private UserService userService;
 
   @Override
   @Transactional(readOnly = true)
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     log.info("Loading user by email: " + email);
-    User user = userRepo.eagerFindByEmail(email);
+    User user = userService.eagerFindByEmail(email);
     if (user == null) {
       throw new UsernameNotFoundException(email);
     }

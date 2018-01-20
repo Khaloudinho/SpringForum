@@ -77,10 +77,9 @@ public class PostController {
     return modelAndView;
   }
 
-  @GetMapping("/post/{postId}")
+  @GetMapping("/post/{postId}/update")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView getPostUpdateForm(Post post, @PathVariable("postId") Long postId,
-      @CurrentUser MyPrincipal principal) {
+  public ModelAndView getPostUpdateForm(Post post, @PathVariable("postId") Long postId) {
     ModelAndView modelAndView = new ModelAndView("post/update");
     if (!postService.exists(postId)) {
       return ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This post doesn't exist");

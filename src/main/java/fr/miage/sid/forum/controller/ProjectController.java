@@ -9,6 +9,7 @@ import fr.miage.sid.forum.service.UserService;
 import java.util.HashSet;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@Slf4j
 public class ProjectController {
 
   private final ProjectService projectService;
@@ -48,7 +50,7 @@ public class ProjectController {
 
   @GetMapping("/project/create")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView getTopicForm(Project project) {
+  public ModelAndView getProjectForm(Project project) {
     ModelAndView modelAndView = new ModelAndView("project/create");
     modelAndView.addObject(project);
     return modelAndView;
@@ -132,6 +134,9 @@ public class ProjectController {
       return modelAndView;
     }
 
+    modelAndView.setViewName("project/edit");
+    modelAndView.addObject("project", project);
+    modelAndView.addObject("users", userService.getAll());
     projectService.save(project);
     modelAndView.setViewName("redirect:/");
 
@@ -139,23 +144,24 @@ public class ProjectController {
     
   }
 
-  @GetMapping("project/permission/{projectId}")
-  public  @ResponseBody void addPermission(@PathVariable("projectId") Long projectId,
+  @GetMapping("permission/{projectId}")
+  public @ResponseBody
+  void addPermission(@PathVariable("projectId") Long projectId,
       @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
-    Project project = projectService.getOne(projectId);    
+    Project project = projectService.getOne(projectId);
     project.givePermissionTo(userId, Permission.valueOf(permission));
     projectService.save(project);
-
   }
   
-  @DeleteMapping("project/permission/{projectId}") 
-  public  @ResponseBody void removePermission(@PathVariable("projectId") Long projectId,
-      @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
       
 
-    Project project = projectService.getOne(projectId);    
+  @DeleteMapping("/permission/{projectId}")
+  public @ResponseBody void removePermission(@PathVariable("projectId") Long projectId,
+      @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
+
+    Project project = projectService.getOne(projectId);
     project.removePermissionOf(userId, Permission.valueOf(permission));
-    
+
     projectService.save(project);
 
   }

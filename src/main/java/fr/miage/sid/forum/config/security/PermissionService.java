@@ -5,6 +5,7 @@ import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.TopicService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class PermissionService {
 
   @Autowired
@@ -27,6 +29,7 @@ public class PermissionService {
 
 
   public boolean canWriteTopic(Long topicId) {
+    log.info("Test if can write Topic");
     Topic topic = topicService.getOne(topicId);
     return topic.hasPermission(getPrincipalId(), Permission.WRITE);
   }

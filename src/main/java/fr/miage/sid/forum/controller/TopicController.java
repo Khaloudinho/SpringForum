@@ -13,6 +13,7 @@ import fr.miage.sid.forum.service.UserService;
 import java.util.HashSet;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@Slf4j
 public class TopicController {
 
   private final TopicService topicService;
@@ -132,9 +134,9 @@ public class TopicController {
       topic.getWriters().forEach((writer) -> {
         tmpWriter.add(userService.getOne(writer));
       });
-      System.out.println(tmpReader.size());
-      System.out.println(tmpWriter.size());
-      modelAndView.setViewName("topic/edit");
+      log.info("Readers size: " + tmpReader.size());
+      log.info("Writers size: " + tmpWriter.size());
+      modelAndView.setViewName("topic/edittopic");
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("users", userService.getAll());
       modelAndView.addObject("usersReader", tmpReader);
