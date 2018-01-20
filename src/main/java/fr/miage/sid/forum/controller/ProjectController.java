@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -103,8 +104,6 @@ public class ProjectController {
       project.getWriters().forEach((writer) -> {
         tmpWriter.add(userService.getOne(writer));
       });
-      log.info("Readers size: " + tmpReader.size());
-      log.info("Writers size: " + tmpWriter.size());
       modelAndView.setViewName("project/edit");
       modelAndView.addObject("project", project);
       modelAndView.addObject("users", userService.getAll());
@@ -121,7 +120,7 @@ public class ProjectController {
   }
 
   @PutMapping("project/{projectId}")
-  public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name) {
+public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name)  {
     ModelAndView modelAndView = new ModelAndView();
 
     Project project = projectService.getOne(projectId);
@@ -130,10 +129,14 @@ public class ProjectController {
     modelAndView.setViewName("project/edit");
     modelAndView.addObject("project", saved);
     modelAndView.addObject("users", userService.getAll());
+    projectService.save(project);
+    modelAndView.setViewName("redirect:/");
+
     return modelAndView;
+    
   }
 
-  @GetMapping("permission/{projectId}")
+  @GetMapping("project/permission/{projectId}")
   public @ResponseBody
   void addPermission(@PathVariable("projectId") Long projectId,
       @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
@@ -141,10 +144,11 @@ public class ProjectController {
     project.givePermissionTo(userId, Permission.valueOf(permission));
     projectService.save(project);
   }
+  
+      
 
-  @DeleteMapping("/permission/{projectId}")
-  public @ResponseBody
-  void removePermission(@PathVariable("projectId") Long projectId,
+  @DeleteMapping("project//permission/{projectId}")
+  public @ResponseBody void removePermission(@PathVariable("projectId") Long projectId,
       @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
 
     Project project = projectService.getOne(projectId);

@@ -3,7 +3,10 @@ package fr.miage.sid.forum.controller;
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Post;
+import fr.miage.sid.forum.service.MailService;
 import fr.miage.sid.forum.service.PostService;
+import fr.miage.sid.forum.service.TopicService;
+import fr.miage.sid.forum.service.UserService;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,21 @@ public class PostController {
 
   private JmsTemplate jmsTemplate;
   private final PostService postService;
+  private final TopicService topicService;
+  private final MailService mailService;
+  private final UserService userService;
 
   @Autowired
-  public PostController(JmsTemplate jmsTemplate, PostService postService) {
+  public PostController(JmsTemplate jmsTemplate,
+      PostService postService,
+      TopicService topicService,
+      MailService mailService,
+      UserService userService) {
     this.jmsTemplate = jmsTemplate;
     this.postService = postService;
+    this.topicService = topicService;
+    this.mailService = mailService;
+    this.userService = userService;
   }
 
   @GetMapping("/topic/{topicId}/post/create")
@@ -74,6 +87,7 @@ public class PostController {
   }
 
   @PutMapping("/post/{postId}")
+  @PreAuthorize("isAuthenticated()")
   public ModelAndView updatePost(
       @Valid Post post,
       BindingResult result,
@@ -92,8 +106,8 @@ public class PostController {
     }
 
     Post originalPost = postService.getOne(postId);
-    if (!(postService.isCreator(principal.getId(), originalPost)
-        || principal.isAdmin())) {
+
+    if (!(postService.isCreator(principal.getId(), originalPost) || principal.isAdmin())) {
       return ViewUtils
           .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your post ! :)");
     }
