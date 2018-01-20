@@ -14,10 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -44,7 +46,7 @@ public class ProjectController {
 
   @GetMapping("/project/create")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView getTopicForm(Project project) {
+  public ModelAndView getProjectForm(Project project) {
     ModelAndView modelAndView = new ModelAndView("project/create");
     modelAndView.addObject(project);
     return modelAndView;
@@ -129,16 +131,23 @@ public class ProjectController {
   }
 
   @GetMapping("permission/{projectId}")
-  public void addPermission(@PathVariable("projectId") Long projectId,
+  public  @ResponseBody void addPermission(@PathVariable("projectId") Long projectId,
       @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
-    System.out.println("fr.miage.sid.forum.controller.ProjectController.addPermission()");
-    System.out.println(projectId + " " + userId + " " + permission);
-
-    Project project = projectService.getOne(projectId);
-
+    Project project = projectService.getOne(projectId);    
     project.givePermissionTo(userId, Permission.valueOf(permission));
     projectService.save(project);
 
   }
+  
+  @DeleteMapping("/permission/{projectId}") 
+  public  @ResponseBody void removePermission(@PathVariable("projectId") Long projectId,
+      @RequestParam("user") Long userId, @RequestParam("permission") String permission) {
+      
 
+    Project project = projectService.getOne(projectId);    
+    project.removePermissionOf(userId, Permission.valueOf(permission));
+    
+    projectService.save(project);
+
+  }
 }

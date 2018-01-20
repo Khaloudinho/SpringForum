@@ -58,10 +58,11 @@
           <div class="control">
             <div class="select">
               <select id="selectUser">
-                                        <span th:each="user : ${users}">
-                                            <option th:value="${user.id}"
-                                                    th:text="${user.username}"></option>
-                                        </span>
+
+                        <option  th:each="user : ${users}"
+                                 th:value="${user.id}"
+                                th:text="${user.username}"></option>
+
               </select>
             </div>
           </div>
@@ -85,10 +86,14 @@
             <p class="menu-label">
               Reader
             </p>
-            <ul class="menu-list">
-                                    <span th:each="user : ${usersReader}">
-                                        <li th:text="${user.username}"></li>
-                                    </span>
+            <ul id="listReaderUsers" class="menu-list">
+                <span th:each="user : ${usersReader}">
+             
+                        <div th:id="@{{id}Reader(id=${user.id})}" class="notification" >
+                            <button class="delete" th:id="${user.id}" onclick="deletePermission(this.id,'READ')"></button>
+                            <span th:text="${user.username}"></span>
+                         </div>
+                </span>
             </ul>
           </aside>
         </div>
@@ -97,10 +102,13 @@
             <p class="menu-label">
               Writer
             </p>
-            <ul class="menu-list">
-                                    <span th:each="user : ${usersWriter}">
-                                        <li th:text="${user.username}"></li>
-                                    </span>
+            <ul id="listWriterUsers" class="menu-list">
+                 <span th:each="user : ${usersWriter}">  
+                        <div th:id="@{{id}Writer(id=${user.id})}" class="notification" >
+                            <button class="delete" th:id="${user.id}" onclick="deletePermission(this.id,'WRITE')"></button>
+                            <span th:text="${user.username}"></span>
+                        </div>
+                </span>
             </ul>
           </aside>
         </div>
