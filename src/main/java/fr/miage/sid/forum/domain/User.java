@@ -4,7 +4,6 @@ package fr.miage.sid.forum.domain;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +13,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
 @Accessors(chain = true)
@@ -23,7 +21,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 // We specify table name because we can't have an User table in psql
 @Table(name = "Users")
-@EntityListeners(AuditingEntityListener.class)
 public class User extends Auditable implements Serializable {
 
   @Id

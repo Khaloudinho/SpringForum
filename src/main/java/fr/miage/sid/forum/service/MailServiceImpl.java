@@ -5,7 +5,6 @@ import fr.miage.sid.forum.domain.PostRepository;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.TopicRepository;
 import fr.miage.sid.forum.domain.User;
-import fr.miage.sid.forum.domain.UserRepository;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +23,10 @@ import org.thymeleaf.context.Context;
 public class MailServiceImpl implements MailService {
 
   @Autowired
-  private UserRepository userRepository;
-
-  private TopicRepository topicRepository;
-
   private PostRepository postRepository;
+
+  @Autowired
+  private TopicRepository topicRepository;
 
   @Autowired
   private JavaMailSender sender;
@@ -68,13 +66,12 @@ public class MailServiceImpl implements MailService {
     }
   }
 
-  private String buildMailTemplate(String firstname, String responserName, String content) {
+  private String buildMailTemplate(String firstname, String author, String content) {
     Context context = new Context();
     context.setVariable("firstName", firstname);
     context.setVariable("content", content);
-    if (responserName != null && !responserName.isEmpty()) {
-      context.setVariable("responserName", responserName);
-    }
+    context.setVariable("author", author);
+
     return templateEngine.process("mail/notification", context);
   }
 }

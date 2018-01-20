@@ -1,7 +1,7 @@
 package fr.miage.sid.forum.config;
 
-import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.config.security.MyPrincipal;
+import fr.miage.sid.forum.domain.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -20,11 +20,12 @@ public class PersistConfig {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
         MyPrincipal principal = (MyPrincipal) authentication.getPrincipal();
-        return new User().setId(principal.getId());
+        return new User().setId(principal.getId()).setUsername(principal.getName())
+            .setEmail(principal.getEmail());
       }
 
       // Will be system account created in Seeder
-      return new User().setId(1L);
+      return new User().setId(1L).setUsername("admin").setEmail("admin@forum.com");
     };
   }
 
