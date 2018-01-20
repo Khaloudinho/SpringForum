@@ -21,7 +21,6 @@ public abstract class HasPermissions extends Auditable {
 
   @ElementCollection
   private Set<Long> writers = new HashSet<>();
-  
 
 
   public void givePermissionTo(Long userId, Permission permission) {
@@ -35,9 +34,9 @@ public abstract class HasPermissions extends Auditable {
   }
 
   public void givePermissionToAll(Set<Long> userIds, Permission permission) {
-      userIds.forEach((user) -> {
-          givePermissionTo(user, permission);
-      });
+    userIds.forEach((user) -> {
+      givePermissionTo(user, permission);
+    });
   }
 
   public void removePermissionOf(Long userId, Permission permission) {
@@ -69,7 +68,8 @@ public abstract class HasPermissions extends Auditable {
    * he is anonymous and anonymousCanAccess is true or he is in readers or readers is empty
    */
   public boolean canRead(Long userId) {
-    return (userId == null && isAnonymousCanAccess()) || readers.isEmpty() || readers.contains(userId);
+    return (userId == null && isAnonymousCanAccess()) || readers.isEmpty() || readers
+        .contains(userId);
   }
 
   public boolean hasPermission(Long userId, Permission permission) {

@@ -23,6 +23,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 public class Topic extends HasPermissions implements Serializable {
 
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

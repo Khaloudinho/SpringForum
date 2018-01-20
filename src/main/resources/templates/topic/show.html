@@ -19,7 +19,7 @@
     <a class="button is-link" th:text="#{post.new}"
        th:href="@{/topic/{id}/post/create(id=${topic.id})}"></a>
     <a class="button is-link" th:text="#{post.editopic}"
-       th:href="@{'/topic/'+${topic.id}+'/edittopic'}"></a>
+       th:href="@{/topic/{id}/edit(id=${topic.id})'}"></a>
     <a id="followBtn" class="button is-link" th:text="#{post.follow}" onclick="follow()"></a>
     <a id="unfollowBtn" class="button is-link" th:text="#{post.unfollow}" onclick="unfollow()"
        style="display:none;"></a>
