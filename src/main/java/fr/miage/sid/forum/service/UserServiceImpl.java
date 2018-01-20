@@ -35,11 +35,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User findUserByEmail(String email) {
-    return userRepo.findByEmail(email);
-  }
-
-  @Override
   public User save(User user) {
     user.setOrigin(UserOrigin.DB);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -62,6 +57,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserDetailsImpl getUserDetails(User user) {
     return new UserDetailsImpl(user, getAuthorities(user.getRoles()));
+  }
+
+  @Override
+  public User eagerFindByEmail(String email) {
+    return userRepo.eagerFindByEmail(email);
   }
 
   private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {

@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface UserService {
 
-  User findUserByEmail(String email);
-
   User save(User user);
 
   User getOne(Long id);
@@ -15,4 +13,6 @@ public interface UserService {
   List<User> getAll();
 
   UserDetailsImpl getUserDetails(User user);
+
+  User eagerFindByEmail(String email);
 }

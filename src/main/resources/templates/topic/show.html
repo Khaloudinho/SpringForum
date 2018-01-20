@@ -29,7 +29,7 @@
         <strong class="is-pulled-left" th:text="${post.getCreatedBy().getUsername()}"></strong>
         <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.post.getCreatedBy().getId())"
            th:text="#{modify}"
-           th:href="@{/post/{id_post}(id_post=${post.getId()})}"
+           th:href="@{/post/{id_post}/update(id_post=${post.getId()})}"
            class="button is-link is-inverted"></a>
         <span class="is-pulled-right" th:text="${post.getCreatedAt()}"></span>
       </div>

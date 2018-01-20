@@ -1,7 +1,6 @@
 package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.Post;
-import fr.miage.sid.forum.domain.PostRepository;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.TopicRepository;
 import fr.miage.sid.forum.domain.User;
@@ -17,13 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-
 @Slf4j
 @Service
 public class MailServiceImpl implements MailService {
-
-  @Autowired
-  private PostRepository postRepository;
 
   @Autowired
   private TopicRepository topicRepository;
