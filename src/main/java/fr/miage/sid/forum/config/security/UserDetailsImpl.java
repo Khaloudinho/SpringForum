@@ -1,5 +1,6 @@
 package fr.miage.sid.forum.config.security;
 
+import fr.miage.sid.forum.domain.UserOrigin;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -9,6 +10,7 @@ public class UserDetailsImpl extends User implements MyPrincipal {
   private Long id;
   private String name;
   private String email;
+  private UserOrigin origin;
 
   public UserDetailsImpl(fr.miage.sid.forum.domain.User user,
       Collection<? extends GrantedAuthority> authorities) {
@@ -16,6 +18,7 @@ public class UserDetailsImpl extends User implements MyPrincipal {
     this.name = user.getUsername();
     this.email = user.getEmail();
     this.id = user.getId();
+    this.origin = user.getOrigin();
   }
 
 
@@ -28,6 +31,11 @@ public class UserDetailsImpl extends User implements MyPrincipal {
   public boolean isAdmin() {
     return getAuthorities().stream()
         .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+  }
+
+  @Override
+  public boolean isFromDB() {
+    return origin.equals(UserOrigin.DB);
   }
 
   @Override

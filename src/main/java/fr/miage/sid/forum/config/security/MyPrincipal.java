@@ -9,4 +9,6 @@ public interface MyPrincipal {
   String getEmail();
 
   boolean isAdmin();
+
+  boolean isFromDB();
 }

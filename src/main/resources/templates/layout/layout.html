@@ -42,7 +42,7 @@
       <div class="navbar-item has-dropdown is-hoverable" sec:authorize="isAuthenticated()">
         <a class="navbar-link"
            th:text="${#authentication.getName()}"></a>
-        <div class="navbar-dropdown is-boxed">
+        <div class="navbar-dropdown is-right is-boxed">
           <a class="navbar-item lang-changer"
              th:text="#{lang.fr}"
              data-lang="fr"></a>
@@ -50,6 +50,7 @@
              th:text="#{lang.eng}"
              data-lang="en"></a>
           <a class="navbar-item"
+             th:if="${#authentication.principal.isFromDB()}"
              th:text="#{user.modify}"
              th:href="@{/user/{id}/edit(id=(${#authentication.principal.id}))}"></a>
           <form sec:authorize="isAuthenticated()" id="logoutForm" th:action="@{/logout}"
