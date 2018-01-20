@@ -124,10 +124,11 @@ public class ProjectController {
   public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name) {
     ModelAndView modelAndView = new ModelAndView();
 
-    Project project = projectService.save(new Project().setId(projectId).setName(name));
+    Project project = projectService.getOne(projectId);
+    Project saved = projectService.save(project.setName(name));
 
     modelAndView.setViewName("project/edit");
-    modelAndView.addObject("project", project);
+    modelAndView.addObject("project", saved);
     modelAndView.addObject("users", userService.getAll());
     return modelAndView;
   }
