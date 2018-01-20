@@ -1,3 +1,4 @@
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -21,6 +22,8 @@ spring:
   activemq:
     packages:
       trust-all: true
+  thymeleaf:
+    cache: false
 
 security:
   oauth2:
