@@ -49,10 +49,9 @@
           <a class="navbar-item lang-changer"
              th:text="#{lang.eng}"
              data-lang="en"></a>
-          <a sec:authorize="" class="navbar-item"
+          <a class="navbar-item"
              th:text="#{user.modify}"
-             th:href="@{/user/{userId}/edit(userId=2)}"></a>
-          <!-- TODO récupérer l'id actuel et ne pas afficher ce lien si l'user vient de google -->
+             th:href="@{/user/{id}/edit(id=(${#authentication.principal.id}))}"></a>
           <form sec:authorize="isAuthenticated()" id="logoutForm" th:action="@{/logout}"
                 method="post">
             <a id="logoutBtn" class="navbar-item" th:text="#{logout.btn}"></a>
