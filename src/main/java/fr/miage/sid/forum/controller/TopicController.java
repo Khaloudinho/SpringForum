@@ -51,7 +51,7 @@ public class TopicController {
   @PreAuthorize("isAuthenticated()")
   public ModelAndView getTopicCreateForm(Topic topic, @PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView("topic/create");
-    Project project = projectService.getOne(projectId);
+//    Project project = projectService.getOne(projectId);
     modelAndView.addObject(topic);
     modelAndView.addObject("projectId", projectId);
     return modelAndView;
