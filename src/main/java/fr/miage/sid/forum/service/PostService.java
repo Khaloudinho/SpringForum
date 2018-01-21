@@ -21,4 +21,6 @@ public interface PostService {
   boolean exists(Long id);
 
   boolean isCreator(Long userId, Post post);
+
+  void loadTestCreation(int maxCreate);
 }

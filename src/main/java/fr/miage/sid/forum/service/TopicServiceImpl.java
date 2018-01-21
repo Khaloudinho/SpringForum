@@ -1,6 +1,11 @@
 package fr.miage.sid.forum.service;
 
-import fr.miage.sid.forum.domain.*;
+import fr.miage.sid.forum.aspects.LogExecutionTime;
+import fr.miage.sid.forum.domain.Project;
+import fr.miage.sid.forum.domain.ProjectRepository;
+import fr.miage.sid.forum.domain.Topic;
+import fr.miage.sid.forum.domain.TopicRepository;
+import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.exception.ProjectNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +54,14 @@ public class TopicServiceImpl implements TopicService {
   @Override
   public int countCreatedByUser(User user) {
     return topicRepository.countAllByCreatedBy(user);
+  }
+
+  @Override
+  @LogExecutionTime
+  public void loadTestCreation(int maxCreate) {
+    Project project = projectRepository.save(new Project().setName("Bonjour"));
+    for (int i = 0; i < maxCreate; i++) {
+      save(new Topic().setTitle("Hello"), project.getId());
+    }
   }
 }

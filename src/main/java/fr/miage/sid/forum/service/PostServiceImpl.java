@@ -1,5 +1,6 @@
 package fr.miage.sid.forum.service;
 
+import fr.miage.sid.forum.aspects.LogExecutionTime;
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.PostRepository;
 import fr.miage.sid.forum.domain.Topic;
@@ -61,5 +62,14 @@ public class PostServiceImpl implements PostService {
   @Override
   public boolean isCreator(Long userId, Post post) {
     return post.getCreatedBy().getId().equals(userId);
+  }
+
+  @Override
+  @LogExecutionTime
+  public void loadTestCreation(int maxCreate) {
+    Topic topic = topicRepository.save(new Topic().setTitle("Bonjour"));
+    for (int i = 0; i < maxCreate; i++) {
+      save(new Post().setContent("Bonjour").setTopic(topic), 1L);
+    }
   }
 }
