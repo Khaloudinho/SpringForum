@@ -6,16 +6,18 @@
 <section class="section" layout:fragment="content">
   <div class="container">
     <h1 class="title" th:text="#{projects}"></h1>
-    <a class="button is-default is-primary" th:text="#{project.create}"
+    <a class="button is-default is-primary"
+       sec:authorize="hasRole('ADMIN')"
+       th:text="#{project.create}"
        th:href="@{/project/create}"></a>
 
     <section class="mt-6">
       <article th:each="project : ${projects}" class="media">
-        <figure class="media-left">
-          <p class="image is-circle is-64x64">
-            <img th:src="${project.createdBy.picture}">
-          </p>
-        </figure>
+        <!--<figure class="media-left">-->
+          <!--<p class="image is-circle is-64x64">-->
+            <!--<img th:src="${project.createdBy.picture}">-->
+          <!--</p>-->
+        <!--</figure>-->
         <div class="media-content">
           <div class="content">
             <p>

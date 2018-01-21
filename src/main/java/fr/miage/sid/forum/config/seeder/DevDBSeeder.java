@@ -68,14 +68,19 @@ public class DevDBSeeder implements CommandLineRunner {
     Project projectA = new Project().setName("Spring Data");
     projectA.setAnonymousCanAccess(false);
     Project projectB = new Project().setName("Spring Boot");
+    Project projectC = new Project().setName("Spring Security");
     projectRepository.save(projectA);
     projectRepository.save(projectB);
+    projectRepository.save(projectC);
 
     Topic topicA1 = new Topic().setTitle("Comment avoir une repository REST?").setProject(projectA);
     Topic topicB1 = new Topic().setTitle("@SpringBoot c'est cool").setProject(projectB);
+    Topic topicC1 = new Topic().setTitle("Je n'arrive pas à configurer Oauth2 ...")
+        .setProject(projectC);
 //    topicA1.givePermissionTo(dummy.getId(), Permission.ALL);
     topicRepository.save(topicA1);
     topicRepository.save(topicB1);
+    topicRepository.save(topicC1);
 
     Post post = new Post().setContent("Premier message").setTopic(topicA1);
     postRepository.save(post);
