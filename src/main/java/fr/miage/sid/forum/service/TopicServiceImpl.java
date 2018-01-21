@@ -56,7 +56,7 @@ public class TopicServiceImpl implements TopicService {
   }
 
   @Override
-  @PostFilter("@permissionService.canReadTopic(filterObject.id)")
+  @PostFilter("@permissionService.canReadTopic(filterObject)")
   public List<Topic> getAllByProject(Project project) {
     return topicRepository.getAllByProject(project);
   }

@@ -22,27 +22,28 @@ public class PermissionService {
   @Autowired
   private ProjectService projectService;
 
-  public boolean canReadTopic(Long topicId) {
-    log.info("Test if can read Topic: " + topicId);
-    Topic topic = topicService.getOne(topicId);
+  public boolean canReadTopic(Topic topic) {
     return topic.hasPermission(getPrincipalId(), Permission.READ);
   }
 
+  public boolean canWriteTopic(Topic topic) {
+    return topic.hasPermission(getPrincipalId(), Permission.WRITE);
+  }
 
   public boolean canWriteTopic(Long topicId) {
-    log.info("Test if can write Topic: " + topicId);
     Topic topic = topicService.getOne(topicId);
     return topic.hasPermission(getPrincipalId(), Permission.WRITE);
   }
 
-  public boolean canReadProject(Long projectId) {
-    log.info("Test if can read Project: " + projectId);
-    Project project = projectService.getOne(projectId);
+  public boolean canReadProject(Project project) {
     return project.hasPermission(getPrincipalId(), Permission.READ);
   }
 
+  public boolean canWriteProjetct(Project project) {
+    return project.hasPermission(getPrincipalId(), Permission.WRITE);
+  }
+
   public boolean canWriteProjetct(Long projectId) {
-    log.info("Test if can write Project: " + projectId);
     Project project = projectService.getOne(projectId);
     return project.hasPermission(getPrincipalId(), Permission.WRITE);
   }

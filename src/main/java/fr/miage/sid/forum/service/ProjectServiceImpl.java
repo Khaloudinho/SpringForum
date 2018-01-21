@@ -31,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  @PostFilter("@permissionService.canReadProject(filterObject.id)")
+  @PostFilter("@permissionService.canReadProject(filterObject)")
   public List<Project> getAllAllowed() {
     return projectRepository.findAll();
   }
