@@ -10,6 +10,8 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Spring Forum</title>
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+  <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.9.0/css/flag-icon.min.css">
   <link rel="stylesheet"
         th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css}">
   <link rel="stylesheet" th:href="@{/css/main.css}">
@@ -46,12 +48,15 @@
         <a class="navbar-link"
            th:text="${#authentication.getName()}"></a>
         <div class="navbar-dropdown is-right is-boxed">
-          <a class="navbar-item lang-changer"
-             th:text="#{lang.fr}"
-             data-lang="fr"></a>
-          <a class="navbar-item lang-changer"
-             th:text="#{lang.eng}"
-             data-lang="en"></a>
+          <a class="navbar-item fr-lang-changer" data-lang="fr">
+            <span class="flag-icon flag-icon-fr mr-3"></span>
+            <span th:text="#{lang.fr}"></span>
+          </a>
+          <a class="navbar-item en-lang-changer"
+             data-lang="en">
+            <span class="flag-icon flag-icon-gb mr-3"></span>
+            <span th:text="#{lang.eng}"></span>
+          </a>
           <a class="navbar-item"
              th:if="${#authentication.principal.isFromDB()}"
              th:text="#{user.modify}"

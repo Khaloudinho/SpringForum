@@ -51,10 +51,9 @@
             <div class="level-left">
               <a class="level-item">
                 <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.post.getCreatedBy().getId())"
-                   th:text="#{modify}"
                    th:href="@{/post/{id_post}/update(id_post=${post.getId()})}">
-                  <span class="icon has-text-info">
-                    <i class="far fa-edit"></i>
+                  <span class="icon is-medium has-text-info">
+                    <i class="far fa-lg fa-edit"></i>
                   </span>
                 </a>
               </a>
