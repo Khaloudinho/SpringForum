@@ -4,32 +4,31 @@
       layout:decorate="~{layout/layout}">
 <body>
 <section class="section" layout:fragment="content">
+  <input type="hidden" id="idTopic" th:value="${topic.id}">
+
   <div class="container">
     <a th:href="@{/project/{id}(id=${topic.project.id})}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 16" class="forum-back-arrow">
         <path d="M6 3L0 8l6 5v-3h4V6H6z"></path>
       </svg>
     </a>
-    <input type="hidden" id="idTopic" th:value="${topic.id}">
     <h1 class="title" th:text="${topic.title}"></h1>
     <h2 class="subtitle"><span th:text="#{project}"></span> : <span
         th:text="${topic.project.name}"></span></h2>
-
 
     <a class="button is-link" th:text="#{post.new}"
        th:href="@{/topic/{id}/post/create(id=${topic.id})}"></a>
 
     <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.topic.getCreatedBy().getId())"
-           th:text="#{topic.edit}"
-           th:href="@{/topic/{id}/edit(id=${topic.id})}"
-           class="button is-link"></a>
-    <input sec:authorize="isAuthenticated()" id="idUser" type="hidden" th:value="${#authentication.principal.id}">
+       th:text="#{topic.edit}"
+       th:href="@{/topic/{id}/edit(id=${topic.id})}"
+       class="button is-link"></a>
+
     <a sec:authorize="isAuthenticated()"
-           id="followBtn" class="button is-link" th:text="#{topic.follow}" onclick="follow()"></a>
-    <a ></a>
-    <a sec:authorize="isAuthenticated()" id="unfollowBtn" class="button is-link" th:text="#{topic.unfollow}" onclick="unfollow()"
-       th:text="#{post.unfollow}" onclick="unfollow()"
-       style="display:none;"></a>
+       id="followBtn" class="button is-link" th:text="#{topic.follow}" onclick="follow()"></a>
+
+    <a sec:authorize="isAuthenticated()" id="unfollowBtn" class="button is-link"
+       th:text="#{topic.unfollow}" onclick="unfollow()" style="display:none;"></a>
 
     <article class="message" th:each="post : ${posts}">
       <div class="message-header">
