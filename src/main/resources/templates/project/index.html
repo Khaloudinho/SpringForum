@@ -5,8 +5,9 @@
 <section class="section" layout:fragment="content">
   <div class="container">
     <h1 class="title" th:text="#{projects}"></h1>
-    <a class="button is-default is-primary" th:text="#{project.create}" th:href="@{/project/create}"></a>
-    <table class="table">
+    <a class="button is-default is-primary" th:text="#{project.create}"
+       th:href="@{/project/create}"></a>
+    <table class="table is-fullwidth">
       <tbody>
       <tr th:each="project : ${projects}">
         <td><a th:href="@{'/project/' + ${project.id}}" th:text="${project.name}"></a></td>
@@ -20,7 +21,6 @@
       </tr>
       </thead>
     </table>
-  </div>
   </div>
 </section>
 </body>
