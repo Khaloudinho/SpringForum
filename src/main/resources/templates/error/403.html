@@ -1,13 +1,16 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
 <body>
-<section class="section" layout:fragment="content">
+<section class="hero is-danger is-bold is-fullheight" layout:fragment="content">
+  <div class="hero-body">
     <div class="container">
-        <h1 class="title"><span>403</span> - ¯\_(ツ)_/¯</h1>
 
-        <div th:inline="text">Why did you want to see that ?</div>
+      <h1 class="title is-1"><span>403</span> - ¯\_(ツ)_/¯</h1>
+
+      <div>Why did you want to see that ?</div>
     </div>
+  </div>
 </section>
 </body>
 </html>

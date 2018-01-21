@@ -18,7 +18,9 @@ public interface TopicService {
 
   int countCreatedByUser(User user);
 
-  void loadTestCreation(int maxCreate);
+  boolean isCreator(Long userId, Topic topic);
 
   boolean isFollowing(Long userId, Topic topic);
+
+  void loadTestCreation(int maxCreate);
 }

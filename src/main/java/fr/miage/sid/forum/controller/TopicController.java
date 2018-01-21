@@ -48,10 +48,9 @@ public class TopicController {
    * Returns form to create a topic
    */
   @GetMapping("project/{projectId}/topic/create")
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() and @permissionService.canWriteProject(#projectId)")
   public ModelAndView getTopicCreateForm(Topic topic, @PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView("topic/create");
-//    Project project = projectService.getOne(projectId);
     modelAndView.addObject(topic);
     modelAndView.addObject("projectId", projectId);
     return modelAndView;
@@ -61,7 +60,7 @@ public class TopicController {
    * Validate and create a topic with a first post
    */
   @PostMapping("project/{projectId}/topic")
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() and @permissionService.canWriteProject(#projectId)")
   public ModelAndView createTopic(
       @Valid Topic topic,
       BindingResult result,
@@ -95,6 +94,7 @@ public class TopicController {
    * return the page of a topic with all posts
    */
   @GetMapping("/topic/{topicId}")
+  @PreAuthorize("@permissionService.canReadTopic(#topicId)")
   public ModelAndView showTopic(@PathVariable("topicId") Long topicId,
       @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView();
@@ -118,19 +118,20 @@ public class TopicController {
    */
   @GetMapping("topic/{topicId}/edit")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView editTopic(@PathVariable("topicId") String topicId) {
+  public ModelAndView editTopic(@PathVariable("topicId") Long topicId,
+      @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView();
-//
-//    if (!(postService.isCreator(principal.getId(), originalPost) || principal.isAdmin())) {
-//      return ViewUtils
-//          .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your post ! :)");
-//    }
+    Topic topic = topicService.getOne(topicId);
 
-    Topic topic = topicService.getOne(Long.valueOf(topicId));
+    if (!(topicService.isCreator(principal.getId(), topic) || principal.isAdmin())) {
+      return ViewUtils
+          .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your topic ! :)");
+    }
 
     HashSet<User> tmpReader = new HashSet<>();
     HashSet<User> tmpWriter = new HashSet<>();
 
+    //    TODO Refactor this , only need one SQL request !
     topic.getReaders().forEach((reader) -> tmpReader.add(userService.getOne(reader)));
     topic.getWriters().forEach((writer) -> tmpWriter.add(userService.getOne(writer)));
 

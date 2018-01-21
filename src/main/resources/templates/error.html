@@ -5,7 +5,8 @@
 <section class="hero is-danger is-bold is-fullheight" layout:fragment="content">
   <div class="hero-body">
     <div class="container">
-      <h1 class="title is-1"><span th:text="${errorCode}"></span> - ¯\_(ツ)_/¯</h1>
+      <h1 class="title is-1" th:text="${status}"></h1>
+      <h2 class="subtitle" th:text="${error}"></h2>
 
       <p class="is-size-3" th:text="${message}"></p>
     </div>

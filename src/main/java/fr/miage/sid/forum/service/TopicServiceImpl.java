@@ -67,6 +67,11 @@ public class TopicServiceImpl implements TopicService {
   }
 
   @Override
+  public boolean isCreator(Long userId, Topic topic) {
+    return topic.getCreatedBy().getId().equals(userId);
+  }
+
+  @Override
   public boolean isFollowing(Long userId, Topic topic) {
     User user = userRepository.getOne(userId);
     return topic.getFollowers().contains(user);

@@ -79,6 +79,7 @@ public class ProjectController {
    * Returns the list of topic of a project
    */
   @GetMapping("project/{projectId}")
+  @PreAuthorize("@permissionService.canReadProject(#projectId)")
   public ModelAndView showProject(@PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
@@ -107,6 +108,7 @@ public class ProjectController {
     HashSet<User> tmpReader = new HashSet<>();
     HashSet<User> tmpWriter = new HashSet<>();
 
+//    TODO Refactor this , only need one SQL request !
     project.getReaders().forEach((reader) -> tmpReader.add(userService.getOne(reader)));
     project.getWriters().forEach((writer) -> tmpWriter.add(userService.getOne(writer)));
 
@@ -124,6 +126,7 @@ public class ProjectController {
    * Put handler to edit a project's name
    */
   @PutMapping("project/{projectId}")
+  @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name, boolean anonymousCanAccess ) {
     ModelAndView modelAndView = new ModelAndView();
 
