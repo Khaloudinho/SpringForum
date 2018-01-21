@@ -6,7 +6,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Spring Forum</title>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
   <link rel="stylesheet"
         th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css}">
   <link rel="stylesheet" th:href="@{/css/main.css}">
@@ -60,16 +63,16 @@
         </div>
       </div>
 
-      <div class="navbar-item has-dropdown is-hoverable" sec:authorize="isAnonymous()">
-
-      </div>
+      <div class="navbar-item has-dropdown is-hoverable" sec:authorize="isAnonymous()"></div>
     </div>
   </div>
 </nav>
 <section layout:fragment="content"></section>
+<script src="https://unpkg.com/notie/dist/notie.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/follow.js}"></script>
-<script th:src="@{/js/permissionFunction.js}"></script>
+<script th:src="@{/js/permissions.js}"></script>
 </body>
 </html>

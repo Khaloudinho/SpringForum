@@ -2,9 +2,7 @@ package fr.miage.sid.forum.controller;
 
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
-import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Post;
-import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.service.MailService;
 import fr.miage.sid.forum.service.PostService;
 import fr.miage.sid.forum.service.TopicService;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -38,14 +34,14 @@ public class PostController {
   @Autowired
   public PostController(JmsTemplate jmsTemplate,
       PostService postService,
-      TopicService topicService, 
+      TopicService topicService,
       MailService mailService,
       UserService userService) {
     this.jmsTemplate = jmsTemplate;
     this.postService = postService;
     this.topicService = topicService;
     this.mailService = mailService;
-    this.userService= userService;
+    this.userService = userService;
   }
 
   @GetMapping("/topic/{topicId}/post/create")
@@ -110,6 +106,7 @@ public class PostController {
     }
 
     Post originalPost = postService.getOne(postId);
+
     if (!(postService.isCreator(principal.getId(), originalPost) || principal.isAdmin())) {
       return ViewUtils
           .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your post ! :)");
@@ -120,6 +117,4 @@ public class PostController {
 
     return modelAndView;
   }
-  
-
 }

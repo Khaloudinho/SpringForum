@@ -1,6 +1,8 @@
 package fr.miage.sid.forum.domain;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.MappedSuperclass;
@@ -21,33 +23,36 @@ public abstract class HasPermissions extends Auditable {
 
   @ElementCollection
   private Set<Long> writers = new HashSet<>();
-  
 
 
-  public void givePermissionTo(Long userId, Permission permission) {
+  /**
+   * We use the returned Map to avoid erros in the frontend.
+   * For example, we don't add an user to the reader table if he already had the permission.
+   */
+  public Map<Permission, Boolean> givePermissionTo(Long userId, Permission permission) {
+    Map<Permission, Boolean> result = new HashMap<>();
     if (permission == Permission.READ || permission == Permission.ALL) {
-      readers.add(userId);
+      result.put(Permission.READ, readers.add(userId));
     }
 
     if (permission == Permission.WRITE || permission == Permission.ALL) {
-      writers.add(userId);
+      result.put(Permission.WRITE, writers.add(userId));
     }
+
+    return result;
   }
 
-  public void givePermissionToAll(Set<Long> userIds, Permission permission) {
-      userIds.forEach((user) -> {
-          givePermissionTo(user, permission);
-      });
-  }
-
-  public void removePermissionOf(Long userId, Permission permission) {
+  public Map<Permission, Boolean> removePermissionOf(Long userId, Permission permission) {
+    Map<Permission, Boolean> result = new HashMap<>();
     if (permission == Permission.READ || permission == Permission.ALL) {
-      readers.remove(userId);
+      result.put(Permission.READ, readers.remove(userId));
     }
 
     if (permission == Permission.WRITE || permission == Permission.ALL) {
-      writers.remove(userId);
+      result.put(Permission.WRITE, writers.remove(userId));
     }
+
+    return result;
   }
 
   public void removePermissionOfAll(Set<Long> userIds, Permission permission) {
@@ -69,7 +74,8 @@ public abstract class HasPermissions extends Auditable {
    * he is anonymous and anonymousCanAccess is true or he is in readers or readers is empty
    */
   public boolean canRead(Long userId) {
-    return (userId == null && isAnonymousCanAccess()) || readers.isEmpty() || readers.contains(userId);
+    return (userId == null && isAnonymousCanAccess()) || readers.isEmpty() || readers
+        .contains(userId);
   }
 
   public boolean hasPermission(Long userId, Permission permission) {

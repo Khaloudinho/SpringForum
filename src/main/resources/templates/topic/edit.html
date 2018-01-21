@@ -3,39 +3,46 @@
       layout:decorate="~{layout/layout}">
 <body>
 <section class="section" layout:fragment="content">
+  <input id="idTopic" type="hidden" th:value="${topic.id}"/>
+
   <div class="container">
+    <a th:href="@{/topic/{id}(id=${topic.id})}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 16" class="forum-back-arrow">
+        <path d="M6 3L0 8l6 5v-3h4V6H6z"></path>
+      </svg>
+    </a>
+
     <h1 class="title" th:text="#{topic}"></h1>
     <h2 class="subtitle" th:text="${topic.title}"></h2>
-    <a class="button is-link" th:text="#{topic.return}"
-       th:href="@{'/topic/'+${topic.id}}"></a>
-    <fieldset class="section">
-      <legend th:text="#{topic.general_info}"></legend>
-      
 
-        <div class="field">
-          <label class="label" th:text="#{topic.title}">Label</label>
-          <div class="control">
-            <input class="input" type="text" th:value="${topic.title}"/>
-          </div>
-          <p class="help">This is a help text</p>
+    <hr>
+
+    <section class="mini-section">
+      <h2 class="title is-3" th:text="#{topic.general_info}"></h2>
+
+      <div class="field">
+        <label class="label" th:text="#{topic.title}"></label>
+        <div class="control">
+          <input class="input" th:value="${topic.title}"/>
         </div>
+      </div>
 
-
-        <div class="field">
-          <div class="control">
-            <input type="checkbox" th:checked="${topic.anonymousCanAccess}">
-            <label class="checkbox" th:text="#{topic.anonymous_access}">
-            </label>
-          </div>
+      <div class="field">
+        <div class="control">
+          <input type="checkbox" th:checked="${topic.anonymousCanAccess}">
+          <label class="checkbox" th:text="#{topic.anonymous_access}">
+          </label>
         </div>
+      </div>
 
-    </fieldset>
+    </section>
 
-    <fieldset class="section">
-      <legend th:text="#{topic.permission_info}"></legend>
+    <section class="mini-section">
+      <h2 class="title is-3" th:text="#{topic.permission_info}"></h2>
+
       <div class="columns">
-        <div class="column is-one-third">
-          <input id="idTopic" type="hidden" th:value="${topic.id}"/>
+        <div class="column is-narrow">
+          <label class="label">Droit</label>
           <div class="control">
             <div class="select">
               <select id="selectPermission">
@@ -47,66 +54,76 @@
           </div>
         </div>
 
-        <div class="column">
+        <div class="column is-narrow">
           <div class="control">
+            <label class="label">Utilisateur</label>
             <div class="select">
               <select id="selectUser">
-
-                        <option  th:each="user : ${users}"
-                                 th:value="${user.id}"
-                                th:text="${user.username}"></option>
-
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.username}"></option>
               </select>
             </div>
           </div>
         </div>
-        <div class="column">
+
+        <div class="column is-narrow">
           <div class="control">
-            <button class="button is-primary" onclick="addPermissionTopic()"
+            <button id="addPermTopicBtn" class="button is-primary"
                     th:text="#{topic.submit}"></button>
           </div>
         </div>
       </div>
-    </fieldset>
+    </section>
 
 
-    <fieldset class="section">
-      <legend> Recap des droits</legend>
+    <section class="mini-section">
+      <h2 class="title is-3">Droits actuels</h2>
 
       <div class="columns">
-        <div class="column is-half">
-          <aside class="menu">
-            <p class="menu-label">
-              Reader
-            </p>
-            <ul id="listReaderUsers" class="menu-list">
-                <span th:each="user : ${usersReader}">
-             
-                        <div th:id="@{{id}Reader(id=${user.id})}" class="notification" >
-                            <button class="delete" th:id="${user.id}" onclick="deletePermissionTopic(this.id,'READ')"></button>
-                            <span th:text="${user.username}"></span>
-                         </div>
-                </span>
-            </ul>
-          </aside>
+        <div class="column">
+          <h3 class="heading">Readers</h3>
+          <table id="topicReadersTable" class="table is-fullwidth">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th th:width="80px">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            </tr>
+            <tr th:data-user-id="${user.id}" th:each="user : ${usersReader}">
+              <td th:text="${user.username}"></td>
+              <td class="deleteReadPermission" th:data-user-id="${user.id}" th:width="80px">
+                <i class="fas fa-trash has-text-danger is-clickable is-size-5"></i>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
         <div class="column">
-          <aside class="menu">
-            <p class="menu-label">
-              Writer
-            </p>
-            <ul id="listWriterUsers" class="menu-list">
-                 <span th:each="user : ${usersWriter}">  
-                        <div th:id="@{{id}Writer(id=${user.id})}" class="notification" >
-                            <button class="delete" th:id="${user.id}" onclick="deletePermission(this.id,'WRITE')"></button>
-                            <span th:text="${user.username}"></span>
-                        </div>
-                </span>
-            </ul>
-          </aside>
+          <h3 class="heading">Writers</h3>
+          <table id="topicWritersTable" class="table is-fullwidth">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th th:width="80px">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr></tr>
+            <tr th:data-user-id="${user.id}" th:each="user : ${usersWriter}">
+              <td th:text="${user.username}"></td>
+              <td class="deleteWritePermission" th:data-user-id="${user.id}" th:width="80px">
+                <i class="fas fa-trash has-text-danger is-clickable is-size-5"></i>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-    </fieldset>
+    </section>
   </div>
 </section>
 </body>

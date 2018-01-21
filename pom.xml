@@ -29,6 +29,7 @@
     <java.version>1.8</java.version>
     <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
     <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
+    <hibernate.version>5.2.12.Final</hibernate.version>
   </properties>
 
   <dependencies>
@@ -76,11 +77,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
     </dependency>
 
     <dependency>

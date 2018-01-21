@@ -12,50 +12,82 @@
 
 <div class="hero is-primary is-bold is-fullheight">
   <div class="hero-body">
-    <div class="column is-4 is-offset-4">
-      <form id="loginForm" th:action="@{/login}" method="post">
-        <article class="card">
-          <div class="card-content">
-            <div class="notification is-danger"
-                 th:if="${param.error}"
-                 th:text="#{login.error}">
-            </div>
+    <div class="columns">
+      <div class="column ">
+        <form id="loginForm2" th:action="@{/login}" method="post">
+          <article class="card">
+            <div class="card-content">
+              <div class="notification is-danger"
+                   th:if="${param.error}"
+                   th:text="#{login.error}">
+              </div>
 
 
-            <div class="field">
-              <label class="label" th:text="#{user.email}"></label>
-              <div class="control">
-                <input class="input" name="email" value="a@a.a"/>
+              <div class="field">
+                <label class="label" th:text="#{user.email}"></label>
+                <div class="control">
+                  <input class="input" name="email" value="admin@forum.com"/>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" th:text="#{user.password}"></label>
+                <div class="control">
+                  <input class="input" type="password" name="password" value="admin"/>
+                </div>
               </div>
             </div>
+            <footer class="card-footer">
+              <a id="loginBtn2" class="card-footer-item" th:text="#{user.login}"></a>
+            </footer>
+          </article>
+        </form>
+      </div>
+      <div class="column ">
+        <form id="loginForm" th:action="@{/login}" method="post">
+          <article class="card">
+            <div class="card-content">
+              <div class="notification is-danger"
+                   th:if="${param.error}"
+                   th:text="#{login.error}">
+              </div>
 
-            <div class="field">
-              <label class="label" th:text="#{user.password}"></label>
-              <div class="control">
-                <input class="input" type="password" name="password" value="love"/>
+
+              <div class="field">
+                <label class="label" th:text="#{user.email}"></label>
+                <div class="control">
+                  <input class="input" name="email" value="a@a.a"/>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" th:text="#{user.password}"></label>
+                <div class="control">
+                  <input class="input" type="password" name="password" value="love"/>
+                </div>
               </div>
             </div>
-          </div>
-          <footer class="card-footer">
-            <a id="loginBtn" class="card-footer-item" th:text="#{user.login}"></a>
-          </footer>
-        </article>
-      </form>
+            <footer class="card-footer">
+              <a id="loginBtn" class="card-footer-item" th:text="#{user.login}"></a>
+            </footer>
+          </article>
+        </form>
 
-      <label class="label has-text-white has-text-centered">ou</label>
-      <div class="field is-grouped is-grouped-centered">
-        <div class="control">
-          <a th:href="@{/login/google}" class="button is-google">
+        <label class="label has-text-white has-text-centered">ou</label>
+        <div class="field is-grouped is-grouped-centered">
+          <div class="control">
+            <a th:href="@{/login/google}" class="button is-google">
                   <span class="icon">
                     <i class="fab fa-google"></i>
                   </span>
-            <span>Connexion avec Google</span>
-          </a>
+              <span>Connexion avec Google</span>
+            </a>
+          </div>
         </div>
-      </div>
-      <div class="field is-grouped is-grouped-centered">
-        <div class="control">
-          <a th:href="@{/}" class="has-text-white">revenir à l'accueil</a>
+        <div class="field is-grouped is-grouped-centered">
+          <div class="control">
+            <a th:href="@{/}" class="has-text-white">revenir à l'accueil</a>
+          </div>
         </div>
       </div>
     </div>

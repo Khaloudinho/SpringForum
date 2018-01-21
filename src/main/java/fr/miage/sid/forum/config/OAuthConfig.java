@@ -45,10 +45,10 @@ public class OAuthConfig {
   @Bean
   public PrincipalExtractor principalExtractor() {
     return map -> {
-      log.info("Mapping google user and saving it to DB");
       String oauthId = (String) map.get("sub");
       User user = userRepository.eagerFindByOauthId(oauthId);
       if (user == null) {
+        log.info("Mapping google user and saving it to DB");
         user = new User();
         Role userRole = roleRepository.findByRole("ROLE_USER");
         user.setEmail((String) map.get("email"))
@@ -59,6 +59,7 @@ public class OAuthConfig {
             .setRoles(Sets.newHashSet(userRole))
             .setOrigin(UserOrigin.GOOGLE);
       } else {
+        log.info("Google auth existing user found, updating profile pic");
         // We will update picture every time to make sure our data is fresh
         user.setPicture((String) map.get("picture"));
       }

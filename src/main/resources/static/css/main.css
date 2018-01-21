@@ -2,6 +2,10 @@
   max-height: 3rem;
 }
 
+.is-clickable {
+  cursor: pointer;
+}
+
 .button.is-google {
   background-color: #dd4b39;
   border-color: transparent;
@@ -25,6 +29,14 @@
 
 .section {
   padding-left: 60px;
+}
+
+.mini-section {
+  padding: 30px 10px;
+}
+
+.column.is-narrow {
+  margin-top: auto;
 }
 
 .mt-0 {
