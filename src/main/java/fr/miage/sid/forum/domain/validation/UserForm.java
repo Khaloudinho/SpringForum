@@ -9,8 +9,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 
 /**
-* UserForm is used to validate Users
-*/
+ * UserForm is used to validate Users
+ */
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor

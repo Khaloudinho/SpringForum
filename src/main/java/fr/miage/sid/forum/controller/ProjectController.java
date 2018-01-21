@@ -5,11 +5,10 @@ import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.TopicService;
 import fr.miage.sid.forum.service.UserService;
-import java.util.HashSet;
+import java.util.Set;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -85,10 +84,6 @@ public class ProjectController {
 
     Project project = projectService.getOne(projectId);
 
-    if (project == null) {
-      ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This project doesn't exist");
-    }
-
     modelAndView.setViewName("project/show");
     modelAndView.addObject("project", project);
     modelAndView.addObject("topics", topicService.getAllByProject(project));
@@ -100,23 +95,18 @@ public class ProjectController {
    */
   @GetMapping("project/{projectId}/edit")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
-  public ModelAndView editProject(@PathVariable("projectId") String projectId) {
+  public ModelAndView editProject(@PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    Project project = projectService.getOne(Long.valueOf(projectId));
-
-    HashSet<User> tmpReader = new HashSet<>();
-    HashSet<User> tmpWriter = new HashSet<>();
-
-//    TODO Refactor this , only need one SQL request !
-    project.getReaders().forEach((reader) -> tmpReader.add(userService.getOne(reader)));
-    project.getWriters().forEach((writer) -> tmpWriter.add(userService.getOne(writer)));
+    Project project = projectService.getOne(projectId);
+    Set<User> readers = userService.getAllProjectReaders(projectId);
+    Set<User> writers = userService.getAllProjectWriters(projectId);
 
     modelAndView.setViewName("project/edit");
     modelAndView.addObject("project", project);
     modelAndView.addObject("users", userService.getAll());
-    modelAndView.addObject("usersReader", tmpReader);
-    modelAndView.addObject("usersWriter", tmpWriter);
+    modelAndView.addObject("usersReader", readers);
+    modelAndView.addObject("usersWriter", writers);
 
     return modelAndView;
   }
@@ -127,21 +117,19 @@ public class ProjectController {
    */
   @PutMapping("project/{projectId}")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
-  public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name, boolean anonymousCanAccess ) {
+  public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name,
+      boolean anonymousCanAccess) {
     ModelAndView modelAndView = new ModelAndView();
 
     Project project = projectService.getOne(projectId);
     project.setName(name);
     project.setAnonymousCanAccess(anonymousCanAccess);
     Project saved = projectService.save(project);
-
-    modelAndView.setViewName("project/edit");
+    
     modelAndView.addObject("project", saved);
     modelAndView.addObject("users", userService.getAll());
-    projectService.save(project);
     modelAndView.setViewName("redirect:/");
 
     return modelAndView;
-
   }
 }

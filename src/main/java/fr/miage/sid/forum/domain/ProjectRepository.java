@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
   int countAllByCreatedBy(User user);
+
 }

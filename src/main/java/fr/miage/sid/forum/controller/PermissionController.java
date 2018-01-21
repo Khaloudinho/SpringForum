@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
-* Handles permissions on topics and projects
-*/
+ * Handles permissions on topics and projects
+ */
 @RestController
 @Slf4j
 public class PermissionController {
@@ -33,8 +33,8 @@ public class PermissionController {
   }
 
   /**
-  * Adds permision to a user on a topic
-  */
+   * Adds permision to a user on a topic
+   */
   @GetMapping("/topic/permission/{topicId}")
   public Map<Permission, Boolean> addTopicPermission(@PathVariable("topicId") Long topicId,
       @RequestParam("permission") String permission, @RequestParam("userId") Long userId) {
@@ -47,8 +47,8 @@ public class PermissionController {
   }
 
   /**
-  * Adds permision to a user on a project
-  */
+   * Adds permision to a user on a project
+   */
   @GetMapping("/project/permission/{projectId}")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public Map<Permission, Boolean> addProjectPermission(@PathVariable("projectId") Long projectId,
@@ -63,8 +63,8 @@ public class PermissionController {
 
 
   /**
-  * Deletes permision to a user on a topic
-  */
+   * Deletes permision to a user on a topic
+   */
   @DeleteMapping("/topic/permission/{topicId}")
   public Map<Permission, Boolean> revokeTopicPermission(@PathVariable("topicId") Long topicId,
       @RequestParam("permission") String permission, @RequestParam("userId") Long userId) {
@@ -78,8 +78,8 @@ public class PermissionController {
 
 
   /**
-  * Deletes permision to a user on a project
-  */
+   * Deletes permision to a user on a project
+   */
   @DeleteMapping("/project/permission/{projectId}")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public Map<Permission, Boolean> removeProjectPermission(@PathVariable("projectId") Long projectId,

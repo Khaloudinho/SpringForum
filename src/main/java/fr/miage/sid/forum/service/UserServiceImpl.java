@@ -64,6 +64,26 @@ public class UserServiceImpl implements UserService {
     return userRepo.eagerFindByEmail(email);
   }
 
+  @Override
+  public Set<User> getAllProjectReaders(Long projectId) {
+    return userRepo.getAllProjectReaders(projectId);
+  }
+
+  @Override
+  public Set<User> getAllProjectWriters(Long projectId) {
+    return userRepo.getAllProjectWriters(projectId);
+  }
+
+  @Override
+  public Set<User> getAllTopicReaders(Long topicId) {
+    return userRepo.getAllTopicReaders(topicId);
+  }
+
+  @Override
+  public Set<User> getAllTopicWriters(Long topicId) {
+    return userRepo.getAllTopicWriters(topicId);
+  }
+
   private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
     List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
     for (Role role : roles) {

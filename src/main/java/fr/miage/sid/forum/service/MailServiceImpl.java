@@ -42,8 +42,8 @@ public class MailServiceImpl implements MailService {
   }
 
   /**
-  * Methods that send an email to a user, about a new post in a topic
-  */
+   * Methods that send an email to a user, about a new post in a topic
+   */
   private void sendNotifEmail(User user, User author, Topic topic,
       Post post) {
     // Don't send email to creator

@@ -34,9 +34,6 @@ public class AuthController {
   @GetMapping("/login")
   public ModelAndView getLoginForm(Principal principal) {
     ModelAndView modelAndView = new ModelAndView("auth/login");
-    /**
-    * principal is null only if the user is not logged in
-    */
     if (principal != null) {
       modelAndView.setViewName("redirect:/");
     }
@@ -51,8 +48,8 @@ public class AuthController {
   }
 
   /**
-  * Post handler for signing up
-  */
+   * Post handler for signing up
+   */
   @PostMapping("/register")
   public ModelAndView register(@Valid UserForm userForm, BindingResult result) {
     ModelAndView modelAndView = new ModelAndView();
@@ -70,8 +67,8 @@ public class AuthController {
   }
 
   /**
-  * Method used to sign in using Spring Security
-  */
+   * Method used to programmatically sign in using Spring Security
+   */
   private void signin(UserDetailsImpl user) {
     SecurityContextHolder
         .getContext()

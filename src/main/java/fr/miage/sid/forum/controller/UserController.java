@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,8 +41,8 @@ public class UserController {
   }
 
   /**
-  * Return a view with details of all users, for admins only
-  */
+   * Return a view with details of all users, for admins only
+   */
   @GetMapping("/users")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public ModelAndView getAll() {
@@ -70,18 +69,21 @@ public class UserController {
   }
 
   /**
-  * Form to edit one's informations, only for one user and admins
-  */
+   * Form to edit one's informations, only for one user and admins
+   */
   @GetMapping("/user/{userId}/edit")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView getEditForm(UserForm userForm, @PathVariable("userId") Long userId, @CurrentUser MyPrincipal principal){
+  public ModelAndView getEditForm(UserForm userForm, @PathVariable("userId") Long userId,
+      @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView();
     User currentUser = userService.getOne(principal.getId());
-    if (currentUser.getOrigin().equals(UserOrigin.GOOGLE)){
-      return ViewUtils.setErrorView(modelAndView, HttpStatus.FORBIDDEN, "You can't edit your profile if you're connected with your google account");
+    if (currentUser.getOrigin().equals(UserOrigin.GOOGLE)) {
+      return ViewUtils.setErrorView(modelAndView, HttpStatus.FORBIDDEN,
+          "You can't edit your profile if you're connected with your google account");
     }
-    if (!principal.getId().equals(userId)){
-      return ViewUtils.setErrorView(modelAndView, HttpStatus.FORBIDDEN, "You can only edit your profile");
+    if (!principal.getId().equals(userId)) {
+      return ViewUtils
+          .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "You can only edit your profile");
     }
 
     userForm.setEmail(currentUser.getEmail());
@@ -96,15 +98,18 @@ public class UserController {
 
   @PutMapping("/user/{userId}/edit")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView editUser(@Valid UserForm userForm, BindingResult result, @PathVariable Long userId, @CurrentUser MyPrincipal principal){
+  public ModelAndView editUser(@Valid UserForm userForm, BindingResult result,
+      @PathVariable Long userId, @CurrentUser MyPrincipal principal) {
 
     ModelAndView modelAndView = new ModelAndView();
     User currentUser = userService.getOne(principal.getId());
-    if (currentUser.getOrigin().equals(UserOrigin.GOOGLE)){
-      return ViewUtils.setErrorView(modelAndView, HttpStatus.FORBIDDEN, "You can't edit your profile if you're connected with your google account");
+    if (currentUser.getOrigin().equals(UserOrigin.GOOGLE)) {
+      return ViewUtils.setErrorView(modelAndView, HttpStatus.FORBIDDEN,
+          "You can't edit your profile if you're connected with your google account");
     }
-    if (!principal.getId().equals(userId)){
-      return ViewUtils.setErrorView(modelAndView, HttpStatus.FORBIDDEN, "You can only edit your profile");
+    if (!principal.getId().equals(userId)) {
+      return ViewUtils
+          .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "You can only edit your profile");
     }
     if (result.hasErrors()) {
       modelAndView.setViewName("user/edit");

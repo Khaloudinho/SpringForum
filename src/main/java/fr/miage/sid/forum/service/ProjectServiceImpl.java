@@ -20,8 +20,6 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public Project save(Project project) {
-    // TODO Implement giving Permissions. Permissions on project can only come from admin
-//    project.givePermissionTo(userRepository.showTopic(userId).getId(), Permission.ALL);
     return projectRepository.save(project);
   }
 

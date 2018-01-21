@@ -11,8 +11,8 @@ import lombok.experimental.Accessors;
 
 
 /**
-* A User can have many roles, such as ROLE_ADMIN or ROLE_USER
-*/
+ * A User can have many roles, such as ROLE_ADMIN or ROLE_USER
+ */
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor

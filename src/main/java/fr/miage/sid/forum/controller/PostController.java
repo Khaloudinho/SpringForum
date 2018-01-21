@@ -3,10 +3,7 @@ package fr.miage.sid.forum.controller;
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Post;
-import fr.miage.sid.forum.service.MailService;
 import fr.miage.sid.forum.service.PostService;
-import fr.miage.sid.forum.service.TopicService;
-import fr.miage.sid.forum.service.UserService;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,23 +22,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 public class PostController {
 
-  private JmsTemplate jmsTemplate;
   private final PostService postService;
-  private final TopicService topicService;
-  private final MailService mailService;
-  private final UserService userService;
+  private JmsTemplate jmsTemplate;
 
   @Autowired
-  public PostController(JmsTemplate jmsTemplate,
-      PostService postService,
-      TopicService topicService,
-      MailService mailService,
-      UserService userService) {
+  public PostController(JmsTemplate jmsTemplate, PostService postService) {
     this.jmsTemplate = jmsTemplate;
     this.postService = postService;
-    this.topicService = topicService;
-    this.mailService = mailService;
-    this.userService = userService;
   }
 
   /**
@@ -76,9 +63,7 @@ public class PostController {
     }
 
     Post saved = postService.save(post, topicId);
-    /**
-     * Adding the post to the mailQueue
-     */
+    // sending message to JMS mail Queue for sending later
     jmsTemplate.convertAndSend("mailQueue", saved);
     modelAndView.setViewName("redirect:/topic/" + topicId);
 
@@ -94,13 +79,9 @@ public class PostController {
       @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView("post/update");
 
-//    if (!postService.exists(postId)) {
-//      return ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This post doesn't exist");
-//    }
-
     Post originalPost = postService.getOne(postId);
 
-    if (!(postService.isCreator(principal.getId(), originalPost) || principal.isAdmin())) {
+    if (isPostCreatorOrAdmin(principal, originalPost)) {
       return ViewUtils
           .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your post ! :)");
     }
@@ -108,6 +89,7 @@ public class PostController {
     modelAndView.addObject("currentPost", originalPost);
     return modelAndView;
   }
+
 
   /**
    * Modify an existing post
@@ -121,10 +103,6 @@ public class PostController {
       @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView();
 
-    if (!postService.exists(postId)) {
-      return ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This post doesn't exist");
-    }
-
     if (result.hasErrors()) {
       modelAndView.addObject("currentPost", postService.getOne(postId));
       modelAndView.setViewName("post/update");
@@ -133,7 +111,7 @@ public class PostController {
 
     Post originalPost = postService.getOne(postId);
 
-    if (!(postService.isCreator(principal.getId(), originalPost) || principal.isAdmin())) {
+    if (isPostCreatorOrAdmin(principal, originalPost)) {
       return ViewUtils
           .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your post ! :)");
     }
@@ -142,5 +120,9 @@ public class PostController {
     modelAndView.setViewName("redirect:/topic/" + originalPost.getTopic().getId());
 
     return modelAndView;
+  }
+
+  private boolean isPostCreatorOrAdmin(MyPrincipal principal, Post originalPost) {
+    return !(postService.isCreator(principal.getId(), originalPost) || principal.isAdmin());
   }
 }

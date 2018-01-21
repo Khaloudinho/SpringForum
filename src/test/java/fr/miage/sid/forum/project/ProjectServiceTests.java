@@ -1,8 +1,11 @@
 package fr.miage.sid.forum.project;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.ProjectRepository;
-import fr.miage.sid.forum.exception.ProjectNotFoundException;
 import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.ProjectServiceImpl;
 import org.junit.Before;
@@ -10,11 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringRunner.class)
 public class ProjectServiceTests {
