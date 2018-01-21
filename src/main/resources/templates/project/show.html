@@ -13,15 +13,13 @@
     <h1 class="title" th:text="#{project}"></h1>
     <h2 class="subtitle" th:text="${project.name}"></h2>
 
-    <a class="button is-link" th:text="#{topic.new}"
+    <a class="button is-primary" th:text="#{topic.new}"
        th:href="@{/project/{id}/topic/create(id=${project.id})}"></a>
-
 
     <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.project.getCreatedBy().getId())"
        th:text="#{project.edit_project}"
        th:href="@{/project/{id}/edit(id=${project.id})}"
-       class="button is-link"></a>
-
+       class="button is-primary"></a>
 
     <section class="mt-6">
       <article th:each="topic : ${topics}" class="media">
@@ -56,6 +54,7 @@
         </div>
       </article>
     </section>
+
   </div>
 </section>
 </body>

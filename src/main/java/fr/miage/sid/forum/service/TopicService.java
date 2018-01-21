@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface TopicService {
 
+  Topic save(Topic topic);
+
   Topic save(Topic topic, Long projectId) throws ProjectNotFoundException;
 
   Topic getOne(Long id);
@@ -17,4 +19,6 @@ public interface TopicService {
   int countCreatedByUser(User user);
 
   void loadTestCreation(int maxCreate);
+
+  boolean isFollowing(Long userId, Topic topic);
 }

@@ -43,8 +43,8 @@ public class TopicController {
   }
 
   /**
-  * Returns form to create a topic
-  */
+   * Returns form to create a topic
+   */
   @GetMapping("project/{projectId}/topic/create")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView getTopicCreateForm(Topic topic, @PathVariable("projectId") Long projectId) {
@@ -56,8 +56,8 @@ public class TopicController {
   }
 
   /**
-  * Validate and create a topic with a first post
-  */
+   * Validate and create a topic with a first post
+   */
   @PostMapping("project/{projectId}/topic")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView createTopic(
@@ -90,8 +90,8 @@ public class TopicController {
   }
 
   /**
-  * return the page of a topic with all posts
-  */
+   * return the page of a topic with all posts
+   */
   @GetMapping("/topic/{topicId}")
   public ModelAndView showTopic(@PathVariable("topicId") Long topicId,
       @CurrentUser MyPrincipal principal) {
@@ -101,17 +101,19 @@ public class TopicController {
     modelAndView.setViewName("topic/show");
     modelAndView.addObject("topic", topic);
     modelAndView.addObject("posts", postService.getAllByTopic(topic));
+
     if (principal != null) {
+      boolean following = topicService.isFollowing(principal.getId(), topic);
       modelAndView.addObject("userIsAdmin", principal.isAdmin());
-      modelAndView.addObject("currentUser", userService.getOne(principal.getId()));
+      modelAndView.addObject("isFollowing", following);
     }
 
     return modelAndView;
   }
 
   /**
-  * Returns form to edit a topic
-  */
+   * Returns form to edit a topic
+   */
   @GetMapping("topic/{topicId}/edit")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView editTopic(@PathVariable("topicId") String topicId) {

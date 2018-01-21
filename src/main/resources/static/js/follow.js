@@ -1,31 +1,26 @@
-function follow () {
-  var topicId = document.getElementById('idTopic').value
-  var userId = document.getElementById('idUser').value
-  const url = `http://localhost:8080/topic/${topicId}/follow`
-  axios.get(url).then(resp => {
-    console.log(resp)
-  })
-  // fetch(url, {
-  //   method: 'get'
-  // }).then(function (response) {
-  //   document.getElementById('followBtn').change = 'none'
-  //   document.getElementById('unfollowBtn').style.display = 'block'
-  // }).catch(function (err) {
-  //   alert('Error')
-  // })
-}
+(() => {
+  const followBtn = document.getElementById('followBtn')
+  const unfollowBtn = document.getElementById('unfollowBtn')
 
-function unfollow () {
-  var topicId = document.getElementById('idTopic').value
-  var userId = document.getElementById('idUser').value
-  // url (required), options (optional)
-  var url = 'http://localhost:8080/topic/' + topicId + '/unfollow'
-  // fetch(url, {
-  //   method: 'get'
-  // }).then(function (response) {
-  //   document.getElementById('unfollowBtn').change = 'none'
-  //   document.getElementById('followBtn').style.display = 'block'
-  // }).catch(function (err) {
-  //   alert('Error')
-  // })
-}
+  followBtn && followBtn.addEventListener('click', follow)
+  unfollowBtn && unfollowBtn.addEventListener('click', unfollow)
+
+  function follow () {
+    const topicId = document.getElementById('idTopic').value
+
+    axios.get(`/topic/${topicId}/follow`).then(resp => {
+      followBtn.style.display = 'none'
+      unfollowBtn.style.display = 'inline-flex'
+    })
+  }
+
+  function unfollow () {
+    const topicId = document.getElementById('idTopic').value
+
+    axios.get(`/topic/${topicId}/unfollow`).then(resp => {
+      followBtn.style.display = 'inline-flex'
+      unfollowBtn.style.display = 'none'
+    })
+  }
+})()
+

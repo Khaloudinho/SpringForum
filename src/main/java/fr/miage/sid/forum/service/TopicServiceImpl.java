@@ -6,6 +6,7 @@ import fr.miage.sid.forum.domain.ProjectRepository;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.TopicRepository;
 import fr.miage.sid.forum.domain.User;
+import fr.miage.sid.forum.domain.UserRepository;
 import fr.miage.sid.forum.exception.ProjectNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,19 @@ public class TopicServiceImpl implements TopicService {
 
   private final TopicRepository topicRepository;
   private final ProjectRepository projectRepository;
+  private final UserRepository userRepository;
 
   @Autowired
   public TopicServiceImpl(TopicRepository topicRepository,
-      ProjectRepository projectRepository) {
+      ProjectRepository projectRepository, UserRepository userRepository) {
     this.topicRepository = topicRepository;
     this.projectRepository = projectRepository;
+    this.userRepository = userRepository;
+  }
+
+  @Override
+  public Topic save(Topic topic) {
+    return topicRepository.save(topic);
   }
 
   @Override
@@ -56,6 +64,12 @@ public class TopicServiceImpl implements TopicService {
   @Override
   public int countCreatedByUser(User user) {
     return topicRepository.countAllByCreatedBy(user);
+  }
+
+  @Override
+  public boolean isFollowing(Long userId, Topic topic) {
+    User user = userRepository.getOne(userId);
+    return topic.getFollowers().contains(user);
   }
 
   @Override

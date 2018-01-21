@@ -16,19 +16,21 @@
     <h2 class="subtitle"><span th:text="#{project}"></span> : <span
         th:text="${topic.project.name}"></span></h2>
 
-    <a class="button is-link" th:text="#{post.new}"
+    <a class="button is-primary" th:text="#{post.new}"
        th:href="@{/topic/{id}/post/create(id=${topic.id})}"></a>
 
     <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.topic.getCreatedBy().getId())"
        th:text="#{topic.edit}"
        th:href="@{/topic/{id}/edit(id=${topic.id})}"
-       class="button is-link"></a>
+       class="button is-primary"></a>
 
     <a sec:authorize="isAuthenticated()"
-       id="followBtn" class="button is-link" th:text="#{topic.follow}" onclick="follow()"></a>
+       th:style="${!isFollowing} ? 'display:inline-flex' : 'display:none'"
+       id="followBtn" class="button is-primary" th:text="#{topic.follow}"></a>
 
-    <a sec:authorize="isAuthenticated()" id="unfollowBtn" class="button is-link"
-       th:text="#{topic.unfollow}" onclick="unfollow()" style="display:none;"></a>
+    <a sec:authorize="isAuthenticated()"
+       th:style="${isFollowing} ? 'display:inline-flex' : 'display:none'"
+       id="unfollowBtn" class="button is-primary" th:text="#{topic.unfollow}"></a>
 
     <article class="message" th:each="post : ${posts}">
       <div class="message-header">
@@ -36,7 +38,7 @@
         <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.post.getCreatedBy().getId())"
            th:text="#{modify}"
            th:href="@{/post/{id_post}/update(id_post=${post.getId()})}"
-           class="button is-link is-inverted"></a>
+           class="button is-primary is-inverted"></a>
         <span class="is-pulled-right" th:text="${post.getCreatedAt()}"></span>
       </div>
 
