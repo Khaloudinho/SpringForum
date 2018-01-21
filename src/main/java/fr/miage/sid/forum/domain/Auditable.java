@@ -13,6 +13,10 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * Auditable is an abstract class for Post, Topic and Projet (HasPermissions classes)
+ * It is used to register the creation and modification of these entities
+ */
 @Data
 @Accessors(chain = true)
 @MappedSuperclass

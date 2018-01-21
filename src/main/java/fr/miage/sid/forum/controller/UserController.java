@@ -41,6 +41,9 @@ public class UserController {
     this.postService = postService;
   }
 
+  /**
+  * Return a view with details of all users, for admins only
+  */
   @GetMapping("/users")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public ModelAndView getAll() {
@@ -66,6 +69,9 @@ public class UserController {
     return modelAndView;
   }
 
+  /**
+  * Form to edit one's informations, only for one user and admins
+  */
   @GetMapping("/user/{userId}/edit")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView getEditForm(UserForm userForm, @PathVariable("userId") Long userId, @CurrentUser MyPrincipal principal){

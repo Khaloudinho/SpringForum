@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * AuthController handles login and sign up
+ */
 @Controller
 @Slf4j
 public class AuthController {
@@ -31,8 +34,10 @@ public class AuthController {
   @GetMapping("/login")
   public ModelAndView getLoginForm(Principal principal) {
     ModelAndView modelAndView = new ModelAndView("auth/login");
+    /**
+    * principal is null only if the user is not logged in
+    */
     if (principal != null) {
-      // Redirect if user already logged in
       modelAndView.setViewName("redirect:/");
     }
     return modelAndView;
@@ -45,6 +50,9 @@ public class AuthController {
     return modelAndView;
   }
 
+  /**
+  * Post handler for signing up
+  */
   @PostMapping("/register")
   public ModelAndView register(@Valid UserForm userForm, BindingResult result) {
     ModelAndView modelAndView = new ModelAndView();
@@ -61,6 +69,9 @@ public class AuthController {
     return modelAndView;
   }
 
+  /**
+  * Method used to sign in using Spring Security
+  */
   private void signin(UserDetailsImpl user) {
     SecurityContextHolder
         .getContext()
