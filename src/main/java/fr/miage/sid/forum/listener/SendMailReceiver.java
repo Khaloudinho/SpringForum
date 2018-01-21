@@ -14,6 +14,9 @@ public class SendMailReceiver {
   @Autowired
   private MailService mailService;
 
+  /**
+  * Sends a notification using JMS queue
+  */
   @JmsListener(destination = "mailQueue")
   public void sendMail(Post post) {
     log.info("Mail queue received new message");

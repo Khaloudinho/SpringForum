@@ -8,8 +8,15 @@ import java.util.List;
 
 public interface PostService {
 
+  /**
+  * Save a post and set it's topic
+  */
   Post save(Post post, Long topicId) throws TopicNotFoundException;
 
+  /**
+  * Save a post without setting it's topic
+  * This method is used when editing a post
+  */
   Post save(Post post);
 
   List<Post> getAllByTopic(Topic topic);
