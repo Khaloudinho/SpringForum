@@ -127,11 +127,13 @@ public class ProjectController {
    */
   @PutMapping("project/{projectId}")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
-  public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name) {
+  public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name, boolean anonymousCanAccess ) {
     ModelAndView modelAndView = new ModelAndView();
 
     Project project = projectService.getOne(projectId);
-    Project saved = projectService.save(project.setName(name));
+    project.setName(name);
+    project.setAnonymousCanAccess(anonymousCanAccess);
+    Project saved = projectService.save(project);
 
     modelAndView.setViewName("project/edit");
     modelAndView.addObject("project", saved);
