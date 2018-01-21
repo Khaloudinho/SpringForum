@@ -119,7 +119,7 @@ public class TopicController {
       });
       log.info("Readers size: " + tmpReader.size());
       log.info("Writers size: " + tmpWriter.size());
-      modelAndView.setViewName("topic/edittopic");
+      modelAndView.setViewName("topic/edit");
       modelAndView.addObject("topic", topic);
       modelAndView.addObject("users", userService.getAll());
       modelAndView.addObject("usersReader", tmpReader);
