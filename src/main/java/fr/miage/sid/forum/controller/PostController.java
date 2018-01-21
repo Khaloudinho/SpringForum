@@ -81,7 +81,7 @@ public class PostController {
 
     Post originalPost = postService.getOne(postId);
 
-    if (isPostCreatorOrAdmin(principal, originalPost)) {
+    if (isNotPostCreatorOrAdmin(principal, originalPost)) {
       return ViewUtils
           .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your post ! :)");
     }
@@ -111,7 +111,7 @@ public class PostController {
 
     Post originalPost = postService.getOne(postId);
 
-    if (isPostCreatorOrAdmin(principal, originalPost)) {
+    if (isNotPostCreatorOrAdmin(principal, originalPost)) {
       return ViewUtils
           .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your post ! :)");
     }
@@ -122,7 +122,7 @@ public class PostController {
     return modelAndView;
   }
 
-  private boolean isPostCreatorOrAdmin(MyPrincipal principal, Post originalPost) {
-    return !(postService.isCreator(principal.getId(), originalPost) || principal.isAdmin());
+  private boolean isNotPostCreatorOrAdmin(MyPrincipal principal, Post originalPost) {
+    return !postService.isCreator(principal.getId(), originalPost) && !principal.isAdmin();
   }
 }

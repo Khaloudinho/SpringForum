@@ -6,10 +6,9 @@ import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.service.PostService;
-import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.TopicService;
 import fr.miage.sid.forum.service.UserService;
-import java.util.HashSet;
+import java.util.Set;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +30,13 @@ public class TopicController {
   private final TopicService topicService;
   private final PostService postService;
   private final UserService userService;
-  private final ProjectService projectService;
 
   @Autowired
   public TopicController(TopicService topicService,
-      PostService postService,
-      UserService userService, ProjectService projectService) {
+      PostService postService, UserService userService) {
     this.topicService = topicService;
     this.postService = postService;
     this.userService = userService;
-    this.projectService = projectService;
   }
 
   /**
@@ -68,7 +64,7 @@ public class TopicController {
       @PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
 
-    if (result.hasErrors()) {
+    if (result.hasErrors() || postContent.equals("")) {
       modelAndView.setViewName("topic/create");
       modelAndView.addObject("errorPostContent", postContent);
       return modelAndView.addObject("projectId", projectId);
@@ -77,15 +73,8 @@ public class TopicController {
     topic.addFollower(userService.getOne(principal.getId()));
     Topic createdTopic = topicService.save(topic, projectId);
 
-    if (createdTopic == null || postContent.equals("")) {
-      ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND,
-          "This project does not exist, making a new topic is impossible");
-      return modelAndView;
-    }
-
     postService.save(new Post().setContent(postContent), createdTopic.getId());
     modelAndView.setViewName("redirect:/project/" + projectId);
-
     return modelAndView;
   }
 
@@ -122,49 +111,51 @@ public class TopicController {
     ModelAndView modelAndView = new ModelAndView();
     Topic topic = topicService.getOne(topicId);
 
-    if (!(topicService.isCreator(principal.getId(), topic) || principal.isAdmin())) {
+    if (isNotTopicCreatorOrAdmin(principal, topic)) {
       return ViewUtils
           .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your topic ! :)");
     }
 
-    HashSet<User> tmpReader = new HashSet<>();
-    HashSet<User> tmpWriter = new HashSet<>();
+    Set<User> readers = userService.getAllTopicReaders(topicId);
+    Set<User> writers = userService.getAllTopicWriters(topicId);
 
-    //    TODO Refactor this , only need one SQL request !
-    topic.getReaders().forEach((reader) -> tmpReader.add(userService.getOne(reader)));
-    topic.getWriters().forEach((writer) -> tmpWriter.add(userService.getOne(writer)));
-
-    log.info("Readers size: " + tmpReader.size());
-    log.info("Writers size: " + tmpWriter.size());
     modelAndView.setViewName("topic/edit");
     modelAndView.addObject("topic", topic);
     modelAndView.addObject("users", userService.getAll());
-    modelAndView.addObject("usersReader", tmpReader);
-    modelAndView.addObject("usersWriter", tmpWriter);
+    modelAndView.addObject("usersReader", readers);
+    modelAndView.addObject("usersWriter", writers);
 
     return modelAndView;
   }
+
 
   /**
    * Put handler to edit a project's name
    */
   @PutMapping("topic/{topicId}")
+  @PreAuthorize("isAuthenticated()")
   public ModelAndView editTopicName(@PathVariable("topicId") Long topicId, String title,
-      boolean anonymousCanAccess) {
+      boolean anonymousCanAccess, @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView();
 
     Topic topic = topicService.getOne(topicId);
+
+    if (isNotTopicCreatorOrAdmin(principal, topic)) {
+      return ViewUtils
+          .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your topic ! :)");
+    }
+
     topic.setTitle(title);
     topic.setAnonymousCanAccess(anonymousCanAccess);
     Topic saved = topicService.save(topic);
 
-    modelAndView.setViewName("topic/edit");
     modelAndView.addObject("topic", saved);
     modelAndView.addObject("users", userService.getAll());
-    topicService.save(topic);
     modelAndView.setViewName("redirect:/topic/" + topicId);
-
     return modelAndView;
+  }
 
+  private boolean isNotTopicCreatorOrAdmin(@CurrentUser MyPrincipal principal, Topic topic) {
+    return !topicService.isCreator(principal.getId(), topic) && !principal.isAdmin();
   }
 }

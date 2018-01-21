@@ -50,12 +50,13 @@
           <nav class="level is-mobile">
             <div class="level-left">
               <a class="level-item">
-                <!--<a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.project.getCreatedBy().getId())"-->
-                <!--th:href="@{/project/{id}/edit(id=${project.id})}">-->
-                <!--<span class="icon has-text-info">-->
-                <!--<i class="far fa-edit"></i>-->
-                <!--</span>-->
-                <!--</a>-->
+                <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.post.getCreatedBy().getId())"
+                   th:text="#{modify}"
+                   th:href="@{/post/{id_post}/update(id_post=${post.getId()})}">
+                  <span class="icon has-text-info">
+                    <i class="far fa-edit"></i>
+                  </span>
+                </a>
               </a>
             </div>
           </nav>
