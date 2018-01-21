@@ -44,6 +44,11 @@ public class PostController {
     this.userService = userService;
   }
 
+  /**
+  * get form to create a post on a topic
+  * @PreAuthorize is a Spring Security tool that filter requests to a method
+  * In this case, a user can only get the form if he is authentificated and if he has the right to write in the topic
+  */
   @GetMapping("/topic/{topicId}/post/create")
   @PreAuthorize("isAuthenticated() and @permissionService.canWriteTopic(#topicId)")
   public ModelAndView getPostCreateForm(Post post, @PathVariable("topicId") Long topicId) {
@@ -52,7 +57,9 @@ public class PostController {
     modelAndView.addObject("topicId", topicId);
     return modelAndView;
   }
-
+  /**
+  * Creating a post, the user and date are automaticaly set, validated with @Valid
+  */
   @PostMapping("/topic/{topicId}/post")
   @PreAuthorize("isAuthenticated() and @permissionService.canWriteTopic(#topicId)")
   public ModelAndView createPost(
@@ -67,12 +74,18 @@ public class PostController {
     }
 
     Post saved = postService.save(post, topicId);
+    /**
+    * Adding the post to the mailQueue
+    */
     jmsTemplate.convertAndSend("mailQueue", saved);
     modelAndView.setViewName("redirect:/topic/" + topicId);
 
     return modelAndView;
   }
 
+  /**
+  * Return the form used to edit a post
+  */
   @GetMapping("/post/{postId}/update")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView getPostUpdateForm(Post post, @PathVariable("postId") Long postId) {
@@ -86,6 +99,9 @@ public class PostController {
     return modelAndView;
   }
 
+  /**
+  * Modify an existing post
+  */
   @PutMapping("/post/{postId}")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView updatePost(
