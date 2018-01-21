@@ -7,7 +7,7 @@
 
     <h1 class="title" th:text="#{post.modify}"></h1>
 
-    <form th:action="@{/post/{id}(id=${currentPost.getId()})}" th:object="${post}" th:method="PUT">
+    <form th:action="@{/post/{id}(id=${currentPost.getId()})}" th:object="${currentPost}" th:method="PUT">
       <div class="field">
         <label class="label" th:text="#{post.content}"></label>
         <div class="control">

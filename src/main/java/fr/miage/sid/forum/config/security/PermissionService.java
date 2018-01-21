@@ -30,6 +30,11 @@ public class PermissionService {
     return topic.hasPermission(getPrincipalId(), Permission.WRITE);
   }
 
+  public boolean canReadTopic(Long topicId) {
+    Topic topic = topicService.getOne(topicId);
+    return topic.hasPermission(getPrincipalId(), Permission.READ);
+  }
+
   public boolean canWriteTopic(Long topicId) {
     Topic topic = topicService.getOne(topicId);
     return topic.hasPermission(getPrincipalId(), Permission.WRITE);
@@ -39,11 +44,16 @@ public class PermissionService {
     return project.hasPermission(getPrincipalId(), Permission.READ);
   }
 
-  public boolean canWriteProjetct(Project project) {
+  public boolean canWriteProject(Project project) {
     return project.hasPermission(getPrincipalId(), Permission.WRITE);
   }
 
-  public boolean canWriteProjetct(Long projectId) {
+  public boolean canReadProject(Long projectId) {
+    Project project = projectService.getOne(projectId);
+    return project.hasPermission(getPrincipalId(), Permission.READ);
+  }
+
+  public boolean canWriteProject(Long projectId) {
     Project project = projectService.getOne(projectId);
     return project.hasPermission(getPrincipalId(), Permission.WRITE);
   }

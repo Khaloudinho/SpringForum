@@ -1,6 +1,7 @@
 package fr.miage.sid.forum.config.seeder;
 
 import com.google.common.collect.Sets;
+import fr.miage.sid.forum.domain.Permission;
 import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.PostRepository;
 import fr.miage.sid.forum.domain.Project;
@@ -75,14 +76,16 @@ public class DevDBSeeder implements CommandLineRunner {
 
     Topic topicA1 = new Topic().setTitle("Comment avoir une repository REST?").setProject(projectA);
     Topic topicB1 = new Topic().setTitle("@SpringBoot c'est cool").setProject(projectB);
-    Topic topicC1 = new Topic().setTitle("Je n'arrive pas à configurer Oauth2 ...")
+    Topic topicC1 = new Topic().setTitle("Topic juste pour admin")
         .setProject(projectC);
-//    topicA1.givePermissionTo(dummy.getId(), Permission.ALL);
+    topicC1.givePermissionTo(admin.getId(), Permission.ALL);
     topicRepository.save(topicA1);
     topicRepository.save(topicB1);
     topicRepository.save(topicC1);
 
     Post post = new Post().setContent("Premier message").setTopic(topicA1);
+    Post postC1 = new Post().setContent("Message que pour admin").setTopic(topicC1);
     postRepository.save(post);
+    postRepository.save(postC1);
   }
 }

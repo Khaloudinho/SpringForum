@@ -45,10 +45,11 @@ public class PostController {
   }
 
   /**
-  * get form to create a post on a topic
-  * @PreAuthorize is a Spring Security tool that filter requests to a method
-  * In this case, a user can only get the form if he is authentificated and if he has the right to write in the topic
-  */
+   * get form to create a post on a topic
+   *
+   * @PreAuthorize is a Spring Security tool that filter requests to a method
+   * In this case, a user can only get the form if he is authentificated and if he has the right to write in the topic
+   */
   @GetMapping("/topic/{topicId}/post/create")
   @PreAuthorize("isAuthenticated() and @permissionService.canWriteTopic(#topicId)")
   public ModelAndView getPostCreateForm(Post post, @PathVariable("topicId") Long topicId) {
@@ -57,9 +58,10 @@ public class PostController {
     modelAndView.addObject("topicId", topicId);
     return modelAndView;
   }
+
   /**
-  * Creating a post, the user and date are automaticaly set, validated with @Valid
-  */
+   * Creating a post, the user and date are automaticaly set, validated with @Valid
+   */
   @PostMapping("/topic/{topicId}/post")
   @PreAuthorize("isAuthenticated() and @permissionService.canWriteTopic(#topicId)")
   public ModelAndView createPost(
@@ -75,8 +77,8 @@ public class PostController {
 
     Post saved = postService.save(post, topicId);
     /**
-    * Adding the post to the mailQueue
-    */
+     * Adding the post to the mailQueue
+     */
     jmsTemplate.convertAndSend("mailQueue", saved);
     modelAndView.setViewName("redirect:/topic/" + topicId);
 
@@ -84,24 +86,32 @@ public class PostController {
   }
 
   /**
-  * Return the form used to edit a post
-  */
+   * Return the form used to edit a post
+   */
   @GetMapping("/post/{postId}/update")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView getPostUpdateForm(Post post, @PathVariable("postId") Long postId) {
+  public ModelAndView getPostUpdateForm(@PathVariable("postId") Long postId,
+      @CurrentUser MyPrincipal principal) {
     ModelAndView modelAndView = new ModelAndView("post/update");
-    if (!postService.exists(postId)) {
-      return ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This post doesn't exist");
+
+//    if (!postService.exists(postId)) {
+//      return ViewUtils.setErrorView(modelAndView, HttpStatus.NOT_FOUND, "This post doesn't exist");
+//    }
+
+    Post originalPost = postService.getOne(postId);
+
+    if (!(postService.isCreator(principal.getId(), originalPost) || principal.isAdmin())) {
+      return ViewUtils
+          .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "This is not your post ! :)");
     }
 
-    modelAndView.addObject(post);
-    modelAndView.addObject("currentPost", postService.getOne(postId));
+    modelAndView.addObject("currentPost", originalPost);
     return modelAndView;
   }
 
   /**
-  * Modify an existing post
-  */
+   * Modify an existing post
+   */
   @PutMapping("/post/{postId}")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView updatePost(
