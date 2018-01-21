@@ -39,7 +39,7 @@ public class User extends Auditable implements Serializable {
 
   private String lastname;
 
-  private String picture;
+  private String picture = "https://i.imgur.com/yfGGq35.png";
 
   private UserOrigin origin;
 

@@ -6,6 +6,10 @@
   cursor: pointer;
 }
 
+.is-circle {
+  border-radius: 50%;
+}
+
 .button.is-google {
   background-color: #dd4b39;
   border-color: transparent;
