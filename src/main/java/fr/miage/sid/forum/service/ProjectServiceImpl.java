@@ -2,10 +2,10 @@ package fr.miage.sid.forum.service;
 
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.ProjectRepository;
-import java.util.List;
-
 import fr.miage.sid.forum.domain.User;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,7 +31,8 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public List<Project> getAll() {
+  @PostFilter("@permissionService.canReadProject(filterObject.id)")
+  public List<Project> getAllAllowed() {
     return projectRepository.findAll();
   }
 

@@ -9,6 +9,7 @@ import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.exception.ProjectNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,6 +48,7 @@ public class TopicServiceImpl implements TopicService {
   }
 
   @Override
+  @PostFilter("@permissionService.canReadTopic(filterObject.id)")
   public List<Topic> getAllByProject(Project project) {
     return topicRepository.getAllByProject(project);
   }

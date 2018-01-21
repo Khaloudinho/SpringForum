@@ -8,10 +8,10 @@ import javax.persistence.ElementCollection;
 import javax.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.Accessors;
 
 @Data
-@Slf4j
+@Accessors(chain = true)
 @MappedSuperclass
 @EqualsAndHashCode(callSuper = true)
 public abstract class HasPermissions extends Auditable {
@@ -66,10 +66,13 @@ public abstract class HasPermissions extends Auditable {
   /**
    * An user can read an entity with Permissions if :
    * he is anonymous and anonymousCanAccess is true or he is in readers or readers is empty
+   * first check reads as : if your are connected or anonymousCanAccess
+   * Of course if readers is not empty anonymous can't acess because it's stupid to restrict users
+   * but not anonymous.
    */
   public boolean canRead(Long userId) {
-    return (userId == null && isAnonymousCanAccess()) || readers.isEmpty() || readers
-        .contains(userId);
+    return (userId != null || isAnonymousCanAccess()) && (readers.isEmpty() || readers
+        .contains(userId));
   }
 
   public boolean hasPermission(Long userId, Permission permission) {

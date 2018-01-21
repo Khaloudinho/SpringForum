@@ -11,7 +11,7 @@ public interface ProjectService {
 
   Project getOne(Long projectId);
 
-  List<Project> getAll();
+  List<Project> getAllAllowed();
 
   int countCreatedByUser(User user);
 }

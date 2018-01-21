@@ -1,26 +1,49 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/layout}">
 <body>
 <section class="section" layout:fragment="content">
   <div class="container">
     <h1 class="title" th:text="#{projects}"></h1>
-    <a class="button is-default is-primary" th:text="#{project.create}"
+    <a class="button is-default is-primary"
+       sec:authorize="hasRole('ADMIN')"
+       th:text="#{project.create}"
        th:href="@{/project/create}"></a>
-    <table class="table is-fullwidth">
-      <tbody>
-      <tr th:each="project : ${projects}">
-        <td><a th:href="@{'/project/' + ${project.id}}" th:text="${project.name}"></a></td>
-        <td><a href="#" th:text="${project.createdBy.username}"></a></td>
-      </tr>
-      </tbody>
-      <thead>
-      <tr>
-        <th th:text="#{project.name}"></th>
-        <th th:text="#{creator}"></th>
-      </tr>
-      </thead>
-    </table>
+
+    <section class="mt-6">
+      <article th:each="project : ${projects}" class="media">
+        <!--<figure class="media-left">-->
+          <!--<p class="image is-circle is-64x64">-->
+            <!--<img th:src="${project.createdBy.picture}">-->
+          <!--</p>-->
+        <!--</figure>-->
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <a class="has-text-dark"
+                 th:href="@{/project/{id}(id=${project.id})}">
+                <strong th:text="${project.name}">Project Name</strong>
+              </a>
+              <small th:inline="text">Créé par [[${project.createdBy.username}]]</small>
+              <small th:inline="text">le [[${project.createdAt.toLocaleString()}]]</small>
+            </p>
+          </div>
+          <nav class="level is-mobile">
+            <div class="level-left">
+              <a class="level-item">
+                <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.project.getCreatedBy().getId())"
+                   th:href="@{/project/{id}/edit(id=${project.id})}">
+                  <span class="icon has-text-info">
+                    <i class="far fa-edit"></i>
+                  </span>
+                </a>
+              </a>
+            </div>
+          </nav>
+        </div>
+      </article>
+    </section>
   </div>
 </section>
 </body>

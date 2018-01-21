@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/layout}">
 <body>
 <section class="section" layout:fragment="content">
@@ -18,24 +18,44 @@
 
 
     <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.project.getCreatedBy().getId())"
-           th:text="#{project.edit_project}"
-           th:href="@{/project/{id}/edit(id=${project.id})}"
-           class="button is-link"></a>
-           
-    <table class="table">
-      <tbody>
-      <tr th:each="topic : ${topics}">
-        <td><a th:href="@{/topic/{id}(id=${topic.id})}" th:text="${topic.title}"></a></td>
-        <td><a href="#" th:text="${topic.createdBy.username}"></a></td>
-      </tr>
-      </tbody>
-      <thead>
-      <tr>
-        <th th:text="#{topic.title}"></th>
-        <th th:text="#{creator}"></th>
-      </tr>
-      </thead>
-    </table>
+       th:text="#{project.edit_project}"
+       th:href="@{/project/{id}/edit(id=${project.id})}"
+       class="button is-link"></a>
+
+
+    <section class="mt-6">
+      <article th:each="topic : ${topics}" class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img class="is-circle" th:src="${topic.createdBy.picture}">
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <a class="has-text-dark"
+                 th:href="@{/topic/{id}(id=${topic.id})}">
+                <strong th:text="${topic.title}">Project Name</strong>
+              </a>
+              <small th:inline="text">Créé par [[${topic.createdBy.username}]]</small>
+              <small th:inline="text">le [[${topic.createdAt.toLocaleString()}]]</small>
+            </p>
+          </div>
+          <nav class="level is-mobile">
+            <div class="level-left">
+              <a class="level-item">
+                <!--<a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.project.getCreatedBy().getId())"-->
+                <!--th:href="@{/project/{id}/edit(id=${project.id})}">-->
+                <!--<span class="icon has-text-info">-->
+                <!--<i class="far fa-edit"></i>-->
+                <!--</span>-->
+                <!--</a>-->
+              </a>
+            </div>
+          </nav>
+        </div>
+      </article>
+    </section>
   </div>
 </section>
 </body>
