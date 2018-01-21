@@ -113,7 +113,7 @@ public class ProjectController {
 
 
   /**
-   * Put handler to edit a project's name
+   * Put handler to edit a project's name and anonymousAccess
    */
   @PutMapping("project/{projectId}")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
@@ -121,11 +121,10 @@ public class ProjectController {
       boolean anonymousCanAccess) {
     ModelAndView modelAndView = new ModelAndView();
 
-    Project project = projectService.getOne(projectId);
-    project.setName(name);
+    Project project = projectService.getOne(projectId).setName(name);
     project.setAnonymousCanAccess(anonymousCanAccess);
     Project saved = projectService.save(project);
-    
+
     modelAndView.addObject("project", saved);
     modelAndView.addObject("users", userService.getAll());
     modelAndView.setViewName("redirect:/");

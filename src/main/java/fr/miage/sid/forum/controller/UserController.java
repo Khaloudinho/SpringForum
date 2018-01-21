@@ -103,24 +103,27 @@ public class UserController {
 
     ModelAndView modelAndView = new ModelAndView();
     User currentUser = userService.getOne(principal.getId());
+
     if (currentUser.getOrigin().equals(UserOrigin.GOOGLE)) {
       return ViewUtils.setErrorView(modelAndView, HttpStatus.FORBIDDEN,
           "You can't edit your profile if you're connected with your google account");
     }
+
     if (!principal.getId().equals(userId)) {
       return ViewUtils
           .setErrorView(modelAndView, HttpStatus.FORBIDDEN, "You can only edit your profile");
     }
+
     if (result.hasErrors()) {
       modelAndView.setViewName("user/edit");
       modelAndView.addObject("userId", userId);
       return modelAndView;
     }
-    currentUser.setEmail(userForm.getEmail());
-    currentUser.setFirstname(userForm.getFirstname());
-    currentUser.setLastname(userForm.getLastname());
-    currentUser.setPassword(userForm.getPassword());
-    currentUser.setUsername(userForm.getUsername());
+
+    currentUser.setEmail(userForm.getEmail()).setFirstname(userForm.getFirstname())
+        .setLastname(userForm.getLastname()).setPassword(userForm.getPassword())
+        .setUsername(userForm.getUsername());
+
     userService.save(currentUser);
 
     modelAndView.setViewName("redirect:/");
