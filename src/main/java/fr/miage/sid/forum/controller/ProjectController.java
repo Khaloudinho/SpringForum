@@ -49,7 +49,7 @@ public class ProjectController {
   * Return the form to create a project
   */
   @GetMapping("/project/create")
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public ModelAndView getProjectForm(Project project) {
     ModelAndView modelAndView = new ModelAndView("project/create");
     modelAndView.addObject(project);
@@ -60,7 +60,7 @@ public class ProjectController {
   * PostMapping, verify the validity of the project before saving
   */
   @PostMapping("/project")
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public ModelAndView createProject(@Valid Project project, BindingResult result) {
     ModelAndView modelAndView = new ModelAndView();
 
