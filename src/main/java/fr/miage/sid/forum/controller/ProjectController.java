@@ -124,11 +124,13 @@ public class ProjectController {
    * Put handler to edit a project's name
    */
   @PutMapping("project/{projectId}")
-  public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name) {
+  public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name, boolean anonymousCanAccess ) {
     ModelAndView modelAndView = new ModelAndView();
 
     Project project = projectService.getOne(projectId);
-    Project saved = projectService.save(project.setName(name));
+    project.setName(name);
+    project.setAnonymousCanAccess(anonymousCanAccess);
+    Project saved = projectService.save(project);
 
     modelAndView.setViewName("project/edit");
     modelAndView.addObject("project", saved);

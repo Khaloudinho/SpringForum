@@ -33,7 +33,7 @@
         <div class="field">
           <div class="control">
             <label class="checkbox" th:inline="text">
-              <input type="checkbox" th:checked="${project.anonymousCanAccess}">
+              <input type="checkbox" th:checked="${project.anonymousCanAccess}" th:field="${project.anonymousCanAccess}">
               [[#{authorizeAnonymousAccess}]]
             </label>
           </div>

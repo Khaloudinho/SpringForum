@@ -3,6 +3,7 @@ package fr.miage.sid.forum.controller;
 import fr.miage.sid.forum.config.security.CurrentUser;
 import fr.miage.sid.forum.config.security.MyPrincipal;
 import fr.miage.sid.forum.domain.Post;
+import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.service.PostService;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -141,5 +143,27 @@ public class TopicController {
     modelAndView.addObject("usersWriter", tmpWriter);
 
     return modelAndView;
+  }
+  
+  /**
+   * Put handler to edit a project's name
+   */
+  @PutMapping("topic/{topicId}")
+  public ModelAndView editTopicName(@PathVariable("topicId") Long topicId, String title, boolean anonymousCanAccess ) {
+    ModelAndView modelAndView = new ModelAndView();
+
+    Topic topic  = topicService.getOne(topicId);
+    topic.setTitle(title);
+    topic.setAnonymousCanAccess(anonymousCanAccess);
+    Topic saved = topicService.save(topic);
+
+    modelAndView.setViewName("topic/edit");
+    modelAndView.addObject("topic", saved);
+    modelAndView.addObject("users", userService.getAll());
+    topicService.save(topic);
+    modelAndView.setViewName("redirect:/topic/"+topicId);
+
+    return modelAndView;
+
   }
 }
