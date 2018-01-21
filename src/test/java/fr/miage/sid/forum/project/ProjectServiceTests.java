@@ -2,6 +2,7 @@ package fr.miage.sid.forum.project;
 
 import fr.miage.sid.forum.domain.Project;
 import fr.miage.sid.forum.domain.ProjectRepository;
+import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.exception.ProjectNotFoundException;
 import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.ProjectServiceImpl;
@@ -11,8 +12,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -31,36 +36,46 @@ public class ProjectServiceTests {
 
     @Test
     public void createProjectWithSuccess() {
-        Project project = new Project().setId(123L);
-        given(this.projectRepository.getOne(123L)).willReturn(project);
+        Project expected = new Project().setId(123L);
+        given(this.projectRepository.save(new Project().setId(123L))).willReturn(expected);
 
-        Project actual = this.projectService.getOne(123L);
-        assertThat(actual).isEqualTo(project);
+        Project actual = this.projectService.save(new Project().setId(123L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     public void inexistantProjectIsNull() {
-        assertThat(this.projectService.getOne(3L)).isEqualTo(null);
+        assertThat(this.projectService.getOne(anyLong())).isEqualTo(null);
     }
 
     @Test
-    public void getAllIsImpossibleWithoutAccess() {
-        Project projectA = new Project().setId(1L);
-        Project projectB = new Project().setId(2L);
-        Project projectC = new Project().setId(2L);
+    public void getOneTest() {
+        Project expected = new Project().setId(1L);
+        given(this.projectRepository.getOne(1L)).willReturn(expected);
 
-        this.projectRepository.save(projectA);
-        this.projectRepository.save(projectB);
-        this.projectRepository.save(projectC);
-
-        given(this.projectRepository.getOne(1L)).willReturn(projectA);
-        given(this.projectRepository.getOne(2L)).willReturn(projectB);
-
-        assertThat(this.projectService.getAllAllowed().size()).isEqualTo(0);
-        assertThat(this.projectService.getOne(1L)).isEqualTo(projectA);
-        assertThat(this.projectService.getOne(2L)).isEqualTo(projectB);
-        assertThat(this.projectService.getOne(2L)).isEqualTo(projectC);
+        Project actual = projectService.getOne(1L);
+        assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
+    public void getAllTest() {
+        Project projectA = new Project().setId(1L);
+        Project projectB = new Project().setId(2L);
+        List<Project> projects = Arrays.asList(projectA, projectB);
+        given(this.projectRepository.findAll()).willReturn(projects);
+
+        List<Project> actual = projectService.getAllAllowed();
+
+        assertThat(actual.size()).isEqualTo(projects.size());
+        assertThat(actual.get(0)).isEqualTo(projects.get(0));
+        assertThat(actual.get(1)).isEqualTo(projects.get(1));
+    }
+
+    @Test
+    public void countProjectsCreatedByUserTest() {
+        given(projectRepository.countAllByCreatedBy(any(User.class))).willReturn(3);
+
+        assertThat(projectService.countCreatedByUser(new User())).isEqualTo(3);
+    }
 
 }
