@@ -6,6 +6,7 @@ import fr.miage.sid.forum.domain.Post;
 import fr.miage.sid.forum.domain.Topic;
 import fr.miage.sid.forum.domain.User;
 import fr.miage.sid.forum.service.PostService;
+import fr.miage.sid.forum.service.ProjectService;
 import fr.miage.sid.forum.service.TopicService;
 import fr.miage.sid.forum.service.UserService;
 import java.util.HashSet;
@@ -28,20 +29,23 @@ public class TopicController {
   private final TopicService topicService;
   private final PostService postService;
   private final UserService userService;
+  private final ProjectService projectService;
 
   @Autowired
   public TopicController(TopicService topicService,
       PostService postService,
-      UserService userService) {
+      UserService userService, ProjectService projectService) {
     this.topicService = topicService;
     this.postService = postService;
     this.userService = userService;
+    this.projectService = projectService;
   }
 
   @GetMapping("project/{projectId}/topic/create")
   @PreAuthorize("isAuthenticated()")
-  public ModelAndView getTopicCreateForm(Topic topic, @PathVariable("projectId") String projectId) {
+  public ModelAndView getTopicCreateForm(Topic topic, @PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView("topic/create");
+//    Project project = projectService.getOne(projectId);
     modelAndView.addObject(topic);
     modelAndView.addObject("projectId", projectId);
     return modelAndView;

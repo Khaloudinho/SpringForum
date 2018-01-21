@@ -33,7 +33,7 @@
         <div class="field">
           <div class="control">
             <input type="checkbox" th:checked="${project.anonymousCanAccess}">
-            <label class="checkbox" th:text="#{project.anonymous_access}">
+              <label class="checkbox" th:text="#{authorizeAnonymousAccess}">
             </label>
           </div>
         </div>
@@ -50,9 +50,9 @@
             <label class="label">Droit</label>
             <div class="select">
               <select id="selectPermission">
-                <option value="READ">Lecture</option>
-                <option value="WRITE">Ecriture</option>
-                <option value="ALL">Tout</option>
+                <option value="READ" th:text="#{read}">Lecture</option>
+                <option value="WRITE" th:text="#{write}">Ecriture</option>
+                <option value="ALL" th:text="#{all}">Tout</option>
               </select>
             </div>
           </div>
