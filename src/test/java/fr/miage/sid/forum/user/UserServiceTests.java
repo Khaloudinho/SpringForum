@@ -1,6 +1,7 @@
 package fr.miage.sid.forum.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
@@ -20,6 +21,7 @@ import fr.miage.sid.forum.service.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -42,6 +44,17 @@ public class UserServiceTests {
     public void setUp() {
         initMocks(this);
         this.userService = new UserServiceImpl(userRepository, roleRepository, bCryptPasswordEncoder);
+    }
+
+    @Test
+    public void createUserWithSuccess(){
+        User expected = new User().setId(1L).setPassword("toto");
+        given(this.bCryptPasswordEncoder.encode(anyString())).willReturn("encoded");
+        given(this.userRepository.save(Matchers.any(User.class))).willReturn(expected);
+        given(this.roleRepository.findByRole(anyString())).willReturn(new Role());
+
+        User actual = this.userService.save(new User().setId(1L));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
