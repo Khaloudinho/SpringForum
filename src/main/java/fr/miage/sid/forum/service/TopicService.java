@@ -15,4 +15,6 @@ public interface TopicService {
   List<Topic> getAllByProject(Project project);
 
   int countCreatedByUser(User user);
+
+  void loadTestCreation(int maxCreate);
 }

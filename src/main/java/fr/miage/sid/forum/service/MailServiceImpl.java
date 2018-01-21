@@ -29,7 +29,6 @@ public class MailServiceImpl implements MailService {
   @Autowired
   private TemplateEngine templateEngine;
 
-
   @Override
   @Transactional(readOnly = true)
   public void sendNotifToAllFollowers(Post post) {
@@ -42,8 +41,16 @@ public class MailServiceImpl implements MailService {
     }
   }
 
+  /**
+  * Methods that send an email to a user, about a new post in a topic
+  */
   private void sendNotifEmail(User user, User author, Topic topic,
       Post post) {
+    // Don't send email to creator
+    if (user.getEmail().equals(author.getEmail())) {
+      return;
+    }
+
     MimeMessagePreparator messagePreparator = mimeMessage -> {
       MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
       messageHelper.setFrom("do-not-reply@spring-forum.com");

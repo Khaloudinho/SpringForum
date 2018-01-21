@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -24,6 +23,7 @@ spring:
       trust-all: true
   thymeleaf:
     cache: false
+    mode: HTML
 
 security:
   oauth2:

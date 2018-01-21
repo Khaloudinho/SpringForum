@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+
 @Controller
 @Slf4j
 public class TopicController {
@@ -41,6 +42,9 @@ public class TopicController {
     this.projectService = projectService;
   }
 
+  /**
+  * Returns form to create a topic
+  */
   @GetMapping("project/{projectId}/topic/create")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView getTopicCreateForm(Topic topic, @PathVariable("projectId") Long projectId) {
@@ -51,6 +55,9 @@ public class TopicController {
     return modelAndView;
   }
 
+  /**
+  * Validate and create a topic with a first post
+  */
   @PostMapping("project/{projectId}/topic")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView createTopic(
@@ -82,6 +89,9 @@ public class TopicController {
     return modelAndView;
   }
 
+  /**
+  * return the page of a topic with all posts
+  */
   @GetMapping("/topic/{topicId}")
   public ModelAndView showTopic(@PathVariable("topicId") Long topicId,
       @CurrentUser MyPrincipal principal) {
@@ -99,6 +109,9 @@ public class TopicController {
     return modelAndView;
   }
 
+  /**
+  * Returns form to edit a topic
+  */
   @GetMapping("topic/{topicId}/edit")
   @PreAuthorize("isAuthenticated()")
   public ModelAndView editTopic(@PathVariable("topicId") String topicId) {

@@ -26,7 +26,7 @@ public abstract class HasPermissions extends Auditable {
 
 
   /**
-   * We use the returned Map to avoid erros in the frontend.
+   * We use the returned Map to avoid errors in the frontend.
    * For example, we don't add an user to the reader table if he already had the permission.
    */
   public Map<Permission, Boolean> givePermissionTo(Long userId, Permission permission) {
@@ -53,12 +53,6 @@ public abstract class HasPermissions extends Auditable {
     }
 
     return result;
-  }
-
-  public void removePermissionOfAll(Set<Long> userIds, Permission permission) {
-    for (Long user : userIds) {
-      removePermissionOf(user, permission);
-    }
   }
 
   /**
