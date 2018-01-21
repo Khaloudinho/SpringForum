@@ -44,6 +44,11 @@ public class MailServiceImpl implements MailService {
 
   private void sendNotifEmail(User user, User author, Topic topic,
       Post post) {
+    // Don't send email to creator
+    if (user.getEmail().equals(author.getEmail())) {
+      return;
+    }
+
     MimeMessagePreparator messagePreparator = mimeMessage -> {
       MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
       messageHelper.setFrom("do-not-reply@spring-forum.com");
