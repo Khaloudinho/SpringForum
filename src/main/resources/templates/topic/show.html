@@ -32,20 +32,36 @@
        th:style="${isFollowing} ? 'display:inline-flex' : 'display:none'"
        id="unfollowBtn" class="button is-primary" th:text="#{topic.unfollow}"></a>
 
-    <article class="message" th:each="post : ${posts}">
-      <div class="message-header">
-        <strong class="is-pulled-left" th:text="${post.getCreatedBy().getUsername()}"></strong>
-        <a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.post.getCreatedBy().getId())"
-           th:text="#{modify}"
-           th:href="@{/post/{id_post}/update(id_post=${post.getId()})}"
-           class="button is-primary is-inverted"></a>
-        <span class="is-pulled-right" th:text="${post.getCreatedAt()}"></span>
-      </div>
-
-      <div th:text="${post.content}" class="message-body">
-      </div>
-    </article>
-
+    <section class="mt-6">
+      <article th:each="post : ${posts}" class="media">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <img class="is-circle" th:src="${post.createdBy.picture}">
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong class="has-text-info" th:text="${topic.createdBy.username}"></strong>
+              <small th:inline="text">le [[${topic.createdAt.toLocaleString()}]]</small>
+            </p>
+            <p th:text="${post.content}"></p>
+          </div>
+          <nav class="level is-mobile">
+            <div class="level-left">
+              <a class="level-item">
+                <!--<a sec:authorize="isAuthenticated() and (hasRole('ADMIN') or principal.id == #vars.project.getCreatedBy().getId())"-->
+                <!--th:href="@{/project/{id}/edit(id=${project.id})}">-->
+                <!--<span class="icon has-text-info">-->
+                <!--<i class="far fa-edit"></i>-->
+                <!--</span>-->
+                <!--</a>-->
+              </a>
+            </div>
+          </nav>
+        </div>
+      </article>
+    </section>
   </div>
 </section>
 </body>
