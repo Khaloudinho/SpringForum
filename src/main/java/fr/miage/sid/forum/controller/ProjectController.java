@@ -36,29 +36,29 @@ public class ProjectController {
   }
 
   /**
-  * Projects are the highest containers of this forum, the index list them all
-  */
+   * Projects are the highest containers of this forum, the index list them all
+   */
   @GetMapping("/")
   public ModelAndView getAll() {
     ModelAndView modelAndView = new ModelAndView("project/index");
-    modelAndView.addObject("projects", projectService.getAll());
+    modelAndView.addObject("projects", projectService.getAllAllowed());
     return modelAndView;
   }
 
   /**
-  * Return the form to create a project
-  */
+   * Return the form to create a project
+   */
   @GetMapping("/project/create")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
-  public ModelAndView getProjectForm(Project project) {
+  public ModelAndView getProjectCreateForm(Project project) {
     ModelAndView modelAndView = new ModelAndView("project/create");
     modelAndView.addObject(project);
     return modelAndView;
   }
 
   /**
-  * PostMapping, verify the validity of the project before saving
-  */
+   * PostMapping, verify the validity of the project before saving
+   */
   @PostMapping("/project")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public ModelAndView createProject(@Valid Project project, BindingResult result) {
@@ -76,8 +76,8 @@ public class ProjectController {
   }
 
   /**
-  * Returns the list of topic of a project
-  */
+   * Returns the list of topic of a project
+   */
   @GetMapping("project/{projectId}")
   public ModelAndView showProject(@PathVariable("projectId") Long projectId) {
     ModelAndView modelAndView = new ModelAndView();
@@ -95,8 +95,8 @@ public class ProjectController {
   }
 
   /**
-  * Return the form used to edit a project
-  */
+   * Return the form used to edit a project
+   */
   @GetMapping("project/{projectId}/edit")
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
   public ModelAndView editProject(@PathVariable("projectId") String projectId) {
@@ -121,8 +121,8 @@ public class ProjectController {
 
 
   /**
-  * Put handler to edit a project's name
-  */
+   * Put handler to edit a project's name
+   */
   @PutMapping("project/{projectId}")
   public ModelAndView editProjectName(@PathVariable("projectId") Long projectId, String name) {
     ModelAndView modelAndView = new ModelAndView();

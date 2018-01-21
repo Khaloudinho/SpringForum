@@ -66,6 +66,7 @@ public class DevDBSeeder implements CommandLineRunner {
     userRepo.save(normal);
 
     Project projectA = new Project().setName("Spring Data");
+    projectA.setAnonymousCanAccess(false);
     Project projectB = new Project().setName("Spring Boot");
     projectRepository.save(projectA);
     projectRepository.save(projectB);
