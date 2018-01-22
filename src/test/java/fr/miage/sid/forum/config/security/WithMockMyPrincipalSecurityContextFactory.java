@@ -1,6 +1,7 @@
 package fr.miage.sid.forum.config.security;
 
 import fr.miage.sid.forum.domain.User;
+import fr.miage.sid.forum.domain.UserOrigin;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +21,8 @@ public class WithMockMyPrincipalSecurityContextFactory implements
     SecurityContext context = SecurityContextHolder.createEmptyContext();
     List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
     User user = new User().setId(Long.valueOf(withMockMyPrincipal.id()))
-        .setUsername(withMockMyPrincipal.username()).setPassword(withMockMyPrincipal.password());
+        .setUsername(withMockMyPrincipal.username()).setPassword(withMockMyPrincipal.password())
+        .setOrigin(UserOrigin.DB);
 
     for (String role : withMockMyPrincipal.roles()) {
       grantedAuthorities.add(new SimpleGrantedAuthority(role));

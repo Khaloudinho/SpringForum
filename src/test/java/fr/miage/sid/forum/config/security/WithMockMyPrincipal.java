@@ -15,7 +15,7 @@ public @interface WithMockMyPrincipal {
 
   String username() default "test";
 
-  String[] roles() default {"USER"};
+  String[] roles() default {"ROLE_USER"};
 
   String password() default "password";
 }
